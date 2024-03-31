@@ -43,7 +43,7 @@ export const Config: IConfig = {
       tags: ["DNS", "DNS-Filtering", "Privacy", "AdGuard-Home", "Network"],
     },
     "Personal Website": {
-      url: "https://github.com/torvalds/linux",
+      url: "https://github.com/the-square-pixel/Personal-Website",
       tags: ["Personal-Website", "Astro", "Tailwind-CSS", "DaisyUI","TypeScript"],
     },
   },
