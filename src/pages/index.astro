@@ -4,6 +4,7 @@ import FloatingBox from "../components/SmallBox.astro";
 import { Picture } from "astro:assets";
 import iconImage from "../assets/icon.png";
 import { Config } from "../config";
+import Analytics from "../jscomponents/Analytics.astro";
 
 const years = () => {
   const start = new Date(Config.me.started);
@@ -133,3 +134,4 @@ const posts = (await getCollection("posts")).sort(function (
     </div>
   </main>
 </Layout>
+<Analytics />

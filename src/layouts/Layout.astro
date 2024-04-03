@@ -60,6 +60,12 @@ const currentPath = Astro.url.pathname;
                 href="/posts">Posts</a
               >
             </li>
+            <li>
+              <a
+                class={currentPath.startsWith("/privacy") ? "text-primary" : ""}
+                href="/privacy">Privacy</a
+              >
+            </li>
           </ul>
         </nav>
       </header>
