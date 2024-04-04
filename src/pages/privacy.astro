@@ -1,8 +1,8 @@
 ---
+import Analytics from "../jscomponents/Analytics.astro";
 import Layout from "../layouts/Layout.astro";
-import Analytics from"../jscomponents/Analytics.astro";
 ---
-
+<Analytics />
 <Layout>
   <div class="hero absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
     <div class="max-w-md">
@@ -20,9 +20,8 @@ import Analytics from"../jscomponents/Analytics.astro";
         Umami's privacy policy is linked below:
       </p>
       <div class="text-lg leading-relaxed mb-4">
-        <a href="https://umami.is/privacy" target="_blank" class="text-indigo-400">umami.is/privacy</a>
+        <a href="https://umami.is/privacy" target="_blank" class="font-normal text-primary">umami.is/privacy</a>
       </div>
     </div>
   </div>
 </Layout>
-<Analytics />

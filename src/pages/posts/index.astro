@@ -1,15 +1,15 @@
 ---
+import Analytics from "../../jscomponents/Analytics.astro";
 import Layout from "../../layouts/Layout.astro";
 import PostBox from "../../components/PostBox.astro";
 import { getCollection } from "astro:content";
-import Analytics from "../../jscomponents/Analytics.astro";
 const posts = (await getCollection("posts")).sort(
   (a, b) =>
     new Date(b.data.publishedAt).getTime() -
     new Date(a.data.publishedAt).getTime()
 );
 ---
-
+<Analytics />
 <Layout og_type="website">
   <div>
     {
@@ -27,4 +27,3 @@ const posts = (await getCollection("posts")).sort(
     }
   </div>
 </Layout>
-<Analytics />

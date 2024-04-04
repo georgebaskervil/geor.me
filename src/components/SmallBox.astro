@@ -21,7 +21,7 @@ const { title, publishedAt, description, href, tags } = Astro.props;
     <div class="flex flex-row items-center gap-2">
       {
         publishedAt ? (
-          <p class="text-neutral whitespace-nowrap">
+          <p class="font-normal text-primary">
             {new Date(publishedAt).toLocaleDateString("en-us", {
               year: "numeric",
               month: "short",

@@ -26,9 +26,9 @@ interface IConfig {
 export const Config: IConfig = {
   me: {
     name: "George Baskerville",
-    job: "computer science student",
+    job: "student",
     started: "2021-09-05",
-    stack: "Astro, Tailwind, DaisyUI and TypeScript",
+    stack: "Astro, Tailwind, and TypeScript",
     hobby: "obsess over my personal privacy",
     projectLink: "https://github.com/the-square-pixel?tab=repositories",
   },
