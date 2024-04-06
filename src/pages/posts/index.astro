@@ -17,19 +17,59 @@ const posts = (await getCollection("posts")).sort(
   <div class="container">
     <h1 class="title">Posts:</h1>
     <div class="post-list">
-      {
-        posts.map((post) => (
-          <div class="post-box">
-            <PostBox
-              title={post.data.title}
-              publishedAt={post.data.publishedAt}
-              description={post.data.description}
-              href={post.slug}
-            >
-            </PostBox>
-          </div>
-        ))
-      }
+      {posts.map((post) => (
+        <div class="post-box p-4 rounded-lg border border-neutral shadow-md">
+          <PostBox
+            title={post.data.title}
+            publishedAt={post.data.publishedAt}
+            description={post.data.description}
+            href={post.slug}
+          />
+        </div>
+      ))}
     </div>
   </div>
 </Layout>
+
+<style>
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.post-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.post-box {
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.post-box h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.post-box p {
+  font-size: 14px;
+  color: #666;
+}
+
+.post-box a {
+  color: #333;
+  text-decoration: none;
+}
+
+.post-box a:hover {
+  text-decoration: underline;
+}
+</style>

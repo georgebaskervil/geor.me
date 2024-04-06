@@ -40,36 +40,26 @@ const currentPath = Astro.url.pathname;
     <ViewTransitions />
   </head>
   <body>
-    <div
-      class="mx-auto flex min-h-screen flex-col gap-9 px-10 py-8 md:gap-20 md:py-8"
-    >
-      <header
-        class="flex w-full gap-3 md:gap-2 flex-row justify-between pb-5 md:pb-0"
-      >
+    <div class="mx-auto min-h-screen flex flex-col gap-9 px-10 py-8 md:gap-20 md:py-8">
+      <header class="flex w-full gap-3 md:gap-2 flex-row justify-between pb-5 md:pb-0">
         <a href="/" class="text-xl">{Config.me.name}</a>
         <nav class="text-sm custom-breadcrumbs">
           <ul>
             <li>
-              <a class={currentPath === "/" ? "text-primary" : ""} href="/"
-                >Home</a
-              >
+              <a class={currentPath === "/" ? "text-primary" : ""} href="/">Home</a>
             </li>
             <li>
-              <a
-                class={currentPath.startsWith("/posts") ? "text-primary" : ""}
-                href="/posts">Posts</a
-              >
+              <a class={currentPath.startsWith("/posts") ? "text-primary" : ""} href="/posts">Posts</a>
             </li>
             <li>
-              <a
-                class={currentPath.startsWith("/privacy") ? "text-primary" : ""}
-                href="/privacy">Privacy</a
-              >
+              <a class={currentPath.startsWith("/privacy") ? "text-primary" : ""} href="/privacy">Privacy</a>
             </li>
           </ul>
         </nav>
       </header>
-      <slot />
+      <div class="flex-grow">
+        <slot />
+      </div>
     </div>
     <style is:global>
       .custom-breadcrumbs {
