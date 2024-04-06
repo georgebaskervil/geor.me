@@ -4,24 +4,32 @@ import Layout from "../layouts/Layout.astro";
 ---
 <Analytics />
 <Layout>
-  <div class="hero absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-    <div class="max-w-md">
-      <h1 class="text-3xl font-bold mb-4">Privacy Policy:</h1>
-      <p class="text-lg leading-relaxed mb-4">
-        This website uses Umami for analytics.
-      </p>
-      <p class="text-lg leading-relaxed mb-4">
-        Therefore, Umami will collect some of your data about your usage of this website.
-      </p>
-      <p class="text-lg leading-relaxed mb-4">
-        By using this site, you agree to the collection and processing of your data as described in the privacy policy of Umami.
-      </p>
-      <p class="text-lg leading-relaxed mb-4">
-        Umami's privacy policy is linked below:
-      </p>
-      <div class="text-lg leading-relaxed mb-4">
-        <a href="https://umami.is/privacy" target="_blank" class="font-normal text-primary">umami.is/privacy</a>
-      </div>
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-4">Privacy Policy</h1>
+    <p class="text-lg leading-relaxed mb-4">
+      Thank you for visiting our website. This privacy policy explains how we collect, use, and protect your personal information.
+    </p>
+    <p class="text-lg leading-relaxed mb-4">
+      We use Umami for analytics to improve our website's performance and user experience.
+    </p>
+    <p class="text-lg leading-relaxed mb-4">
+      By using this site, you consent to the collection and processing of your data as described in Umami's privacy policy.
+    </p>
+    <p class="text-lg leading-relaxed mb-4">
+      Please review Umami's privacy policy for more information:
+    </p>
+    <div class="text-lg leading-relaxed mb-4">
+      <a href="https://umami.is/privacy" target="_blank" class="font-normal text-primary">umami.is/privacy</a>
     </div>
   </div>
 </Layout>
+
+<style>
+  @media (min-width: 768px) {
+    .container {
+      max-width: 768px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+</style>

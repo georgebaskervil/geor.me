@@ -40,11 +40,11 @@ export const Config: IConfig = {
   projects: {
     "DNS Filterlists": {
       url: "https://github.com/the-square-pixel/dnsfilterlists",
-      tags: ["DNS", "DNS-Filtering", "Privacy", "AdGuard-Home", "Network"],
+      tags: ["DNS", "DNS-Filtering", "Privacy"],
     },
     "Personal Website": {
       url: "https://github.com/the-square-pixel/Personal-Website",
-      tags: ["Personal-Website", "Astro", "Tailwind-CSS", "DaisyUI","TypeScript"],
+      tags: ["Personal-Website", "Astro", "Tailwind-CSS"],
     },
   },
   og: {

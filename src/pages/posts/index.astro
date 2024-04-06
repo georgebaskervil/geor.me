@@ -3,27 +3,33 @@ import Analytics from "../../jscomponents/Analytics.astro";
 import Layout from "../../layouts/Layout.astro";
 import PostBox from "../../components/PostBox.astro";
 import { getCollection } from "astro:content";
+
 const posts = (await getCollection("posts")).sort(
   (a, b) =>
     new Date(b.data.publishedAt).getTime() -
     new Date(a.data.publishedAt).getTime()
 );
 ---
+
 <Analytics />
+
 <Layout og_type="website">
-  <div>
-    {
-      posts.map((post) => (
-        <>
-          <div class="divider my-2" />
-          <PostBox
-            title={post.data.title}
-            publishedAt={post.data.publishedAt}
-            description={post.data.description}
-            href={post.slug}
-          />
-        </>
-      ))
-    }
+  <div class="container">
+    <h1 class="title">Posts:</h1>
+    <div class="post-list">
+      {
+        posts.map((post) => (
+          <div class="post-box">
+            <PostBox
+              title={post.data.title}
+              publishedAt={post.data.publishedAt}
+              description={post.data.description}
+              href={post.slug}
+            >
+            </PostBox>
+          </div>
+        ))
+      }
+    </div>
   </div>
 </Layout>
