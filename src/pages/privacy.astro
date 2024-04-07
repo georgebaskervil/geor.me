@@ -4,50 +4,74 @@ import Layout from "../layouts/Layout.astro";
 ---
 <Analytics />
 <Layout>
-  <div class="container mx-auto px-4 py-8 w-full">
-    <h1 class="text-4xl font-bold mb-4">Privacy Notice</h1>
-    <div class="text-lg leading-relaxed mb-4">
-      <p>
-        Privacy is a topic I care deeply about. I've put this notice here for full transparency about how exactly this website uses your personal data.
-      </p>
-      <p>
-        <strong>Section 1: Site Analytics</strong>
-      </p>
-      <p>
-        This website uses the open-source analytics tool Umami to collect anonymized data about how you interact with the site.
-      </p>
-      <p>
-        As far as I'm aware, Umami makes the following data available to me:
-      </p>
-      <ul class="list-disc ml-8 mb-4">
-        <li>Total page views</li>
-        <li>Total unique visits</li>
-        <li>Total unique visitors</li>
-        <li>Bounce rate (that is, the percentage of visitors who leave the site after viewing only one page)</li>
-        <li>Average visit time</li>
-        <li>Pageviews per page</li>
-        <li>Referrers (that is, the websites visitors came from)</li>
-        <li>Browser type (e.g. Chrome)</li>
-        <li>Operating system (e.g. Windows)</li>
-        <li>Device type (e.g. desktop)</li>
-        <li>Country (e.g. United States)</li>
-        <li>Events (e.g. clicks, downloads) Note: I have not implemented any custom events on this site yet, so this data is not currently being collected.</li>
-      </ul>
-      <p>
-        For more information, please see Umami's Privacy Policy.
-      </p>
-      <a href="https://umami.is/privacy" target="_blank" class="font-normal text-primary">umami.is/privacy</a>
+  <style>
+    @keyframes ripple {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    body {
+      height: 100vh;
+      margin: 0;
+      background-size: 200% 200%;
+      background-image: radial-gradient(circle at 50% 50%, #111111,#000000 );
+      animation: ripple 15s ease-in-out infinite;
+    }
+  </style>
+
+  <main>
+    <div class="container mx-auto px-4 py-8 w-full">
+      <h1 class="text-4xl font-bold mb-4">Privacy Notice</h1>
+      <div class="text-lg leading-relaxed mb-4">
+        <p>
+          Privacy is a topic I care deeply about. I've put this notice here for full transparency about how exactly this website uses your personal data.
+        </p>
+        <p>
+          <strong>Section 1: Site Analytics</strong>
+        </p>
+        <p>
+          This website uses the open-source analytics tool Umami to collect anonymized data about how you interact with the site.
+        </p>
+        <p>
+          As far as I'm aware, Umami makes the following data available to me:
+        </p>
+        <ul class="list-disc ml-8 mb-4">
+          <li>Total page views</li>
+          <li>Total unique visits</li>
+          <li>Total unique visitors</li>
+          <li>Bounce rate (that is, the percentage of visitors who leave the site after viewing only one page)</li>
+          <li>Average visit time</li>
+          <li>Pageviews per page</li>
+          <li>Referrers (that is, the websites visitors came from)</li>
+          <li>Browser type (e.g. Chrome)</li>
+          <li>Operating system (e.g. Windows)</li>
+          <li>Device type (e.g. desktop)</li>
+          <li>Country (e.g. United States)</li>
+          <li>Events (e.g. clicks, downloads) Note: I have not implemented any custom events on this site yet, so this data is not currently being collected.</li>
+        </ul>
+        <p>
+          For more information, please see Umami's Privacy Policy.
+        </p>
+        <a href="https://umami.is/privacy" target="_blank" class="text-purple-300">umami.is/privacy</a>
+      </div>
+      <div class="text-lg leading-relaxed mb-4">
+        <p>
+          <strong>Section 2: Providers</strong>
+        </p>
+        <p>
+          This site is hosted by Netlify. Netlify may collect data for various purposes. For more information, please see Netlify's Privacy Policy.
+        </p>
+        <a href="https://www.netlify.com/privacy" target="_blank" class="text-purple-300">netlify.com/privacy</a>
+      </div>
     </div>
-    <div class="text-lg leading-relaxed mb-4">
-      <p>
-        <strong>Section 2: Providers</strong>
-      </p>
-      <p>
-        This site is hosted by Netlify. Netlify may collect data for various purposes. For more information, please see Netlify's Privacy Policy.
-      </p>
-      <a href="https://www.netlify.com/privacy" target="_blank" class="font-normal text-primary">netlify.com/privacy</a>
-    </div>
-  </div>
+  </main>
 </Layout>
 
 <style>

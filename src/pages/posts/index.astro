@@ -14,6 +14,27 @@ const posts = (await getCollection("posts")).sort(
 <Analytics />
 
 <Layout og_type="website">
+  <style>
+    @keyframes ripple {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    body {
+      height: 100vh;
+      margin: 0;
+      background-size: 200% 200%;
+      background-image: radial-gradient(circle at 50% 50%, #111111,#000000 );
+      animation: ripple 15s ease-in-out infinite;
+    }
+  </style>
   <div class="container">
     <h1 class="title">Posts:</h1>
     <div class="post-list">
