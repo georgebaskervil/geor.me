@@ -3,41 +3,30 @@ import Analytics from "../jscomponents/Analytics.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 <Analytics />
+<style>
+  .background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to left,#110819, #000);
+    z-index: -1;
+  }
+</style>
+<div class="background-animation"></div>
 <Layout>
-  <style>
-    @keyframes ripple {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-    body {
-      height: 100vh;
-      margin: 0;
-      background-size: 200% 200%;
-      background-image: radial-gradient(circle at 50% 50%, #111111,#000000 );
-      animation: ripple 15s ease-in-out infinite;
-    }
-  </style>
-
   <main>
-    <div class="container mx-auto px-4 py-8 w-full">
+    <div class="container mx-auto px-4 py-0 w-full">
       <h1 class="text-4xl font-bold mb-4">Privacy Notice</h1>
-      <div class="text-lg leading-relaxed mb-4">
-        <p>
+      <p>
           Privacy is a topic I care deeply about. I've put this notice here for full transparency about how exactly this website uses your personal data.
         </p>
         <p>
           <strong>Section 1: Site Analytics</strong>
         </p>
         <p>
-          This website uses the open-source analytics tool Umami to collect anonymized data about how you interact with the site.
+          I'm using the open-source analytics tool Umami to collect anonymized data about how you interact with the site.
         </p>
         <p>
           As far as I'm aware, Umami makes the following data available to me:
@@ -57,18 +46,15 @@ import Layout from "../layouts/Layout.astro";
           <li>Events (e.g. clicks, downloads) Note: I have not implemented any custom events on this site yet, so this data is not currently being collected.</li>
         </ul>
         <p>
-          For more information, please see Umami's Privacy Policy.
-        </p>
-        <a href="https://umami.is/privacy" target="_blank" class="text-purple-300">umami.is/privacy</a>
-      </div>
-      <div class="text-lg leading-relaxed mb-4">
+          For more information, please see Umami's Privacy Policy at
+        <a href="https://umami.is/privacy" target="_blank" class="text-purple-500 no-underline hover:underline">umami.is/privacy</a>
+        <p>
         <p>
           <strong>Section 2: Providers</strong>
         </p>
         <p>
-          This site is hosted by Netlify. Netlify may collect data for various purposes. For more information, please see Netlify's Privacy Policy.
-        </p>
-        <a href="https://www.netlify.com/privacy" target="_blank" class="text-purple-300">netlify.com/privacy</a>
+          This site is hosted by Netlify. Netlify may collect data for various purposes. For more information, please see Netlify's Privacy Policy at
+        <a href="https://www.netlify.com/privacy" target="_blank" class="text-purple-500 no-underline hover:underline">netlify.com/privacy</a>
       </div>
     </div>
   </main>
@@ -76,9 +62,7 @@ import Layout from "../layouts/Layout.astro";
 
 <style>
   .container {
-    max-width: 768px;
-    margin: 0 auto;
-    padding: 16px;
+    max-width: 100%;
   }
 
   h1 {
