@@ -1,0 +1,34 @@
+---
+import { Config } from "../config";
+import icon from "../assets/favicon.png";
+
+interface Props {
+  title?: string;
+  description?: string;
+  og_title?: string;
+  og_description?: string;
+  og_type?: string;
+  og_image?: string;
+}
+
+const {
+  title = Config.me.name,
+  description = Config.me.name + "'s personal website.",
+  og_title = Config.me.name,
+  og_description = Config.me.name + "'s personal website.",
+  og_type = "website",
+  og_image = Config.og.image,
+} = Astro.props;
+---
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={icon.src} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={og_title} />
+    <meta property="og:description" content={og_description} />
+    <meta property="og:type" content={og_type} />
+    <meta property="og:image" content={og_image} />
+    <meta property="og:url" content={Astro.request.url} />
+<head>

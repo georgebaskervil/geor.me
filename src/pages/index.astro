@@ -1,5 +1,6 @@
 ---
-import Analytics from "../jscomponents/Analytics.astro";
+import Analytics from "../components/analytics.astro";
+import Tags from "../components/tags.astro";
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import iconImage from "../assets/icon.png";
@@ -19,6 +20,7 @@ const posts = (await getCollection("posts")).sort(function (
   return second.data.publishedAt.getTime() - first.data.publishedAt.getTime();
 });
 ---
+<Tags />
 <Analytics />
 <style>
 .background-animation {

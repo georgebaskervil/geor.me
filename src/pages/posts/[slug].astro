@@ -1,5 +1,6 @@
 ---
-import Analytics from "../../jscomponents/Analytics.astro";
+import Analytics from "../../components/analytics.astro";
+import Tags from "../../components/tags.astro";
 import Layout from "../../layouts/Layout.astro";
 import { getCollection, type CollectionEntry } from "astro:content";
 
@@ -17,13 +18,14 @@ interface Props {
 const { post } = Astro.props;
 const { Content } = await post.render();
 ---
+<Tags />
 <Analytics />
 <Layout
   title={post.data.title}
   description={post.data.description}
   og_title={post.data.title}
   og_description={post.data.description}
-  og_type="article"
+  og_type="article" 
 >
   <style>
     .background-animation {

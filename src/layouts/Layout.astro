@@ -1,7 +1,5 @@
 ---
-import { ViewTransitions } from "astro:transitions";
 import { Config } from "../config";
-import icon from "../assets/favicon.png";
 
 interface Props {
   title?: string;
@@ -12,33 +10,11 @@ interface Props {
   og_image?: string;
 }
 
-const {
-  title = Config.me.name,
-  description = Config.me.name + "'s personal website.",
-  og_title = Config.me.name,
-  og_description = Config.me.name + "'s personal website.",
-  og_type = "website",
-  og_image = Config.og.image,
-} = Astro.props;
-
 const currentPath = Astro.url.pathname;
 ---
 
 <!doctype html>
 <html class="bg-base-100 text-base-content overflow-y-scroll" lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width"/>
-    <link rel="icon" type="image/svg+xml" href={icon.src} />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta property="og:title" content={og_title} />
-    <meta property="og:description" content={og_description} />
-    <meta property="og:type" content={og_type} />
-    <meta property="og:image" content={og_image} />
-    <meta property="og:url" content={Astro.request.url} />
-    <ViewTransitions />
-  </head>
   <body>
     <div class="mx-auto min-h-screen flex flex-col gap-9 px-10 py-8 md:gap-20 md:py-8">
       <header class="flex w-full gap-3 md:gap-2 flex-row justify-between pb-5 md:pb-0">

@@ -1,5 +1,6 @@
 ---
-import Analytics from "../../jscomponents/Analytics.astro";
+import Analytics from "../../components/analytics.astro";
+import Tags from "../../components/tags.astro";
 import Layout from "../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
 
@@ -9,6 +10,7 @@ const posts = (await getCollection("posts")).sort(
     new Date(first.data.publishedAt).getTime()
 );
 ---
+<Tags />
 <Analytics />
 <style>
 .background-animation {
