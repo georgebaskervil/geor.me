@@ -38,7 +38,7 @@ const posts = (await getCollection("posts")).sort(function (
       <article class="md:flex-row-reverse md:justify-end md:gap-12">
         <div class="flex flex-row justify-between sm:grid-cols-3">
           <div class="col-span-2 flex flex-col gap-6 md:gap-8 my-auto">
-            <h1 class="text-4xl font-bold">Hi, I’m {Config.me.name.split(" ")[0]}</h1>
+            <h1 class="lg:text-4xl md:text-3xl font-bold text-2xl">Hi, I’m {Config.me.name.split(" ")[0]}</h1>
             <h2 class="w-auto sm:w-[85%] md:w-[90%] leading-6 text-sm sm:text-base">
               I'm a {Config.me.job}. I started over {years} years ago. I am currently learning {Config.me.stack}. Outside of programming I like to {Config.me.hobby}.
             </h2>
@@ -71,7 +71,7 @@ const posts = (await getCollection("posts")).sort(function (
         </div>
       </article>
 
-      <article class="flex flex-col gap-4">
+      <article class="flex flex-col gap-3">
         <header class="flex w-full flex-row justify-between gap-2">
           <h3 class="text-lg">Featured projects:</h3>
           <a href={Config.me.projectLink} class="text-sm text-purple-500 no-underline hover:underline" target="_self" rel="noreferrer">
@@ -104,7 +104,7 @@ const posts = (await getCollection("posts")).sort(function (
         </section>
       </article>
 
-      <article class="flex flex-col gap-4">
+      <article class="flex flex-col gap-3">
         <header class="flex w-full flex-row justify-between gap-2">
           <h3 class="text-lg">Latest posts:</h3>
           <a href="/posts" class="text-sm text-purple-500 no-underline hover:underline" rel="noreferrer">
