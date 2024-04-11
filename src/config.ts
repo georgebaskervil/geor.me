@@ -35,15 +35,15 @@ export const Config: IConfig = {
   socials: {
     X: "https://x.com/georgebaskervil",
     LinkedIn: "https://linkedin.com",
-    GitHub: "https://github.com/the-square-pixel",
+    GitHub: "https://github.com/georgebaskervil",
   },
   projects: {
     "DNS Filterlists": {
-      url: "https://github.com/the-square-pixel/dnsfilterlists",
+      url: "https://github.com/georgebaskervil/dnsfilterlists",
       tags: ["DNS", "DNS-Filtering", "Privacy"],
     },
     "Personal Website": {
-      url: "https://github.com/the-square-pixel/Personal-Website",
+      url: "https://github.com/georgebaskervil/Personal-Website",
       tags: ["Personal-Website", "Astro", "Tailwind-CSS"],
     },
   },
