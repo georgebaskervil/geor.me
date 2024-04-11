@@ -30,7 +30,7 @@ export const Config: IConfig = {
     started: "2021-09-05",
     stack: "Astro, Tailwind, and TypeScript",
     hobby: "obsess over my personal privacy",
-    projectLink: "https://github.com/the-square-pixel?tab=repositories",
+    projectLink: "https://github.com/georgebaskervil?tab=repositories",
   },
   socials: {
     X: "https://x.com/georgebaskervil",
