@@ -5,8 +5,6 @@ interface IConfig {
     name: string;
     job: string;
     started: string;
-    stack: string;
-    hobby: string;
     projectLink: string;
   };
   socials: {
@@ -28,8 +26,6 @@ export const Config: IConfig = {
     name: "George Baskerville",
     job: "student",
     started: "2021-09-05",
-    stack: "Astro, Tailwind, and TypeScript",
-    hobby: "obsess over my personal privacy",
     projectLink: "https://github.com/georgebaskervil?tab=repositories",
   },
   socials: {

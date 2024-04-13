@@ -21,7 +21,6 @@ const posts = (await getCollection("posts")).sort(function (
 });
 ---
 <Tags />
-<Analytics />
 <style>
 .background-animation {
   position: fixed;
@@ -41,8 +40,10 @@ const posts = (await getCollection("posts")).sort(function (
         <div class="flex flex-row justify-between sm:grid-cols-3">
           <div class="col-span-2 flex flex-col gap-6 md:gap-8 my-auto">
             <h1 class="lg:text-4xl md:text-3xl font-bold text-2xl">Hi, I’m {Config.me.name.split(" ")[0]}</h1>
-            <h2 class="w-auto sm:w-[85%] md:w-[90%] leading-6 text-sm sm:text-base">
-              I'm a {Config.me.job}. I started over {years} years ago. I am currently learning {Config.me.stack}. Outside of programming I like to {Config.me.hobby}.
+            <h2 class="w-[90%] leading-6 text-sm sm:text-base">
+              I'm a {Config.me.job}.
+              I've been interested in the web for a long time, making my first site {years} years ago.
+              I'm also a digital privacy advocate and a dark mode enthusiast.
             </h2>
             <div class="custom-breadcrumbs">
               <ul>
@@ -139,3 +140,4 @@ const posts = (await getCollection("posts")).sort(function (
     </div>
   </main>
 </Layout>
+<Analytics />
