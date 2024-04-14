@@ -25,7 +25,7 @@ export const Config: IConfig = {
   me: {
     name: "George Baskerville",
     job: "student",
-    started: "2021-09-05",
+    started: "2019-05-05",
     projectLink: "https://github.com/georgebaskervil?tab=repositories",
   },
   socials: {
