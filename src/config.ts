@@ -30,7 +30,6 @@ export const Config: IConfig = {
   },
   socials: {
     X: "https://x.com/georgebaskervil",
-    LinkedIn: "https://linkedin.com",
     GitHub: "https://github.com/georgebaskervil",
   },
   projects: {

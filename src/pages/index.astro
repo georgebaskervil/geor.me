@@ -5,6 +5,7 @@ import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
 import iconImage from "../assets/icon.png";
 import { Config } from "../config";
+import { getImages } from '../getImages.js';
 
 const years = () => {
   const start = new Date(Config.me.started);
@@ -19,6 +20,8 @@ const posts = (await getCollection("posts")).sort(function (
 ) {
   return second.data.publishedAt.getTime() - first.data.publishedAt.getTime();
 });
+
+const images = getImages();
 ---
 <Tags />
 <style>
@@ -76,7 +79,7 @@ const posts = (await getCollection("posts")).sort(function (
 
       <article class="flex flex-col gap-3">
         <header class="flex w-full flex-row justify-between gap-2">
-          <h3 class="text-lg">Featured projects:</h3>
+          <h3 class="text-lg pb-2">Featured projects:</h3>
           <a href={Config.me.projectLink} class="text-sm text-purple-500 no-underline hover:underline" target="_self" rel="noreferrer">
             See all projects
           </a>
@@ -109,7 +112,7 @@ const posts = (await getCollection("posts")).sort(function (
 
       <article class="flex flex-col gap-3">
         <header class="flex w-full flex-row justify-between gap-2">
-          <h3 class="text-lg">Latest posts:</h3>
+          <h3 class="text-lg pb-2">Latest posts:</h3>
           <a href="/posts" class="text-sm text-purple-500 no-underline hover:underline" rel="noreferrer">
             See all posts
           </a>
@@ -135,6 +138,25 @@ const posts = (await getCollection("posts")).sort(function (
               </div>
             ))
           }
+        </section>
+      </article>
+      <article class="flex flex-col gap-3">
+        <header class="flex w-full flex-row justify-between gap-2">
+          <h3 class="text-lg pb-2">Latest Pictures:</h3>
+          <a href="/pictures" class="text-sm text-purple-500 no-underline hover:underline" rel="noreferrer">
+        See all pictures
+          </a>
+        </header>
+        <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {images.slice(0, 4).map((image) => (
+        <div class="border border-neutral rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
+          <picture>
+            <source srcset={`/image-assets/${image}.avif`} type="image/avif">
+            <source srcset={`/image-assets/${image}.webp`} type="image/webp">
+            <img src={`/image-assets/${image}.webp`} alt="Image" class="rounded-lg" />
+          </picture>
+        </div>
+          ))}
         </section>
       </article>
     </div>
