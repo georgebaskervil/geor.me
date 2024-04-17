@@ -6,37 +6,73 @@ import Layout from "../layouts/Layout.astro";
 
 const images = getImages();
 ---
-<Tags />
 <style>
-.background-animation {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to left,#110819, #000);
-  z-index: -1;
-}
+  .image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+  }
+
+  .image-container:hover {
+    transform: scale(1.05);
+  }
+
+  .image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
 </style>
-<div class="background-animation">
+<Tags />
+<div class="background-animation"></div>
   <Layout>
-
     <h1 class="text-4xl font-bold mb-10">Latest Pictures:</h1>
-
     <article class="flex flex-col gap-4">
       <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {images.map((image) => (
-          <div class="border border-neutral rounded-lg shadow-md hover:scale-105 transition-transform duration-300">
-            <picture>
-              <source srcset={`/image-assets/${image}.avif`} type="image/avif">
-              <source srcset={`/image-assets/${image}.webp`} type="image/webp">
-              <img src={`/image-assets/${image}.webp`} alt="Image" class="rounded-lg" />
-            </picture>
-          </div>
+          <picture class="image-container">
+            <source srcset={`/image-assets/${image}.avif`} type="image/avif">
+            <source srcset={`/image-assets/${image}.webp`} type="image/webp">
+            <img data-src={`/image-assets/${image}.webp`} alt="Image" />
+          </picture>
         ))}
       </section>
     </article>
   </Layout>
-  </Layout>
 </div>
 <Analytics />
+
+<script>
+  const imagesToLazyLoad = document.querySelectorAll('img[data-src]');
+
+  const options = {
+    rootMargin: '0px',
+    threshold: 0.1
+  };
+
+  const lazyLoad = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+    entries.forEach((entry: IntersectionObserverEntry) => {
+      if (entry.isIntersecting) {
+        const image = entry.target;
+        const lazyLoad = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+          entries.forEach((entry: IntersectionObserverEntry) => {
+            if (entry.isIntersecting) {
+              const image = entry.target as HTMLImageElement;
+              image.src = image.dataset.src!;
+              observer.unobserve(image);
+            }
+          });
+        };
+        image.removeAttribute('data-src');
+        observer.unobserve(image);
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(lazyLoad, options);
+
+  imagesToLazyLoad.forEach((image) => {
+    observer.observe(image);
+  });
+</script>
