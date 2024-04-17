@@ -1,0 +1,43 @@
+# Security Policy
+
+## Commitment
+I take the security of this project very seriously. 
+While it might not be immediately apparent how a vulnerability could impact a DNS filterlist, it's prudent to recognize that no system is completely secure. 
+Thus, I remain fully committed to maintaining the security of users and encourage the responsible reporting of any potential vulnerabilities.
+
+## Supported Versions
+
+Maintaining the security of this project is my top priority. Currently, support and attention to security concerns are provided for the following version:
+
+| Version | Supported          |
+| ------- | ------------------ |
+| Latest  | :white_check_mark: |
+
+## Reporting a Vulnerability
+
+If you uncover a potential security issue, I earnestly request your assistance in reporting it through responsible channels. 
+I am in the process of implementing a more robust and secure reporting system. More details will be provided once this system is in place.
+
+### Contact Channels:
+
+**Primary (Email):**
+
+- **Email**: Vulnerabilities can be reported to my iCloud Hide My Email address: `resists-oysters.0s@icloud.com`.
+- This channel is monitored regularly, and I am working on enhancing the security reporting processes for even greater privacy and efficiency in the near future.
+
+**Secondary (Social Media):**
+
+- I can also be reached quickly on **Twitter/X [@georgebaskervil](https://twitter.com/georgebaskervil)**:
+    
+Note: X/Twitter offers an encrypted DMs feature for premium subsribers, which is better than regular DMs for enhanced privacy.
+However, it's important to be aware that the platform's implementation of end-to-end encryption for DMs has been noted to have some flaws.
+Please consider the sensitivity of the information when using this communication channel.
+
+### Response Process
+
+I am committed to reviewing reports and responding promptly as follows:
+
+1. Acknowledge receipt of your report within 48 hours.
+2. Provide an initial assessment within one week.
+3. Work to understand the potential impact and determine an appropriate resolution timeline.
+4. Release an update, if necessary, with due acknowledgment given to your contribution towards enhancing the security measures of this project (unless anonymity is requested).
