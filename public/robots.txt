@@ -1,6 +1,2 @@
 User-agent: *
-Disallow: / 
-Allow: /$
-Allow: /posts/
-Allow: /posts$
-Allow: /privacy
+Disallow:
