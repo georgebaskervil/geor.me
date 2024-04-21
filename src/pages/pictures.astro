@@ -1,78 +1,22 @@
 ---
 import Analytics from "../components/analytics.astro";
 import { getImages } from '../getImages.js';
+import { getImageCount } from '../getImageCount.js';
 import Tags from "../components/tags.astro";
+import PictureSect from "../components/picturesect.astro";
 import Layout from "../layouts/Layout.astro";
 
-const images = getImages();
+const totalImages = getImageCount();
+const imagesPerSection = Math.floor(totalImages / 4);
+const sections = Array.from({length: 4}, (_, i) => i * imagesPerSection);
 ---
-<style>
-  .image-container {
-    position: relative;
-    overflow: hidden;
-    border-radius: 10px;
-    transition: transform 0.3s ease;
-  }
-
-  .image-container:hover {
-    transform: scale(1.05);
-  }
-
-  .image-container img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-</style>
 <Tags />
-<div class="background-animation"></div>
-  <Layout>
-    <h1 class="text-4xl font-bold mb-10">Latest Pictures:</h1>
-    <article class="flex flex-col gap-4">
-      <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {images.map((image) => (
-          <picture class="image-container">
-            <source srcset={`/image-assets/${image}.avif`} type="image/avif">
-            <source srcset={`/image-assets/${image}.webp`} type="image/webp">
-            <img data-src={`/image-assets/${image}.webp`} alt="Image" />
-          </picture>
-        ))}
-      </section>
-    </article>
-  </Layout>
-</div>
+<Layout>
+  {sections.map((start, index) => (
+    <>
+      <PictureSect start={start} end={start + imagesPerSection} key={index} />
+      {index !== sections.length - 1 && <div style="padding-bottom: 20px;"></div>}
+    </>
+  ))}
+</Layout>
 <Analytics />
-
-<script>
-  const imagesToLazyLoad = document.querySelectorAll('img[data-src]');
-
-  const options = {
-    rootMargin: '0px',
-    threshold: 0.1
-  };
-
-  const lazyLoad = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
-    entries.forEach((entry: IntersectionObserverEntry) => {
-      if (entry.isIntersecting) {
-        const image = entry.target;
-        const lazyLoad = (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
-          entries.forEach((entry: IntersectionObserverEntry) => {
-            if (entry.isIntersecting) {
-              const image = entry.target as HTMLImageElement;
-              image.src = image.dataset.src!;
-              observer.unobserve(image);
-            }
-          });
-        };
-        image.removeAttribute('data-src');
-        observer.unobserve(image);
-      }
-    });
-  };
-
-  const observer = new IntersectionObserver(lazyLoad, options);
-
-  imagesToLazyLoad.forEach((image) => {
-    observer.observe(image);
-  });
-</script>
