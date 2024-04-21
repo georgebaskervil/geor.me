@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://georgebaskerville.me/privacy</loc>
+    <lastmod>2024-04-21T11:06:31.130Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://georgebaskerville.me/pictures</loc>
+    <lastmod>2024-04-21T11:06:31.131Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://georgebaskerville.me/</loc>
+    <lastmod>2024-04-21T11:06:31.131Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://georgebaskerville.me/404</loc>
+    <lastmod>2024-04-21T11:06:31.131Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://georgebaskerville.me/posts/index</loc>
+    <lastmod>2024-04-21T11:06:31.131Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://georgebaskerville.me/posts/adguard-home-setup</loc>
+    <lastmod>2024-04-21T11:06:31.131Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://georgebaskerville.me/posts/creating-my-website</loc>
+    <lastmod>2024-04-21T11:06:31.131Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+</urlset>

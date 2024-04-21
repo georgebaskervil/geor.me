@@ -1,6 +1,5 @@
 ---
 import Analytics from "../components/analytics.astro";
-import { getImages } from '../getImages.js';
 import { getImageCount } from '../getImageCount.js';
 import Tags from "../components/tags.astro";
 import PictureSect from "../components/picturesect.astro";
@@ -11,7 +10,20 @@ const imagesPerSection = Math.floor(totalImages / 4);
 const sections = Array.from({length: 4}, (_, i) => i * imagesPerSection);
 ---
 <Tags />
+<style>
+  .background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to left,#110819, #000);
+    z-index: -1;
+  }
+</style>
+<div class="background-animation"></div>
 <Layout>
+  <h1 class="text-4xl font-bold mb-10">Latest Pictures:</h1>
   {sections.map((start, index) => (
     <>
       <PictureSect start={start} end={start + imagesPerSection} key={index} />
