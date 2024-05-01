@@ -140,6 +140,34 @@ declare module 'astro:content' {
   collection: "posts";
   data: InferEntrySchema<"posts">
 } & { render(): Render[".md"] };
+"how-the-metaverse-will-kill-us-all.md": {
+	id: "how-the-metaverse-will-kill-us-all.md";
+  slug: "how-the-metaverse-will-kill-us-all";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"netflix-do-better.md": {
+	id: "netflix-do-better.md";
+  slug: "netflix-do-better";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"why-surveillance-captialism-is-bad.md": {
+	id: "why-surveillance-captialism-is-bad.md";
+  slug: "why-surveillance-captialism-is-bad";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
+"why-the-world-might-not-be-falling-apart.md": {
+	id: "why-the-world-might-not-be-falling-apart.md";
+  slug: "why-the-world-might-not-be-falling-apart";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
 };
 
 	};
