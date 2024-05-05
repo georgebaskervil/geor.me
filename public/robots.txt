@@ -1,4 +1,4 @@
 User-agent: *
-Disallow:
+Disallow: /netflixdobetter
 
 Sitemap: https://georgebaskerville.me/sitemap.xml
