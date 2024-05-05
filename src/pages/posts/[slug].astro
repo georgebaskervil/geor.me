@@ -42,14 +42,24 @@ const { Content } = await post.render();
   </style>
   <div class="background-animation"></div>
 
-  <article class="prose mx-auto w-full max-w-full flex-col"></article>
+  <article class="prose mx-auto w-full max-w-full flex-col">
     <h1 class="text-4xl font-bold mb-4">
       {post.data.title}
     </h1>
-    <p class="mt-0 mb-10" style="opacity: 0.8; font-style: italic;">
+    <p class="mt-0 mb-10" style="font-style: italic;">
       {post.data.description}
     </p>
-    <Content />
+    <Content id="content" />
   </article>
+  <script>
+    const content = document.getElementById('content');
+    const style = document.createElement('style');
+    style.textContent = 'p { color: #ffffff; }';
+    if (content) {
+      if (content && content.shadowRoot) {
+        content.shadowRoot.appendChild(style);
+      }
+    }
+  </script>
 </Layout>
 <Analytics />

@@ -126,20 +126,6 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"posts": {
-"adguard-home-setup.md": {
-	id: "adguard-home-setup.md";
-  slug: "adguard-home-setup";
-  body: string;
-  collection: "posts";
-  data: InferEntrySchema<"posts">
-} & { render(): Render[".md"] };
-"creating-my-website.md": {
-	id: "creating-my-website.md";
-  slug: "creating-my-website";
-  body: string;
-  collection: "posts";
-  data: InferEntrySchema<"posts">
-} & { render(): Render[".md"] };
 "how-the-metaverse-will-kill-us-all.md": {
 	id: "how-the-metaverse-will-kill-us-all.md";
   slug: "how-the-metaverse-will-kill-us-all";
@@ -154,9 +140,9 @@ declare module 'astro:content' {
   collection: "posts";
   data: InferEntrySchema<"posts">
 } & { render(): Render[".md"] };
-"netflix-do-better.md": {
-	id: "netflix-do-better.md";
-  slug: "netflix-do-better";
+"my-site-building-journey.md": {
+	id: "my-site-building-journey.md";
+  slug: "my-site-building-journey";
   body: string;
   collection: "posts";
   data: InferEntrySchema<"posts">
@@ -164,13 +150,6 @@ declare module 'astro:content' {
 "why-surveillance-captialism-is-bad.md": {
 	id: "why-surveillance-captialism-is-bad.md";
   slug: "why-surveillance-captialism-is-bad";
-  body: string;
-  collection: "posts";
-  data: InferEntrySchema<"posts">
-} & { render(): Render[".md"] };
-"why-the-world-might-not-be-falling-apart.md": {
-	id: "why-the-world-might-not-be-falling-apart.md";
-  slug: "why-the-world-might-not-be-falling-apart";
   body: string;
   collection: "posts";
   data: InferEntrySchema<"posts">
