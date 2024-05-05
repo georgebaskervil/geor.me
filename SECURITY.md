@@ -1,8 +1,9 @@
 # Security Policy
 
 ## Commitment
-I take the security of this project very seriously. 
-While it might not be immediately apparent how a vulnerability could impact a DNS filterlist, it's prudent to recognize that no system is completely secure. 
+
+I take the security of this project very seriously.
+While it might not be immediately apparent how a vulnerability could impact a DNS filterlist, it's prudent to recognize that no system is completely secure.
 Thus, I remain fully committed to maintaining the security of users and encourage the responsible reporting of any potential vulnerabilities.
 
 ## Supported Versions
@@ -15,10 +16,10 @@ Maintaining the security of this project is my top priority. Currently, support 
 
 ## Reporting a Vulnerability
 
-If you uncover a potential security issue, I earnestly request your assistance in reporting it through responsible channels. 
+If you uncover a potential security issue, I earnestly request your assistance in reporting it through responsible channels.
 I am in the process of implementing a more robust and secure reporting system. More details will be provided once this system is in place.
 
-### Contact Channels:
+### Contact Channels
 
 **Primary (Email):**
 
@@ -28,7 +29,7 @@ I am in the process of implementing a more robust and secure reporting system. M
 **Secondary (Social Media):**
 
 - I can also be reached quickly on **Twitter/X [@georgebaskervil](https://twitter.com/georgebaskervil)**:
-    
+
 Note: X/Twitter offers an encrypted DMs feature for premium subsribers, which is better than regular DMs for enhanced privacy.
 However, it's important to be aware that the platform's implementation of end-to-end encryption for DMs has been noted to have some flaws.
 Please consider the sensitivity of the information when using this communication channel.

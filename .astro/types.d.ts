@@ -147,6 +147,13 @@ declare module 'astro:content' {
   collection: "posts";
   data: InferEntrySchema<"posts">
 } & { render(): Render[".md"] };
+"im-boycotting-meta-heres-why.md": {
+	id: "im-boycotting-meta-heres-why.md";
+  slug: "im-boycotting-meta-heres-why";
+  body: string;
+  collection: "posts";
+  data: InferEntrySchema<"posts">
+} & { render(): Render[".md"] };
 "netflix-do-better.md": {
 	id: "netflix-do-better.md";
   slug: "netflix-do-better";

@@ -30,7 +30,9 @@ export const Config: IConfig = {
   },
   socials: {
     X: "https://x.com/georgebaskervil",
+    Tumblr: "https://tumblr.com/georgebaskervil",
     GitHub: "https://github.com/georgebaskervil",
+    LinkedIn: "https://www.linkedin.com/in/georgebaskervil",
   },
   projects: {
     "DNS Filterlists": {

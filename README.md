@@ -1,1 +1,4 @@
-Files for my personal website georgebaskerville.me. Based on a template by Tahir Murata. (github.com/pastc)
+# Files for my personal website
+
+URL is georgebaskerville.me.
+Based on [this template](https://github.com/pastc/portfolio)
