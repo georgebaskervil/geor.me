@@ -31,6 +31,9 @@ const currentPath = Astro.url.pathname;
               <a class={currentPath.startsWith("/pictures") ? "text-purple-500" : ""} href="/pictures">Pictures</a>
             </li>
             <li>
+              <a class={currentPath.startsWith("/contact") ? "text-purple-500" : ""} href="/contact">Contact</a>
+            </li>
+            <li>
               <a class={currentPath.startsWith("/privacy") ? "text-purple-500" : ""} href="/privacy">Privacy</a>
             </li>
           </ul>

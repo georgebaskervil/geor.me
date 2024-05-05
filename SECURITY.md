@@ -21,16 +21,19 @@ I am in the process of implementing a more robust and secure reporting system. M
 
 ### Contact Channels
 
-**Primary (Email):**
+**Primary (Signal):**
+
+- For secure and private communication, you can reach me on [Signal](https://signal.me/#eu/Ui1-KTmlgnCbNj491iq3HSOJtrkY1aVHm4n0v97dvkGDbCqWsExOu66Fzg7-7iC9)
+
+**Secondary (Email):**
 
 - **Email**: Vulnerabilities can be reported to my iCloud Hide My Email address: `resists-oysters.0s@icloud.com`.
 - This channel is monitored regularly, and I am working on enhancing the security reporting processes for even greater privacy and efficiency in the near future.
 
-**Secondary (Social Media):**
+**Tertiary (Social Media):**
 
-- I can also be reached quickly on **Twitter/X [@georgebaskervil](https://twitter.com/georgebaskervil)**:
-
-Note: X/Twitter offers an encrypted DMs feature for premium subsribers, which is better than regular DMs for enhanced privacy.
+- I can also be reached quickly on **X [@georgebaskervil](https://x.com/georgebaskervil)**:
+Note: X offers an encrypted DMs feature for premium subsribers, which is better than regular DMs for enhanced privacy.
 However, it's important to be aware that the platform's implementation of end-to-end encryption for DMs has been noted to have some flaws.
 Please consider the sensitivity of the information when using this communication channel.
 
