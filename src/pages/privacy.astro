@@ -1,5 +1,4 @@
 ---
-import Analytics from "../components/analytics.astro";
 import Tags from "../components/tags.astro";
 import Layout from "../layouts/Layout.astro";
 ---
@@ -23,35 +22,10 @@ import Layout from "../layouts/Layout.astro";
       <p>
           Privacy is a topic I care deeply about. I've put this notice here for full transparency about how exactly this website uses your personal data.
         </p>
-        <p>
-          <strong>Section 1: Site Analytics</strong>
-        </p>
-        <p>
-          I'm using the open-source analytics tool Umami to collect anonymized data about how you interact with the site.
-        </p>
-        <p>
-          As far as I'm aware, Umami makes the following data available to me:
-        </p>
-        <ul class="list-disc ml-8 mb-4">
-          <li>Total page views</li>
-          <li>Total unique visits</li>
-          <li>Total unique visitors</li>
-          <li>Bounce rate (that is, the percentage of visitors who leave the site after viewing only one page)</li>
-          <li>Average visit time</li>
-          <li>Pageviews per page</li>
-          <li>Referrers (that is, the websites visitors came from)</li>
-          <li>Browser type (e.g. Chrome)</li>
-          <li>Operating system (e.g. Windows)</li>
-          <li>Device type (e.g. desktop)</li>
-          <li>Country (e.g. United States)</li>
-          <li>Events (e.g. clicks, downloads) Note: I have not implemented any custom events on this site yet, so this data is not currently being collected.</li>
-        </ul>
-        <p>
-          For more information, please see Umami's Privacy Policy at
-        <a href="https://umami.is/privacy" target="_blank" class="text-purple-500 no-underline hover:underline">umami.is/privacy</a>
-        <p>
-        <p>
-          <strong>Section 2: Providers</strong>
+        There used to be a section about Umami analytics here, but I have since removed all analytics from this site.
+        I don't want to track you, I just want to share my thoughts with you.
+        <p/>
+          <strong>Section 1: Providers</strong>
         </p>
         <p>
           This site is hosted by Netlify. Netlify may collect data for various purposes. For more information, please see Netlify's Privacy Policy at
@@ -80,4 +54,3 @@ import Layout from "../layouts/Layout.astro";
     margin-bottom: 16px;
   }
 </style>
-<Analytics />

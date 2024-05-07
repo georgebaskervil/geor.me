@@ -1,5 +1,4 @@
 ---
-import Analytics from "../components/analytics.astro";
 import Tags from "../components/tags.astro";
 import Layout from "../layouts/Layout.astro";
 import { Picture } from "astro:assets";
@@ -150,4 +149,3 @@ const posts = (await getCollection("posts")).sort(function (
     </div>
   </main>
 </Layout>
-<Analytics />
