@@ -25,39 +25,46 @@ const { Content } = await post.render();
   og_description={post.data.description}
   og_type="article" 
 >
-  <style>
-    .background-animation {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to left, #110819, #000);
-      z-index: -1;
+<style>
+  .background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to left, #110819, #000);
+    z-index: -1;
+  }
+  .title {
+    color: #d6d6d6;
+    font-size: 2.75rem;
+  }
+  article {
+    color: #d6d6d6;
+    font-size: 1.15rem; 
+  }
+  .description {
+    opacity: 0.8;
+  }
+</style>
+<div class="background-animation"></div>
+<article class="prose mx-auto w-full max-w-full flex-col">
+  <h1 class="text-4xl font-bold mb-1">
+    {post.data.title}
+  </h1>
+  <p class="mt-0 mb-10 description" style="font-style: italic;">
+    {post.data.description}
+  </p>
+  <Content id="content" />
+</article>
+<script>
+  const content = document.getElementById('content');
+  const style = document.createElement('style');
+  style.textContent = 'p:not(.description) { color: #ffffff; }';
+  if (content) {
+    if (content && content.shadowRoot) {
+      content.shadowRoot.appendChild(style);
     }
-    .title {
-      font-size: 2.75rem;
-    }
-  </style>
-  <div class="background-animation"></div>
-
-  <article class="prose mx-auto w-full max-w-full flex-col">
-    <h1 class="text-4xl font-bold mb-4">
-      {post.data.title}
-    </h1>
-    <p class="mt-0 mb-10" style="font-style: italic;">
-      {post.data.description}
-    </p>
-    <Content id="content" />
-  </article>
-  <script>
-    const content = document.getElementById('content');
-    const style = document.createElement('style');
-    style.textContent = 'p { color: #ffffff; }';
-    if (content) {
-      if (content && content.shadowRoot) {
-        content.shadowRoot.appendChild(style);
-      }
-    }
-  </script>
+  }
+</script>
 </Layout>

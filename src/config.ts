@@ -1,4 +1,4 @@
-import icon from "../src/assets/icon.png";
+import icon from "../public/brand-assets/icon.png";
 
 interface IConfig {
   me: {
