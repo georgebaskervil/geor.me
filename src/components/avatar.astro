@@ -31,8 +31,8 @@ let avatar = images[0]; // get the first avatar
 
 <article class="flex flex-col gap-4">
     <picture class="image-container">
-      <source srcset={`/brand-assets/${avatar}.avif`} type="image/avif" media="(max-width: 768px)">
-      <source srcset={`/brand-assets/${avatar}.webp`} type="image/webp" media="(max-width: 768px)">
+      <source srcset={`/brand-assets/${avatar}.avif`} type="image/avif">
+      <source srcset={`/brand-assets/${avatar}.webp`} type="image/webp">
       <img data-src={`/brand-assets/${avatar}.png`} alt="Avatar" class="lazy" />
     </picture>
 </article>
