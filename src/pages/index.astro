@@ -35,34 +35,32 @@ const posts = (await getCollection("posts")).sort(function (
 <Layout>
   <main>
     <div class="flex flex-col gap-10">
-      <article class="md:flex-row-reverse md:justify-end md:gap-12">
+    <article class="md:flex-row-reverse md:justify-end md:gap-12">
         <div class="flex flex-row justify-between sm:grid-cols-3">
-          <div class="col-span-2 flex flex-col gap-6 md:gap-8 my-auto">
-            <h1 class="lg:text-4xl md:text-3xl font-bold text-2xl">Hi, I’m {Config.me.name.split(" ")[0]}</h1>
-            <h2 class="w-[90%] leading-6 text-sm sm:text-base">
-              I'm a {Config.me.job}.
-              I've been interested in the web for a long time, making my first site {years} years ago.
-              I'm also a digital privacy advocate and a dark mode enthusiast.
-            </h2>
-            <div class="custom-breadcrumbs">
-              <ul>
-                {
-                  Object.keys(Config.socials).map((social) => (
-                    <li>
-                      <a href={Config.socials[social as keyof typeof Config.socials]} rel="noreferrer" target="_blank" class="text-purple-500">
-                        {social.charAt(0).toUpperCase() + social.slice(1)}
-                      </a>
-                    </li>
-                  ))
-                }
-              </ul>
+            <div class="col-span-2 flex flex-col gap-6 md:gap-8 my-auto">
+                <h1 class="lg:text-4xl md:text-3xl font-bold text-2xl">Hi, I’m {Config.me.name.split(" ")[0]}</h1>
+                <h2 class="w-[90%] leading-6 text-sm sm:text-base">
+                    I'm a {Config.me.job}.
+                    I've been interested in the web for a long time, making my first site {years} years ago.
+                    I'm also a digital privacy advocate and a dark mode enthusiast.
+                </h2>
+                <div class="custom-breadcrumbs">
+                    <ul>
+                        {
+                            Object.keys(Config.socials).map((social) => (
+                                <li>
+                                    <a href={Config.socials[social as keyof typeof Config.socials]} rel="noreferrer" target="_blank" class="text-purple-500">
+                                        {social.charAt(0).toUpperCase() + social.slice(1)}
+                                    </a>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
             </div>
-          </div>
-          <div class="ml-auto flex justify-center items-center">
-                <Avatar />
-          </div>
+            <Avatar />
         </div>
-      </article>
+    </article>
 
       <article class="flex flex-col gap-3">
         <header class="flex w-full flex-row justify-between gap-2">
