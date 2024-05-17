@@ -1,6 +1,6 @@
 ---
 import Tags from "../components/tags.astro";
-import Layout from "../layouts/Layout.astro";
+import Layout from "../components/Layout.astro";
 ---
 <Tags />
 <style>
@@ -16,46 +16,25 @@ import Layout from "../layouts/Layout.astro";
 </style>
 <div class="background-animation"></div>
 <Layout>
-  <main>
+<main>
     <div class="container mx-auto px-4 py-0 w-full">
-      <h1 class="text-4xl font-bold mb-4">Privacy Notice</h1>
-      <p>
-        Privacy is a topic I care deeply about. I've put this notice here for full transparency about how exactly this website uses your personal data.
-      </p>
-      <p>
-        There used to be a section about Umami analytics here, but I have since removed all analytics from this site.
-      </p>
-      <p>
-        I don't want to track you, I just want to share my thoughts with you &lt;3.
-      </p>
-      </p>
-      <p>
-        <strong>Section 1: Providers</strong>
-      </p>
-      <p>
-        This site is hosted by Netlify. Netlify may collect data for various purposes. For more information, please see Netlify's Privacy Policy at
-        <a href="https://www.netlify.com/privacy" target="_blank" class="text-purple-500 no-underline hover:underline">netlify.com/privacy</a>
-      </p>
+        <h1 class="text-4xl font-bold mb-4 text-text" style="font-size: 2.5rem; margin-bottom: 24px;">Privacy Notice</h1>
+        <p class="text-text" style="margin-bottom: 16px;">
+            Privacy is a topic I care deeply about. I've put this notice here for full transparency about how exactly this website uses your personal data.
+        </p>
+        <p class="text-text" style="margin-bottom: 16px;">
+            There used to be a section about Umami analytics here, but I have since removed all analytics from this site.
+        </p>
+        <p class="text-text" style="margin-bottom: 16px;">
+            I don't want to track you, I just want to share my thoughts with you &lt;3.
+        </p>
+        </p>
+        <p class="text-text" style="margin-bottom: 16px;">
+            <strong>Section 1: Providers</strong>
+        </p>
+        <p class="text-text" style="margin-bottom: 16px;">
+            This site is hosted by Netlify. Netlify may collect data for various purposes. For more information, please see Netlify's Privacy Policy at
+            <a href="https://www.netlify.com/privacy" target="_blank" class="text-purple-500 no-underline hover:underline">netlify.com/privacy</a>
+        </p>
     </div>
-  </main>
-</Layout>
-
-<style>
-  .container {
-    max-width: 100%;
-  }
-
-  h1 {
-    font-size: 2.5rem;
-    margin-bottom: 24px;
-  }
-
-  p {
-    margin-bottom: 16px;
-  }
-
-  ul {
-    margin-left: 32px;
-    margin-bottom: 16px;
-  }
-</style>
+</main>

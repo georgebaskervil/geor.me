@@ -3,5 +3,6 @@
   "compilerOptions": {
     "jsx": "preserve",
     "strictNullChecks": true,
+    "esModuleInterop": true,
   }
 }

@@ -1,6 +1,6 @@
 ---
 import Tags from "../components/tags.astro";
-import Layout from "../layouts/Layout.astro";
+import Layout from "../components/Layout.astro";
 ---
 <Tags />
 <style>
@@ -17,12 +17,12 @@ import Layout from "../layouts/Layout.astro";
 <div class="background-animation"></div>
 <Layout>
 <main>
-    <div class="container mx-auto px-4 py-0 w-full">
-        <h1 class="text-4xl font-bold mb-4">Where to contact me:</h1>
-        <p class="p-spacing">
+    <div class="container mx-auto w-full">
+        <h1 class="text-4xl font-bold mb-4 text-text">Where to contact me:</h1>
+        <p class="p-spacing text-text">
             Since I'm boycotting Meta, here's a list of other platforms where you can find me:
         </p>
-        <p class="p-spacing">
+        <p class="p-spacing text-text">
             This list is sorted by how often I check each platform.
         </p>
         <a href="https://x.com/georgebaskervil" target="_blank" class="text-purple-500 no-underline hover:underline">X</a>

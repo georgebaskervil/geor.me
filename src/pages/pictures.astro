@@ -2,7 +2,7 @@
 import { getImageCount } from '../getImageCount';
 import Tags from "../components/tags.astro";
 import PictureSect from "../components/picturesect.astro";
-import Layout from "../layouts/Layout.astro";
+import Layout from "../components/Layout.astro";
 
 const totalImages = getImageCount();
 const imagesPerSection = Math.floor(totalImages / 4);
@@ -22,8 +22,8 @@ const sections = Array.from({length: 4}, (_, i) => i * imagesPerSection);
 </style>
 <div class="background-animation"></div>
 <Layout>
-  <h1 class="text-4xl font-bold mb-1">Latest Pictures:</h1>
-  <p class="mt-0 mb-5" style="opacity:0.8; font-style: italic;">Images licensed under CC0 1.0 Universal. Download them on the <a href="https://github.com/georgebaskervil/Personal-Website/tree/main/public/image-assets" style="text-decoration: underline;" target="_blank">GitHub repo</a></p>
+  <h1 class="text-4xl font-bold mb-1 text-text">Latest Pictures:</h1>
+  <p class="mt-0 mb-5 text-text" style="opacity:0.8; font-style: italic;">Images licensed under CC0 1.0 Universal. Download them on the <a href="https://github.com/georgebaskervil/Personal-Website/tree/main/public/image-assets" style="text-decoration: underline;" target="_blank">GitHub repo</a></p>
   {sections.map((start, index) => (
     <>
       <PictureSect start={start} end={start + imagesPerSection} key={index} />
