@@ -17,8 +17,6 @@
     "@tabler/icons": "^3.3.0",
     "astro": "^4.7.0",
     "eslint": "8.56.0",
-    "glob": "^10.3.12",
-    "sharp": "^0.33.3",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
   },
