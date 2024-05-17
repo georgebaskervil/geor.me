@@ -1,7 +1,8 @@
-import { z, defineCollection } from "astro:content";
+// eslint-disable-next-line import/no-unresolved
+import { z, defineCollection } from 'astro:content';
 
 const postCollection = defineCollection({
-  type: "content",
+  type: 'content',
   schema: z.object({
     title: z.string(),
     // tags: z.array(z.string()),

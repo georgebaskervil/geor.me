@@ -1,8 +1,17 @@
 {
-  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "jsx": "preserve",
-    "strictNullChecks": true,
+    "baseUrl": ".",
+    "paths": {
+      "astro:content": ["src/content"]
+    },
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "noImplicitAny": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
-  }
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*", "astro.config.ts", "tailwind.config.ts"]
 }

@@ -1,4 +1,4 @@
-import icon from "../public/brand-assets/icon.png";
+import icon from '../public/brand-assets/icon.png';
 
 interface IConfig {
   me: {
@@ -23,24 +23,24 @@ interface IConfig {
 
 export const Config: IConfig = {
   me: {
-    name: "George Baskerville",
-    job: "student",
-    started: "2019-05-05",
-    projectLink: "https://github.com/georgebaskervil?tab=repositories",
+    name: 'George Baskerville',
+    job: 'student',
+    started: '2019-05-05',
+    projectLink: 'https://github.com/georgebaskervil?tab=repositories',
   },
   socials: {
-    X: "https://x.com/georgebaskervil",
-    GitHub: "https://github.com/georgebaskervil",
-    LinkedIn: "https://www.linkedin.com/in/georgebaskervil",
+    X: 'https://x.com/georgebaskervil',
+    GitHub: 'https://github.com/georgebaskervil',
+    LinkedIn: 'https://www.linkedin.com/in/georgebaskervil',
   },
   projects: {
-    "DNS Filterlists": {
-      url: "https://github.com/georgebaskervil/dnsfilterlists",
-      tags: ["DNS", "DNS-Filtering", "Privacy"],
+    'DNS Filterlists': {
+      url: 'https://github.com/georgebaskervil/dnsfilterlists',
+      tags: ['DNS', 'DNS-Filtering', 'Privacy'],
     },
-    "Personal Website": {
-      url: "https://github.com/georgebaskervil/Personal-Website",
-      tags: ["Personal-Website", "Astro", "Tailwind-CSS"],
+    'Personal Website': {
+      url: 'https://github.com/georgebaskervil/Personal-Website',
+      tags: ['Personal-Website', 'Astro', 'Tailwind-CSS'],
     },
   },
   og: {
