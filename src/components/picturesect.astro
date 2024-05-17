@@ -1,44 +1,19 @@
 ---
-import { getImages } from '../getImages';
+import { getImages } from '../scripts/getImages';
 
 let { start, end } = Astro.props;
 const images = getImages();
 ---
 
-<style>
-  .image-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    border-radius: 10px;
-    transition: transform 0.3s ease;
-    width: 100%;
-    aspect-ratio: 3 / 2;
-  }
-
-  .image-container:hover {
-    transform: scale(1.05);
-  }
-
-  .image-container img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-  }
-</style>
-
 <article class="flex flex-col gap-4">
-  <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-    {images.slice(start, end).map((image) => (
-      <picture class="image-container">
-        <source srcset={`/image-assets/${image}.avif`} type="image/avif">
-        <img data-src={`/image-assets/${image}.webp`} alt="Image" class="lazy" />
-      </picture>
-    ))}
-  </section>
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {images.slice(start, end).map((image) => (
+            <picture style="position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; border-radius: 10px; transition: transform 0.3s ease; width: 100%; aspect-ratio: 3 / 2;">
+                <source srcset={`/image-assets/${image}.avif`} type="image/avif">
+                <img data-src={`/image-assets/${image}.webp`} alt="Image" style="width: 100%; height: 100%; display: block; object-fit: cover;" class="lazy" />
+            </picture>
+        ))}
+    </section>
 </article>
 
 <script>
