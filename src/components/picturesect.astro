@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { getImages } from '../scripts/getImages';
 
 let { start, end } = Astro.props;
@@ -8,10 +9,19 @@ const images = getImages();
 <article class="flex flex-col gap-4">
     <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {images.slice(start, end).map((image) => (
-            <picture class="image-container">
-                <source srcset={`/image-assets/${image}.avif`} type="image/avif">
-                <img data-src={`/image-assets/${image}.webp`} alt="Image" class="lazy" />
-            </picture>
+            <div class="image-container">
+                <picture>
+                    <source srcset={`/image-assets/${image}.avif`} type="image/avif" />
+                    <source srcset={`/image-assets/${image}.webp`} type="image/webp" />
+                    <source srcset={`/image-assets/${image}.png`} type="image/png" />
+                    <Image 
+                        src={`/image-assets/${image}.png`}
+                        alt="Some of my best pictures"
+                        width={500} 
+                        height={333}
+                    />
+                </picture>
+            </div>
         ))}
     </section>
 </article>
@@ -40,26 +50,3 @@ const images = getImages();
     transform: scale(1.05);
 }
 </style>
-
-<script>
-  window.onload = () => {
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          // Load image
-          const img = entry.target as HTMLImageElement;
-          if (img.dataset.src) {
-            img.src = img.dataset.src;
-          }
-
-          // Stop observing
-          observer.unobserve(entry.target);
-        }
-      });
-    });
-
-    document.querySelectorAll('img.lazy').forEach(img => {
-      observer.observe(img);
-    });
-  };
-</script>
