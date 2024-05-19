@@ -28,7 +28,6 @@ I am in the process of implementing a more robust and secure reporting system. M
 **Secondary (Email):**
 
 - **Email**: Vulnerabilities can be reported to my iCloud Hide My Email address: `resists-oysters.0s@icloud.com`.
-- This channel is monitored regularly, and I am working on enhancing the security reporting processes for even greater privacy and efficiency in the near future.
 
 **Tertiary (Social Media):**
 
