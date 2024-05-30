@@ -2,7 +2,7 @@
 import Tags from "../components/tags.astro";
 import Layout from "../components/Layout.astro";
 import { Config } from "../config";
-import PictureSect from "../components/picturesect.astro";
+import EagerPictureSect from "../components/eagerpicturesect.astro";
 import Avatar from '../components/avatar.astro';
 
 const years = () => {
@@ -125,7 +125,7 @@ const posts = (await getCollection("posts")).sort(function (
         See all pictures
           </a>
         </header>
-        <PictureSect start={0} end={4} />      
+        <EagerPictureSect start={0} end={4} />      
       </article>
     </div>
   </main>

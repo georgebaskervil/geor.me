@@ -1,11 +1,31 @@
 ---
+import { Image } from 'astro:assets';
 import { getavatar } from '../scripts/getavatar';
 const images = getavatar();
 let avatar = images[0]; // get the first avatar
 ---
 
-<picture class="image-container overflow-hidden rounded-lg transition-transform duration-300 hover:scale-105" style="width: 35%; height: 35%; min-width: 125px;">
-  <source srcset={`/brand-assets/${avatar}.avif`} type="image/avif">
-  <source srcset={`/brand-assets/${avatar}.webp`} type="image/webp">
-  <img src={`/brand-assets/${avatar}.png`} alt="Avatar" class="lazy" />
+<style>
+    .image-container {
+        overflow: hidden;
+        border-radius: 10px;
+        transition: transform 0.3s;
+    }
+
+    .image-container:hover {
+        transform: scale(1.05);
+    }
+</style>
+
+<picture class="image-container">
+    <source srcset={`/brand-assets/${avatar}.avif`} type="image/avif" />
+    <source srcset={`/brand-assets/${avatar}.webp`} type="image/webp" />
+    <source srcset={`/brand-assets/${avatar}.png`} type="image/png" />
+    <Image 
+        src={`/image-assets/${avatar}.png`}
+        alt="Some of my best pictures"
+        width={500} 
+        height={333}
+        loading="eager"
+    />
 </picture>
