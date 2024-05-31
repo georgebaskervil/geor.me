@@ -11,15 +11,13 @@ const images = getImages();
         {images.slice(start, end).map((image) => (
             <div class="image-container">
                 <picture>
-                    <source srcset={`/image-assets/${image}.avif`} type="image/avif" />
                     <source srcset={`/image-assets/${image}.webp`} type="image/webp" />
-                    <source srcset={`/image-assets/${image}.png`} type="image/png" />
                     <Image
                         src={`/image-assets/${image}.png`}
                         alt="Some of my best pictures"
                         width={500} 
                         height={333}
-                        loading="eager"
+                        loading="lazy"
                     />
                 </picture>
             </div>

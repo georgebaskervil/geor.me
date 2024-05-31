@@ -1,12 +1,17 @@
 ---
 import { getImageCount } from '../scripts/getImageCount';
 import Tags from "../components/tags.astro";
-import PictureSect from "../components/eagerpicturesect.astro";
+import PictureSect from "../components/picturesect.astro";
 import Layout from "../components/Layout.astro";
+import { Image } from 'astro:assets';
+import { getImages } from '../scripts/getImages';
 
 const totalImages = getImageCount();
 const imagesPerSection = Math.floor(totalImages / 4);
-const sections = Array.from({length: 4}, (_, i) => i * imagesPerSection);
+const numSections = Math.ceil(totalImages / 4);
+const sections = Array.from({length: numSections}, (_, i) => i * 4);
+let { start, end } = Astro.props;
+const images = getImages();
 ---
 <Tags />
 <style>
@@ -19,6 +24,28 @@ const sections = Array.from({length: 4}, (_, i) => i * imagesPerSection);
     background: linear-gradient(to left,#110819, #000);
     z-index: -1;
   }
+  .image-container {
+    position: relative; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    overflow: hidden; 
+    border-radius: 10px; 
+    transition: transform 0.3s ease; 
+    width: 100%; 
+    aspect-ratio: 3 / 2;
+}
+
+.image-container img {
+    width: 100%; 
+    height: 100%; 
+    display: block; 
+    object-fit: cover;
+}
+
+.image-container:hover {
+    transform: scale(1.05);
+}
 </style>
 <div class="background-animation"></div>
 <Layout>
@@ -26,10 +53,22 @@ const sections = Array.from({length: 4}, (_, i) => i * imagesPerSection);
   <p class="bottom-0 text-left text-white text-sm mt-0 mb-3" style="opacity:0.4; font-style: italic; font-family: monospace;">
 // Images licensed under CC0 1.0 Universal. Download them on the <a href="https://github.com/georgebaskervil/Personal-Website/tree/main/public/image-assets" class="hover:underline" target="_blank">GitHub repo</a>
 </p>
-  {sections.map((start, index) => (
-    <>
-      <PictureSect start={start} end={start + imagesPerSection} key={index} />
-      {index !== sections.length - 1 && <div style="padding-bottom: 20px;"></div>}
-    </>
-  ))}
+<article class="flex flex-col gap-4">
+    <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {images.map((image) => (
+            <div class="image-container">
+                <picture>
+                    <source srcset={`/image-assets/${image}.webp`} type="image/webp" />
+                    <Image
+                        src={`/image-assets/${image}.png`}
+                        alt="Some of my best pictures"
+                        width={500} 
+                        height={333}
+                        loading="lazy"
+                    />
+                </picture>
+            </div>
+        ))}
+    </section>
+</article>
 </Layout>
