@@ -7,15 +7,32 @@
     <style>
       canvas {
         width: 100%;
-        height: 800px; /* Increased height for better resolution */
-        border: 1px solid black;
+        height: 800px;
+        border: 1px solid #2d2a2a;
       }
       #controls {
         margin-bottom: 10px;
+        color: #d6d6d6;
+      }
+      #controls input,
+      #controls button {
+        border: 1px solid #2d2a2a;
+        color: #d6d6d6;
+        background-color: #110819;
+      }
+      .background-animation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to left, #110819, #000);
+        z-index: -1;
       }
     </style>
   </head>
   <body>
+    <div class="background-animation"></div>
     <div id="controls">
       <label for="fileInput">Upload .wav File:</label>
       <input type="file" id="fileInput" accept=".wav" />
@@ -26,7 +43,6 @@
       <button id="drawButton">Draw Waveform Section</button>
     </div>
     <canvas id="canvas" width="3840" height="800"></canvas>
-    <!-- Increased width for ultra-high resolution -->
 
     <script>
       let audioBuffer = null;
@@ -83,6 +99,7 @@
         const data = buffer.getChannelData(0).slice(startSample, endSample);
         ctx.clearRect(0, 0, width, height);
         ctx.beginPath();
+        ctx.strokeStyle = '#D6D6D6'; // Use the 'text' color from your Tailwind CSS config for the graph
         const step = Math.ceil(data.length / width); // Reduced step size for high resolution
         const amp = height / 2;
         for (let i = 0; i < width; i++) {
