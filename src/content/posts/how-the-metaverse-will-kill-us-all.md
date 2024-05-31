@@ -24,4 +24,4 @@ However, this system was refined in a world that looked very different to ours. 
 
 This is the same mechanism by which we will be susceptible to the metaverse. If the metaverse can offer us an illusion of everything we could ever imagine, our reward systems will once again be hijacked because as far as our reward pathways are concerned, literal paradise is available to us if only we remain plugged into the headset. Even if we know it’s fake. Even if we know it’s bad for us. We just won’t be able to stop.
 
-In a single sentence:  Meta really is on a highway to creating the real-life matrix.
+In a single sentence: Meta really is on a highway to creating the real-life matrix.

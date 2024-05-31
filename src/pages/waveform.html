@@ -1,87 +1,99 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Waveform Viewer</title>
     <style>
-        canvas {
-            width: 100%;
-            height: 800px; /* Increased height for better resolution */
-            border: 1px solid black;
-        }
-        #controls {
-            margin-bottom: 10px;
-        }
+      canvas {
+        width: 100%;
+        height: 800px; /* Increased height for better resolution */
+        border: 1px solid black;
+      }
+      #controls {
+        margin-bottom: 10px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div id="controls">
-        <label for="fileInput">Upload .wav File:</label>
-        <input type="file" id="fileInput" accept=".wav"/>
-        <label for="startTime">Start Time (s):</label>
-        <input type="number" id="startTime" value="0" step="0.01" min="0"/>
-        <label for="endTime">End Time (s):</label>
-        <input type="number" id="endTime" value="1" step="0.01" min="0"/>
-        <button id="drawButton">Draw Waveform Section</button>
+      <label for="fileInput">Upload .wav File:</label>
+      <input type="file" id="fileInput" accept=".wav" />
+      <label for="startTime">Start Time (s):</label>
+      <input type="number" id="startTime" value="0" step="0.01" min="0" />
+      <label for="endTime">End Time (s):</label>
+      <input type="number" id="endTime" value="1" step="0.01" min="0" />
+      <button id="drawButton">Draw Waveform Section</button>
     </div>
-    <canvas id="canvas" width="3840" height="800"></canvas> <!-- Increased width for ultra-high resolution -->
+    <canvas id="canvas" width="3840" height="800"></canvas>
+    <!-- Increased width for ultra-high resolution -->
 
     <script>
-        let audioBuffer = null;
+      let audioBuffer = null;
 
-        document.getElementById('fileInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    audioContext.decodeAudioData(e.target.result, function(buffer) {
-                        audioBuffer = buffer;
-                        alert('Audio file loaded successfully.');
-                    }, function(error) {
-                        console.error('Error decoding audio data:', error);
-                        alert('Error decoding audio data.');
-                    });
-                };
-                reader.readAsArrayBuffer(file);
-            } else {
-                alert('Please upload a .wav file.');
-            }
+      document
+        .getElementById('fileInput')
+        .addEventListener('change', function (event) {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const audioContext = new (window.AudioContext ||
+                window.webkitAudioContext)();
+              audioContext.decodeAudioData(
+                e.target.result,
+                function (buffer) {
+                  audioBuffer = buffer;
+                  alert('Audio file loaded successfully.');
+                },
+                function (error) {
+                  console.error('Error decoding audio data:', error);
+                  alert('Error decoding audio data.');
+                },
+              );
+            };
+            reader.readAsArrayBuffer(file);
+          } else {
+            alert('Please upload a .wav file.');
+          }
         });
 
-        document.getElementById('drawButton').addEventListener('click', function() {
-            const startTime = parseFloat(document.getElementById('startTime').value);
-            const endTime = parseFloat(document.getElementById('endTime').value);
-            if (audioBuffer) {
-                drawWaveformSection(audioBuffer, startTime, endTime);
-            } else {
-                alert('Please load an audio file first.');
-            }
+      document
+        .getElementById('drawButton')
+        .addEventListener('click', function () {
+          const startTime = parseFloat(
+            document.getElementById('startTime').value,
+          );
+          const endTime = parseFloat(document.getElementById('endTime').value);
+          if (audioBuffer) {
+            drawWaveformSection(audioBuffer, startTime, endTime);
+          } else {
+            alert('Please load an audio file first.');
+          }
         });
 
-        function drawWaveformSection(buffer, startTime, endTime) {
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-            const sampleRate = buffer.sampleRate;
-            const startSample = Math.floor(startTime * sampleRate);
-            const endSample = Math.floor(endTime * sampleRate);
-            const data = buffer.getChannelData(0).slice(startSample, endSample);
-            ctx.clearRect(0, 0, width, height);
-            ctx.beginPath();
-            const step = Math.ceil(data.length / width); // Reduced step size for high resolution
-            const amp = height / 2;
-            for (let i = 0; i < width; i++) {
-                const slice = data.slice(i * step, (i + 1) * step);
-                const min = Math.min(...slice);
-                const max = Math.max(...slice);
-                ctx.moveTo(i, (1 + min) * amp);
-                ctx.lineTo(i, (1 + max) * amp);
-            }
-            ctx.stroke();
+      function drawWaveformSection(buffer, startTime, endTime) {
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        const sampleRate = buffer.sampleRate;
+        const startSample = Math.floor(startTime * sampleRate);
+        const endSample = Math.floor(endTime * sampleRate);
+        const data = buffer.getChannelData(0).slice(startSample, endSample);
+        ctx.clearRect(0, 0, width, height);
+        ctx.beginPath();
+        const step = Math.ceil(data.length / width); // Reduced step size for high resolution
+        const amp = height / 2;
+        for (let i = 0; i < width; i++) {
+          const slice = data.slice(i * step, (i + 1) * step);
+          const min = Math.min(...slice);
+          const max = Math.max(...slice);
+          ctx.moveTo(i, (1 + min) * amp);
+          ctx.lineTo(i, (1 + max) * amp);
         }
+        ctx.stroke();
+      }
     </script>
-</body>
+  </body>
 </html>

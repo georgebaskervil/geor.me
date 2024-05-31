@@ -32,9 +32,9 @@ I am in the process of implementing a more robust and secure reporting system. M
 **Tertiary (Social Media):**
 
 - I can also be reached quickly on **X [@georgebaskervil](https://x.com/georgebaskervil)**:
-Note: X offers an encrypted DMs feature for premium subsribers, which is better than regular DMs for enhanced privacy.
-However, it's important to be aware that the platform's implementation of end-to-end encryption for DMs has been noted to have some flaws.
-Please consider the sensitivity of the information when using this communication channel.
+  Note: X offers an encrypted DMs feature for premium subsribers, which is better than regular DMs for enhanced privacy.
+  However, it's important to be aware that the platform's implementation of end-to-end encryption for DMs has been noted to have some flaws.
+  Please consider the sensitivity of the information when using this communication channel.
 
 ### Response Process
 
