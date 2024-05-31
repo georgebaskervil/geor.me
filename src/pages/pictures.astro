@@ -1,16 +1,9 @@
 ---
-import { getImageCount } from '../scripts/getImageCount';
 import Tags from "../components/tags.astro";
-import PictureSect from "../components/picturesect.astro";
 import Layout from "../components/Layout.astro";
 import { Image } from 'astro:assets';
 import { getImages } from '../scripts/getImages';
 
-const totalImages = getImageCount();
-const imagesPerSection = Math.floor(totalImages / 4);
-const numSections = Math.ceil(totalImages / 4);
-const sections = Array.from({length: numSections}, (_, i) => i * 4);
-let { start, end } = Astro.props;
 const images = getImages();
 ---
 <Tags />
