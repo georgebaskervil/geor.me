@@ -10,15 +10,18 @@
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint . --ext .ts --ext .js",
-    "lint:fix": "eslint . --ext .ts --fix",
+    "lint:fix": "eslint . --ext .ts --ext .js --fix",
     "format": "prettier --write ."
   },
   "dependencies": {
     "@astrojs/check": "^0.7.0",
+    "@astrojs/react": "^3.4.0",
     "@astrojs/sitemap": "^3.1.5",
     "@astrojs/tailwind": "^5.1.0",
     "@tabler/icons": "^3.3.0",
     "astro": "^4.9.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
   },
@@ -26,6 +29,8 @@
     "@eslint/js": "^9.1.1",
     "@tailwindcss/typography": "^0.5.13",
     "@types/node": "^20.12.7",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.9.0",
     "@typescript-eslint/parser": "^7.9.0",
     "eslint": "8.56.0",

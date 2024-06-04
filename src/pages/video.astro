@@ -1,0 +1,55 @@
+---
+import Tags from "../components/tags.astro";
+import Layout from "../components/Layout.astro";
+---
+<Tags />
+<style>
+  .background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to left, #110819, #000);
+    z-index: -1;
+  }
+
+  .video-container {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .download-link {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #000;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+
+  .download-link:hover {
+    background-color: #ddd;
+  }
+</style>
+<div class="background-animation"></div>
+<Layout>
+<main>
+    <div class="container mx-auto px-4 py-0 w-full">
+        <div class="video-container">
+            <h1 class="text-text">How to Solder Pokémon Gold for GBA:</h1>
+            <video controls>
+                <source src="/video-assets/tutorial.webm" type="video/webm">
+                Your browser does not support the video tag.
+            </video>
+            <p><a class="download-link" href="/video-assets/tutorial.webm" download>Download the video</a></p>
+        </div>
+    </div>
+</main>
+</Layout>
