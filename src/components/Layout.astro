@@ -50,6 +50,24 @@ const currentPath = Astro.url.pathname;
             </div>
         </div>
         <style is:global>
+            @font-face {
+                font-family: 'SpecialElite';
+                src: url(/fonts/SpecialElite-Regular.woff2) format('woff2');
+            }
+
+            html, body {
+                font-family: 'SpecialElite';
+            }
+
+            * {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* Internet Explorer 10+ */
+            }
+
+            *::-webkit-scrollbar { 
+            display: none;  /* WebKit (Safari, Chrome, etc.) */
+            }
+
             .custom-breadcrumbs {
                 max-width: 100%;
                 overflow-x: auto;
@@ -102,15 +120,29 @@ const currentPath = Astro.url.pathname;
             [dir="rtl"] .custom-breadcrumbs > ul > li + *:before {
                 --tw-rotate: -180deg;
             }
-            
-            footer {
-                font-family: monospace;
-            }
         </style>
+        <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(this: HTMLAnchorElement, e: Event) {
+        e.preventDefault();
+
+        const href = this.getAttribute('href');
+            if (href) {
+                const targetElement = document.querySelector(href);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    }
+                }
+            });
+        });
+        </script>
     </body>
     <footer class="bottom-0 text-left p-4 text-white text-sm ml-6" style="opacity:0.4; font-style: italic">
-        // Built with Astro, Tailwind CSS, and TypeScript by George Baskerville.
-        Based on a template (sadly has since been taken down) by Tahir Murata.
-        <a href="https://github.com/georgebaskervil/Personal-Website" target="_blank" rel="noopener noreferrer" class="hover:underline">Source code available under MIT licence on GitHub</a>.
+        # Built with Astro, Tailwind, and TypeScript by George Baskerville.
+        Based on a template that has since been taken down by Tahir Murata.
+        Uses the <a href="https://fonts.google.com/specimen/Special+Elite" target="_blank" rel="noopener noreferrer" class="hover:underline">Special Elite</a> font.    
+        <a href="https://github.com/georgebaskervil/Personal-Website" target="_blank" rel="noopener noreferrer" class="hover:underline">Source code available under MIT licence</a>.
     </footer>
 </html>

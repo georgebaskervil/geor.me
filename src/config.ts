@@ -1,4 +1,4 @@
-import icon from '../public/brand-assets/icon.png';
+import icon from '../public/brand-assets/icon.avif';
 
 interface IConfig {
   me: {
@@ -31,7 +31,6 @@ export const Config: IConfig = {
   socials: {
     X: 'https://x.com/georgebaskervil',
     GitHub: 'https://github.com/georgebaskervil',
-    LinkedIn: 'https://www.linkedin.com/in/georgebaskervil',
   },
   projects: {
     'DNS Filterlists': {

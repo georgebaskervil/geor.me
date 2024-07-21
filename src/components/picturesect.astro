@@ -11,9 +11,8 @@ const images = getImages();
         {images.slice(start, end).map((image) => (
             <div class="image-container">
                 <picture>
-                    <source srcset={`/image-assets/${image}.webp`} type="image/webp" />
                     <Image
-                        src={`/image-assets/${image}.png`}
+                        src={`/image-assets/${image}.avif`}
                         alt="Some of my best pictures"
                         width={500} 
                         height={333}

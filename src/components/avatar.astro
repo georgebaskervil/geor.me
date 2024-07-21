@@ -18,11 +18,8 @@ let avatar = images[0]; // get the first avatar
 </style>
 
 <picture class="image-container">
-    <source srcset={`/brand-assets/${avatar}.avif`} type="image/avif" />
-    <source srcset={`/brand-assets/${avatar}.webp`} type="image/webp" />
-    <source srcset={`/brand-assets/${avatar}.png`} type="image/png" />
     <Image 
-        src={`/image-assets/${avatar}.png`}
+        src={`/brand-assets/${avatar}.avif`}
         alt="Some of my best pictures"
         width={500} 
         height={333}
