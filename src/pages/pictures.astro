@@ -2,6 +2,7 @@
 import Tags from "../components/tags.astro";
 import Layout from "../components/Layout.astro";
 import { getImages } from '../scripts/getImages';
+import { Image } from 'astro:assets';
 
 const images = getImages();
 ---
@@ -50,13 +51,13 @@ const images = getImages();
         {images.map((image) => (
             <div class="image-container">
                 <picture>
-                    <img
-                        src={`/image-assets/${image}.avif`}
-                        alt="Some of my best pictures"
-                        width="500"
-                        height="333"
-                        loading="eager"
-                    />
+                <Image
+                    src={`/image-assets/${image}.webp`}
+                    alt="Some of my best pictures"
+                    width={500}
+                    height={333}
+                    loading="eager"
+                />
                 </picture>
             </div>
         ))}

@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { getImages } from '../scripts/getImages';
 
 let { start, end } = Astro.props;
@@ -10,13 +11,13 @@ const images = getImages();
         {images.slice(start, end).map((image) => (
             <div class="image-container">
                 <picture>
-                    <img
-                        src={`/image-assets/${image}.avif`}
-                        alt="Some of my best pictures"
-                        width="500"
-                        height="333"
-                        loading="eager"
-                    />
+                    <Image
+                    src={`/image-assets/${image}.webp`}
+                    alt="Some of my best pictures"
+                    width={500}
+                    height={333}
+                    loading="eager"
+                />
                 </picture>
             </div>
         ))}

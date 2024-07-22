@@ -1,4 +1,4 @@
-import icon from '../public/brand-assets/icon.avif';
+import icon from '../public/brand-assets/icon.webp';
 
 interface IConfig {
   me: {
