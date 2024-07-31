@@ -1,46 +1,64 @@
 ---
-import Tags from "../components/tags.astro";
-import Layout from "../components/Layout.astro";
+import Tags from '../components/tags.astro';
+import Layout from '../components/Layout.astro';
 const currentPath = Astro.url.pathname;
 ---
+
 <Tags />
-<style>
-  .background-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to left,#110819, #000);
-    z-index: -1;
-  }
-</style>
 <div class="background-animation"></div>
 <Layout>
-<main>
+  <main>
     <div class="container mx-auto py-0 w-full">
-        <h1 class="text-4xl font-bold mb-4 text-text" style="font-size: 2.5rem; margin-bottom: 24px;">Extra Items</h1>
-        <p class="text-text" style="margin-bottom: 16px;">
-            This page contains various items that don't fit into the main categories of this site.
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            Number 1: 
-            <a class={currentPath.startsWith("/netflixdobetter")} class="text-purple-500", href="/netflixdobetter">Netflix, Do Better</a>
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            This is a meme page that I made for fun. It's a parody of the fact that, due to global includes, a test page that 
-             <a href="https://web.archive.org/web/20240423111505/netflix.com/helloworld" target="_blank" class="text-text no-underline hover:underline">used to be on the Netflix website</a> 
-            that just contained an h1 tag with "Hello World !!"
-            used 400kb of javascript. I managed to recreate the same thing in only
-            ~140 Bytes of HTML. It's just a joke and not affiliated with Netflix in any way.
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            Number 2: 
-            <a class={currentPath.startsWith("/waveform")} class="text-purple-500" href="/waveform">Waveform Viewer</a>
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            This is a waveform viewer I made while researching audio compression algorithms for the
-            <a href="https://content.neuralink.com/compression-challenge/README.html" target="_blank" class="text-text no-underline hover:underline">NeuraLink compression challenge.</a>
-        </p>
+      <h1
+        class="text-4xl font-bold mb-4 text-text"
+        style="font-size: 2.5rem; margin-bottom: 24px;"
+      >
+        Extra Items
+      </h1>
+      <p class="text-text" style="margin-bottom: 16px;">
+        This page contains various items that don't fit into the main categories
+        of this site.
+      </p>
+      <p class="text-text" style="margin-bottom: 16px;">
+        Number 1:
+        <a
+          class={currentPath.startsWith('/netflixdobetter')}
+          class="text-accent"
+          ,
+          href="/netflixdobetter">Netflix, Do Better</a
+        >
+      </p>
+      <p class="text-text" style="margin-bottom: 16px;">
+        This is a meme page that I made for fun. It's a parody of the fact that,
+        due to global includes, a test page that
+        <a
+          href="https://web.archive.org/web/20240423111505/netflix.com/helloworld"
+          target="_blank"
+          class="text-text no-underline hover:underline"
+          >used to be on the Netflix website</a
+        >
+        that just contained an h1 tag with "Hello World !!" used 400kb of javascript.
+        I managed to recreate the same thing in only ~140 Bytes of HTML. It's just
+        a joke and not affiliated with Netflix in any way.
+      </p>
+      <p class="text-text" style="margin-bottom: 16px;">
+        Number 2:
+        <a
+          class={currentPath.startsWith('/waveform')}
+          class="text-accent"
+          href="/waveform">Waveform Viewer</a
+        >
+      </p>
+      <p class="text-text" style="margin-bottom: 16px;">
+        This is a waveform viewer I made while researching audio compression
+        algorithms for the
+        <a
+          href="https://content.neuralink.com/compression-challenge/README.html"
+          target="_blank"
+          class="text-text no-underline hover:underline"
+          >NeuraLink compression challenge.</a
+        >
+      </p>
     </div>
-</main>
+  </main>
+</Layout>

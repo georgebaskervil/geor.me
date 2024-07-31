@@ -1,40 +1,44 @@
 ---
-import Tags from "../components/tags.astro";
-import Layout from "../components/Layout.astro";
+import Tags from '../components/tags.astro';
+import Layout from '../components/Layout.astro';
 ---
+
 <Tags />
-<style>
-  .background-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to left,#110819, #000);
-    z-index: -1;
-  }
-</style>
 <div class="background-animation"></div>
 <Layout>
-<main>
-    <div class="container mx-auto  py-0 w-full">
-        <h1 class="text-4xl font-bold mb-4 text-text" style="font-size: 2.5rem; margin-bottom: 24px;">Privacy Notice</h1>
-        <p class="text-text" style="margin-bottom: 16px;">
-            Privacy is a topic I care deeply about. I've put this notice here for full transparency about how exactly this website uses your personal data.
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            There used to be a section about Umami analytics here, but I have since removed all analytics from this site.
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            I don't want to track you, I just want to share my thoughts with you &lt;3.
-        </p>
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            <strong>Section 1: Providers</strong>
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            This site is hosted by Netlify. Netlify may collect data for various purposes. For more information, please see Netlify's Privacy Policy at
-            <a href="https://www.netlify.com/privacy" target="_blank" class="text-purple-500 no-underline hover:underline">netlify.com/privacy</a>
-        </p>
+  <main>
+    <div class="container mx-auto py-0 w-full">
+      <h1
+        class="text-4xl font-bold mb-4 text-text"
+        style="font-size: 2.5rem; margin-bottom: 24px;"
+      >
+        Privacy Notice
+      </h1>
+      <p class="text-text" style="margin-bottom: 16px;">
+        Privacy is a topic I care deeply about. I've put this notice here for
+        full transparency about how exactly this website uses your personal
+        data.
+      </p>
+      <p class="text-text" style="margin-bottom: 16px;">
+        There used to be a section about Umami analytics here, but I have since
+        removed all analytics from this site.
+      </p>
+      <p class="text-text" style="margin-bottom: 16px;">
+        I don't want to track you, I just want to share my thoughts with you
+        &lt;3.
+      </p>
     </div>
-</main>
+    <p class="text-text" style="margin-bottom: 16px;">
+      <strong>Section 1: Providers</strong>
+    </p>
+    <p class="text-text" style="margin-bottom: 16px;">
+      This site is hosted by Netlify. Netlify may collect data for various
+      purposes. For more information, please see Netlify's Privacy Policy at
+      <a
+        href="https://www.netlify.com/privacy"
+        target="_blank"
+        class="text-accent no-underline hover:underline">netlify.com/privacy</a
+      >
+    </p>
+  </main>
+</Layout>

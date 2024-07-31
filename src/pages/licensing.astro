@@ -1,55 +1,77 @@
 ---
-import Tags from "../components/tags.astro";
-import Layout from "../components/Layout.astro";
+import Tags from '../components/tags.astro';
+import Layout from '../components/Layout.astro';
 ---
+
 <Tags />
-<style>
-  .background-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to left,#110819, #000);
-    z-index: -1;
-  }
-</style>
 <div class="background-animation"></div>
 <Layout>
-<main>
+  <main>
     <div class="container mx-auto py-0 w-full">
-        <h1 class="text-4xl font-bold mb-4 text-text" style="font-size: 2.5rem; margin-bottom: 24px;">How my work is liscenced</h1>
-        <p class="text-text" style="margin-bottom: 16px;">
-           Since I based this site on a template, I have adopted a dual liscencing model for my work.
-        </p>
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            <strong>Section 1: Site Code</strong>
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            The code of this site is liscenced under the MIT licence due to the temple I used being liscenced under the MIT licence. 
-            The MIT license is a permissive free software license recognised by the Open Source Initiative. Read the license on the
-            <a href="https://opensource.org/license/mit" target="_blank" class="text-purple-500 no-underline hover:underline">OSI website</a>
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            <strong>Section 2: Site Content</strong>
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            The content on this site is under the licensced Creative Commons Zero v1.0 Universal so that people can do what they want with it. 
-            I found this license on GitHub. Read the license on
-            <a href="https://choosealicense.com/licenses/cc0-1.0/" target="_blank" class="text-purple-500 no-underline hover:underline">choosealicense.com.</a>
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-           Where applicable, I have included download instructions like these:
-        </p>
-        <p class="text-text" style="margin-bottom: 16px;">
-            (Note that the "GitHub repo" is a hyperlink to section of the GitHub repo where the content can be downloaded.)
-        </p>
-        <p class="bottom-0 text-left text-white text-sm mt-0 mb-3" style="opacity:0.4; font-style: italic;">
-         # Images licensed under CC0 1.0 Universal. Download them on the <a href="https://github.com/georgebaskervil/Personal-Website/tree/main/data/images" class="hover:underline" target="_blank">GitHub repo</a>
-        </p>
-        <p class="bottom-0 text-left text-white text-sm mt-0 mb-5" style="opacity:0.4; font-style: italic;">
-        # Articles licensed under CC0 1.0 Universal. Download them on the <a href="https://github.com/georgebaskervil/Personal-Website/tree/main/src/content/posts" class="hover:underline" target="_blank">GitHub repo</a>
-        </p>
+      <h1
+        class="text-4xl font-bold mb-4 text-text"
+        style="font-size: 2.5rem; margin-bottom: 24px;"
+      >
+        How my work is liscenced
+      </h1>
+      <p class="text-text" style="margin-bottom: 16px;">
+        Since I based this site on a template, I have adopted a dual liscencing
+        model for my work.
+      </p>
     </div>
-</main>
+    <p class="text-text" style="margin-bottom: 16px;">
+      <strong>Section 1: Site Code</strong>
+    </p>
+    <p class="text-text" style="margin-bottom: 16px;">
+      The code of this site is liscenced under the MIT licence due to the temple
+      I used being liscenced under the MIT licence. The MIT license is a
+      permissive free software license recognised by the Open Source Initiative.
+      Read the license on the
+      <a
+        href="https://opensource.org/license/mit"
+        target="_blank"
+        class="text-accent no-underline hover:underline">OSI website</a
+      >
+    </p>
+    <p class="text-text" style="margin-bottom: 16px;">
+      <strong>Section 2: Site Content</strong>
+    </p>
+    <p class="text-text" style="margin-bottom: 16px;">
+      The content on this site is under the licensced Creative Commons Zero v1.0
+      Universal so that people can do what they want with it. I found this
+      license on GitHub. Read the license on
+      <a
+        href="https://choosealicense.com/licenses/cc0-1.0/"
+        target="_blank"
+        class="text-accent no-underline hover:underline">choosealicense.com.</a
+      >
+    </p>
+    <p class="text-text" style="margin-bottom: 16px;">
+      Where applicable, I have included download instructions like these:
+    </p>
+    <p class="text-text" style="margin-bottom: 16px;">
+      (Note that the "GitHub repo" is a hyperlink to section of the GitHub repo
+      where the content can be downloaded.)
+    </p>
+    <p
+      class="bottom-0 text-left text-white text-sm mt-0 mb-3"
+      style="opacity:0.4; font-style: italic;"
+    >
+      # Images licensed under CC0 1.0 Universal. Download them on the <a
+        href="https://github.com/georgebaskervil/Personal-Website/tree/main/data/images"
+        class="hover:underline"
+        target="_blank">GitHub repo</a
+      >
+    </p>
+    <p
+      class="bottom-0 text-left text-white text-sm mt-0 mb-5"
+      style="opacity:0.4; font-style: italic;"
+    >
+      # Articles licensed under CC0 1.0 Universal. Download them on the <a
+        href="https://github.com/georgebaskervil/Personal-Website/tree/main/src/content/posts"
+        class="hover:underline"
+        target="_blank">GitHub repo</a
+      >
+    </p>
+  </main>
+</Layout>

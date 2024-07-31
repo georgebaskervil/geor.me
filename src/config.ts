@@ -13,7 +13,7 @@ interface IConfig {
   projects: {
     [name: string]: {
       url: string;
-      tags: string[];
+      description: string;
     };
   };
   og: {
@@ -35,11 +35,11 @@ export const Config: IConfig = {
   projects: {
     'DNS Filterlists': {
       url: 'https://github.com/georgebaskervil/dnsfilterlists',
-      tags: ['DNS', 'DNS-Filtering', 'Privacy'],
+      description: 'A collection of DNS filterlists intended for use with AdGuard Home.',
     },
     'Personal Website': {
       url: 'https://github.com/georgebaskervil/Personal-Website',
-      tags: ['Personal-Website', 'Astro', 'Tailwind-CSS'],
+      description: 'My personal website built with Astro, TypeScript, and Tailwind CSS.',
     },
   },
   og: {

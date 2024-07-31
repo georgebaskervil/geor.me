@@ -1,65 +1,90 @@
 ---
-import Tags from "../components/tags.astro";
-import Layout from "../components/Layout.astro";
+import Tags from '../components/tags.astro';
+import Layout from '../components/Layout.astro';
 ---
+
 <Tags />
-<style>
-  .background-animation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to left,#110819, #000);
-    z-index: -1;
-  }
-</style>
 <div class="background-animation"></div>
 <Layout>
-<main>
+  <main>
     <div class="container mx-auto w-full">
-        <h1 class="text-4xl font-bold mb-4 text-text">Where to contact me:</h1>
-        <p class="p-spacing text-text">
-            Since I'm boycotting Meta, here's a list of other platforms where you can find me:
+      <h1 class="text-4xl font-bold mb-4 text-text">Where to contact me:</h1>
+      <p class="p-spacing text-text">
+        Since I'm boycotting Meta, here's a list of other platforms where you
+        can find me:
+      </p>
+      <p class="p-spacing text-text">
+        This list is sorted by how often I check each platform.
+      </p>
+      <a
+        href="https://x.com/georgebaskervil"
+        target="_blank"
+        class="text-accent no-underline hover:underline">X</a
+      >
+      <p>
+        <a
+          href="https://t.me/georgebaskervil"
+          target="_blank"
+          class="text-accent no-underline hover:underline">Telegram</a
+        >
+        <p>
+          <a
+            href="https://signal.me/#eu/Ui1-KTmlgnCbNj491iq3HSOJtrkY1aVHm4n0v97dvkGDbCqWsExOu66Fzg7-7iC9"
+            target="_blank"
+            class="text-accent no-underline hover:underline">Signal</a
+          >
+          <p>
+            <a
+              href="https://tumblr.com/georgebaskervil"
+              target="_blank"
+              class="text-accent no-underline hover:underline">Tumblr</a
+            >
+            <p>
+              <a
+                href="https://www.reddit.com/user/I_am_a_ssquare_pixel/"
+                target="_blank"
+                class="text-accent no-underline hover:underline">Reddit</a
+              >
+              <p>
+                <a
+                  href="https://discordapp.com/users/922956525662777454"
+                  target="_blank"
+                  class="text-accent no-underline hover:underline">Discord</a
+                >
+                <p>
+                  <a
+                    href="https://www.linkedin.com/in/georgebaskervil/"
+                    target="_blank"
+                    class="text-accent no-underline hover:underline">LinkedIn</a
+                  >
+                </p>
+              </p>
+            </p>
+
+            <style>
+              .container {
+                max-width: 100%;
+              }
+              .p-spacing {
+                margin-bottom: 1em; /* or any other value you prefer */
+              }
+              h1 {
+                font-size: 2.5rem;
+                margin-bottom: 24px;
+              }
+
+              p {
+                margin-bottom: 0px;
+              }
+
+              ul {
+                margin-left: 32px;
+                margin-bottom: 16px;
+              }
+            </style>
+          </p>
         </p>
-        <p class="p-spacing text-text">
-            This list is sorted by how often I check each platform.
-        </p>
-        <a href="https://x.com/georgebaskervil" target="_blank" class="text-purple-500 no-underline hover:underline">X</a>
-        <p>
-        <a href="https://t.me/georgebaskervil" target="_blank" class="text-purple-500 no-underline hover:underline">Telegram</a>
-        <p>
-        <a href="https://signal.me/#eu/Ui1-KTmlgnCbNj491iq3HSOJtrkY1aVHm4n0v97dvkGDbCqWsExOu66Fzg7-7iC9" target="_blank" class="text-purple-500 no-underline hover:underline">Signal</a>
-        <p>
-        <a href="https://tumblr.com/georgebaskervil" target="_blank" class="text-purple-500 no-underline hover:underline">Tumblr</a>
-        <p>
-          <a href="https://www.reddit.com/user/I_am_a_ssquare_pixel/" target="_blank" class="text-purple-500 no-underline hover:underline">Reddit</a>
-        <p>
-          <a href="https://discordapp.com/users/922956525662777454" target="_blank" class="text-purple-500 no-underline hover:underline">Discord</a>
-        <p>
-        <a href="https://www.linkedin.com/in/georgebaskervil/" target="_blank" class="text-purple-500 no-underline hover:underline">LinkedIn</a>
-    </p>
+      </p>
     </div>
-</main>
-
-<style>
-  .container {
-    max-width: 100%;
-  }
-  .p-spacing {
-    margin-bottom: 1em; /* or any other value you prefer */
-}
-  h1 {
-    font-size: 2.5rem;
-    margin-bottom: 24px;
-  }
-
-  p {
-    margin-bottom: 0px;
-  }
-
-  ul {
-    margin-left: 32px;
-    margin-bottom: 16px;
-  }
-</style>
+  </main></Layout
+>

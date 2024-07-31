@@ -5,9 +5,10 @@ module.exports = {
     extend: {
       colors: {
         neutral: '#2D2A2A',
-        text: '#D6D6D6',
-      },
+        text: '#DCD7BA',
+        accent: '#C8C093',
     },
   },
+},
   plugins: [require('@tailwindcss/typography')],
 };
