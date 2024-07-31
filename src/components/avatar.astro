@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import { getavatar } from '../scripts/getavatar';
 const images = getavatar();
-let avatar = images[0]; // get the first avatar
+let avatar = images[0];
 ---
 
 <style>
@@ -10,6 +10,7 @@ let avatar = images[0]; // get the first avatar
         overflow: hidden;
         border-radius: 10px;
         transition: transform 0.3s;
+        border-width: 2px;
     }
 
     .image-container:hover {
@@ -17,7 +18,7 @@ let avatar = images[0]; // get the first avatar
     }
 </style>
 
-<picture class="image-container">
+<picture class="image-container rounded-lg border-neutral">
     <Image 
         src={`/brand-assets/${avatar}.webp`}
         alt="Some of my best pictures"
