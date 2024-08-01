@@ -38,13 +38,6 @@ const posts = (await getCollection('posts')).sort(
             >
               <h4 class="text-lg font-medium text-text">{post.data.title}</h4>
               <p class="mt-2 text-text">
-                {post.data.publishedAt.toLocaleDateString('en-us', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                })}
-              </p>
-              <p class="mt-2 text-text">
                 {post.data.description}
               </p>
             </a>
