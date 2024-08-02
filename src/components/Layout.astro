@@ -27,7 +27,7 @@ const currentPath = Astro.url.pathname;
           class="text-sm md:text-xl lg:text-xl whitespace-nowrap mr-4 text-text"
           >{Config.me.name}</a
         >
-        <nav class="text-xs md:text-sm lg:text-sm custom-breadcrumbs text-text">
+        <nav class="text-xs md:text-sm lg:text-sm custom-breadcrumbs text-text ">
           <ul>
             <li>
               <a class={currentPath === '/' ? 'text-accent' : ''} href="/"
@@ -81,13 +81,13 @@ const currentPath = Astro.url.pathname;
     </div>
     <style is:global>
       @font-face {
-        font-family: 'MartianMono';
-        src: url(/fonts/MartianMono_SemiCondensed-Light.ttf) format('truetype');
+        font-family: 'SpaceMono';
+        src: url(/fonts/SpaceMono-Regular.woff2) format('woff2');
       }
 
       html,
       body {
-        font-family: 'MartianMono'; 
+        font-family: 'SpaceMono';
       }
 
       .background-animation {
@@ -179,11 +179,11 @@ const currentPath = Astro.url.pathname;
     style="opacity:0.4;"
   >
     Built with Astro, Tailwind, and TypeScript by George Baskerville. Based on
-    a template that has since been taken down by Tahir Murata. Uses the <a
-      href="https://fonts.google.com/specimen/Special+Elite"
+    a template by Tahir Murata (since taken down). Uses the <a
+      href="https://fonts.google.com/specimen/Space+Mono"
       target="_blank"
       rel="noopener noreferrer"
-      class="hover:underline">Special Elite</a
+      class="hover:underline">Space Mono</a
     > font.
     <a
       href="https://github.com/georgebaskervil/Personal-Website"
