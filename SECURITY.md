@@ -40,7 +40,11 @@ I am in the process of implementing a more robust and secure reporting system. M
 
 I am committed to reviewing reports and responding promptly as follows:
 
-1. Acknowledge receipt of your report within 48 hours.
-2. Provide an initial assessment within one week.
-3. Work to understand the potential impact and determine an appropriate resolution timeline.
-4. Release an update, if necessary, with due acknowledgment given to your contribution towards enhancing the security measures of this project (unless anonymity is requested).
+### Response Process
+
+We are committed to reviewing reports and responding promptly as follows:
+
+1. I will try my best to acknowledge receipt of your report within 48 hours.
+2. I will try my best to provide an initial assessment within one week.
+3. I will try my best to work to understand the potential impact and determine an appropriate resolution timeline.
+4. I will try my best to release an update, if necessary, with due acknowledgment given to your contribution towards enhancing the security measures of this project (unless anonymity is requested).
