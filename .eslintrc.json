@@ -1,0 +1,60 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["@typescript-eslint", "prettier", "import"],
+  "rules": {
+    "prettier/prettier": "warn",
+    "no-unused-vars": "warn",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { "argsIgnorePattern": "^_" }
+    ],
+    "import/order": [
+      "warn",
+      {
+        "groups": [["builtin", "external", "internal"]],
+        "newlines-between": "always"
+      }
+    ],
+    "import/no-unresolved": "error",
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "eqeqeq": "error",
+    "curly": "error",
+    "camelcase": "warn",
+    "consistent-return": "warn",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": "warn",
+    "@typescript-eslint/triple-slash-reference": [
+      "error",
+      { "path": "always", "types": "prefer-import" }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true,
+        "project": "./tsconfig.json"
+      }
+    }
+  },
+  "ignorePatterns": ["dist/", "node_modules/", "*.astro"]
+}

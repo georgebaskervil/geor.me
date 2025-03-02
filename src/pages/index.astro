@@ -1,43 +1,161 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import Tags from '../components/tags.astro';
+import Layout from '../components/Layout.astro';
+import { Config } from '../config';
+import EagerPictureSect from '../components/picturesect.astro';
+import Avatar from '../components/avatar.astro';
 
-import Introduction from "@/components/card/Introduction.astro";
-import AboutMe from "@/components/card/AboutMe.astro";
-import Socials from "@/components/card/Socials.astro";
-import Projects from "@/components/card/Projects.astro";
-import Blog from "@/components/card/Blog.astro";
-import Info from "@/components/card/Info.astro";
-import ModeToggle from "@/components/card/ModeToggle.astro";
-import TimeZone from "@/components/card/TimeZone.astro";
+const years = () => {
+  const start = new Date(Config.me.started);
+  const now = new Date();
+  return now.getFullYear() - start.getFullYear();
+};
+
+import { getCollection } from 'astro:content';
+const posts = (await getCollection('posts')).sort(function (
+  first: any,
+  second: any,
+) {
+  return second.data.publishedAt.getTime() - first.data.publishedAt.getTime();
+});
 ---
 
-<Layout title="Tahir Murata">
-	<main
-		class="gap-2 sm:gap-2 md:gap-3 lg:gap-4 grid md:grid-cols-3 lg:grid-cols-4 md:grid-rows-9 lg:grid-rows-8 m-auto p-2 sm:p-4 md:p-6 w-full max-w-xl md:max-w-6xl"
-	>
-		<Introduction
-			grids="md:col-span-3 lg:col-span-3 md:row-span-2 lg:row-span-4"
-		/>
-		<AboutMe
-			grids="lg:col-start-4 md:row-span-7 lg:row-span-7 md:row-start-3"
-		/>
-		<Socials
-			grids="md:row-span-3 lg:row-span-4 md:row-start-3 lg:row-start-5"
-		/>
-		<Projects
-			grids="lg:col-start-2 md:row-span-3 lg:row-span-3 md:row-start-3 lg:row-start-6"
-		/>
-		<Blog
-			grids="md:col-start-3 lg:col-start-3 md:row-span-3 lg:row-span-3 md:row-start-6 lg:row-start-6"
-		/>
-		<ModeToggle
-			grids="md:col-start-2 lg:col-start-2 md:row-start-6 md:row-span-2 lg:row-span-1 lg:row-start-5"
-		/>
-		<TimeZone
-			grids="md:col-start-2 lg:col-start-3 md:row-start-8 md:row-span-2 lg:row-start-5 lg:row-span-1"
-		/>
-		<Info
-			grids="md:col-start-3 lg:col-start-4 md:row-start-9 lg:row-start-8"
-		/>
-	</main>
+<Tags />
+<div class="background-animation"></div>
+<Layout>
+  <main>
+    <div class="flex flex-col gap-10">
+      <article class="md:flex-row-reverse md:justify-end md:gap-12">
+        <div class="flex flex-row justify-between sm:grid-cols-3 items-center">
+          <div class="col-span-2 flex flex-col gap-6 md:gap-8 my-auto">
+            <h1 class="lg:text-4xl md:text-3xl font-bold text-2xl text-text">
+              Hi, I’m {Config.me.name.split(' ')[0]}
+            </h1>
+            <h2 class="w-[90%] leading-6 text-sm sm:text-base text-text">
+              I'm a {Config.me.job}. I've been interested in the web for a long
+              time, making my first site {years} years ago. I'm also a digital privacy
+              advocate and a dark mode enthusiast.
+            </h2>
+            <div class="custom-breadcrumbs text-white">
+              <ul>
+                {
+                  Object.keys(Config.socials).map((social) => (
+                    <li>
+                      <a
+                        href={
+                          Config.socials[social as keyof typeof Config.socials]
+                        }
+                        rel="noreferrer"
+                        target="_blank"
+                        class="text-accent"
+                      >
+                        {social.charAt(0).toUpperCase() + social.slice(1)}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          </div>
+          <Avatar />
+        </div>
+      </article>
+
+      <article class="flex flex-col gap-3">
+        <header class="flex w-full flex-row justify-between gap-2">
+          <h3 class="text-lg pb-2 text-text">Featured projects:</h3>
+          <a
+            href={Config.me.projectLink}
+            class="text-sm text-accent no-underline hover:underline"
+            target="_self"
+            rel="noreferrer"
+          >
+            See all projects
+          </a>
+        </header>
+        <section
+          class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        >
+          {
+            Object.keys(Config.projects).map((project) => (
+              <div class="p-4 rounded-lg border border-neutral shadow-md hover:scale-105 transition-transform duration-300">
+                <a
+                  href={
+                    Config.projects[project as keyof typeof Config.projects].url
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div class="flex justify-between gap-3 flex-row items-start">
+                    <p class="font-semibold text-lg text-text">{project}</p>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="30"
+                      height="30"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#D3487F"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      color="#D3487F"
+                      class="tabler-icon tabler-icon-arrow-up-right transition-none md:transition-all md:duration-300 md:group-hover:translate-x-1 md:group-hover:translate-y-1"
+                    >
+                      <path d="M17 7l-10 10" />
+                      <path d="M8 7l9 0l0 9" />
+                    </svg>
+                  </div>
+                  <div class="text-text mt-1">
+                    {Config.projects[project as keyof typeof Config.projects].description}
+                  </div>
+                </a>
+              </div>
+            ))
+          }
+        </section>
+      </article>
+
+      <article class="flex flex-col gap-3">
+        <header class="flex w-full flex-row justify-between gap-2">
+          <h3 class="text-lg pb-2 text-text">Latest posts:</h3>
+          <a
+            href="/posts"
+            class="text-sm text-accent no-underline hover:underline"
+            rel="noreferrer"
+          >
+            See all posts
+          </a>
+        </header>
+        <section
+          class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        >
+          {
+            posts.slice(0, 4).map((post: any) => (
+              <a
+                href={'/posts/' + post.slug}
+                class="p-4 rounded-lg border border-neutral shadow-md hover:scale-105 transition-transform duration-300 no-underline block"
+              >
+                <h4 class="text-lg font-medium text-text">{post.data.title}</h4>
+                <p class="mt-2 text-text">
+                  {post.data.description}
+                </p>
+              </a>
+            ))
+          }
+        </section>
+      </article>
+    </div>
+    <article class="flex flex-col gap-3">
+      <header class="flex w-full flex-row justify-between gap-2">
+        <h3 class="text-lg pb-2 text-text mt-9">Latest Pictures:</h3>
+        <a
+          href="/pictures"
+          class="text-sm text-accent no-underline hover:underline mt-9"
+          rel="noreferrer"
+        >
+          See all pictures
+        </a>
+      </header>
+      <EagerPictureSect start={0} end={4} />
+    </article>
+  </main>
 </Layout>

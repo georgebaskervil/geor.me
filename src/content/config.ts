@@ -1,32 +1,17 @@
-import { defineCollection, z } from 'astro:content';
-import { glob, file } from 'astro/loaders';
+// eslint-disable-next-line import/no-unresolved
+import { z, defineCollection } from 'astro:content';
 
-const blog = defineCollection({
-    loader: glob({ pattern: "*.md", base: "./src/content/blog" }),
-    schema: z.object({
-        title: z.string(),
-        date: z.date(),
-        tags: z.array(z.string()),
-        image: z.string().optional(),
-        slug: z.string(),
-    }),
-});
-
-const projects = defineCollection({
-    loader: file("./src/content/projects/projects.json"),
-    schema: z.object({
-        title: z.string(),
-        tags: z.array(z.enum(["Go", "PostgreSQL", "Vue", "Astro", "React", "TypeScript", "Tailwind CSS"])),
-        description: z.string(),
-        links:
-            z.array(z.object({
-                name: z.enum(["GitHub", "Go Package", "Blog", "URL"]),
-                url: z.string()
-            }))
-    }),
+const postCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    // tags: z.array(z.string()),
+    // image: z.string().optional(),
+    description: z.string(),
+    publishedAt: z.date().default(() => new Date()),
+  }),
 });
 
 export const collections = {
-    blog,
-    projects,
+  posts: postCollection,
 };

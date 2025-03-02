@@ -1,50 +1,47 @@
 {
-  "name": "portfolio",
+  "name": "portofolio",
   "type": "module",
-  "version": "1.2.3",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint . --ext .ts --ext .js",
+    "lint:fix": "eslint . --ext .ts --ext .js --fix",
+    "format": "prettier --write ."
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/mdx": "^4.0.7",
-    "@astrojs/react": "^4.2.0",
-    "@astrojs/sitemap": "^3.2.1",
-    "@astrojs/tailwind": "^5.1.5",
-    "@noble/ciphers": "^1.2.1",
-    "@radix-ui/react-accordion": "^1.2.2",
-    "@radix-ui/react-avatar": "^1.1.2",
-    "@radix-ui/react-scroll-area": "^1.2.2",
-    "@radix-ui/react-separator": "^1.1.1",
-    "@radix-ui/react-slot": "^1.1.1",
-    "@radix-ui/react-switch": "^1.1.2",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
-    "astro": "5.1.8",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "framer-motion": "^11.18.2",
-    "lucide-react": "^0.460.0",
+    "@astrojs/check": "^0.8.2",
+    "@astrojs/react": "^3.6.0",
+    "@astrojs/sitemap": "^3.1.6",
+    "@astrojs/tailwind": "^5.1.0",
+    "@tabler/icons": "^3.3.0",
+    "astro": "^4.12.2",
     "react": "^18.3.1",
-    "react-compiler-runtime": "19.0.0-beta-b2e8e9c-20241220",
     "react-dom": "^18.3.1",
-    "sharp": "^0.33.5",
-    "tailwind-merge": "^2.6.0",
-    "tailwindcss": "^3.4.17",
-    "tailwindcss-animate": "^1.0.7",
-    "typescript": "^5.7.3"
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.16"
+    "@eslint/js": "^9.1.1",
+    "@tailwindcss/typography": "^0.5.13",
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.9.0",
+    "@typescript-eslint/parser": "^7.9.0",
+    "eslint": "8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3",
+    "globals": "^15.1.0",
+    "prettier": "^3.2.5",
+    "typescript-eslint": "^7.8.0",
+    "vite": "^5.2.10"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "sharp"
-    ]
-  }
+  "packageManager": "pnpm@9.6.0+sha512.38dc6fba8dba35b39340b9700112c2fe1e12f10b17134715a4aa98ccf7bb035e76fd981cf0bb384dfa98f8d6af5481c2bef2f4266a24bfa20c34eb7147ce0b5e"
 }

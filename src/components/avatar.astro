@@ -1,0 +1,29 @@
+---
+import { Image } from 'astro:assets';
+import { getavatar } from '../scripts/getavatar';
+const images = getavatar();
+let avatar = images[0];
+---
+
+<style>
+    .image-container {
+        overflow: hidden;
+        border-radius: 10px;
+        transition: transform 0.3s;
+        border-width: 2px;
+    }
+
+    .image-container:hover {
+        transform: scale(1.05);
+    }
+</style>
+
+<picture class="image-container rounded-lg border-neutral">
+    <Image 
+        src={`/brand-assets/${avatar}.webp`}
+        alt="Some of my best pictures"
+        width={500} 
+        height={333}
+        loading="eager"
+    />
+</picture>
