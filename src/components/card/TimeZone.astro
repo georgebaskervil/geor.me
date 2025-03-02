@@ -1,0 +1,37 @@
+---
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
+interface Props {
+    grids: string;
+}
+
+const { grids } = Astro.props;
+---
+
+<Card className={cn("relative", grids)}>
+    <div
+        class="flex flex-col justify-center items-center gap-4 p-6 md:p-0 h-full font-bold text-3xl"
+    >
+        <span id="clock-jst">00:00 JST</span>
+    </div>
+</Card>
+
+<script>
+    function updateClocks() {
+        const now = new Date();
+
+        // JST Time
+        const jstTime = now.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: "Asia/Tokyo",
+        });
+
+        document.getElementById("clock-jst")!.textContent = `${jstTime} JST`;
+    }
+
+    // Update clocks immediately and every second
+    updateClocks();
+    setInterval(updateClocks, 1000);
+</script>

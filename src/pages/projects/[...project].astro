@@ -1,0 +1,46 @@
+---
+import { ProjectList } from "@/components/ProjectList";
+import MinimalLayout from "@/layouts/MinimalLayout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+    const projects = await getCollection("projects");
+    let paths = projects.map((project) => ({
+        params: {
+            project: project.data.title.toLowerCase() as string | undefined,
+        },
+        props: { projects },
+    }));
+
+    paths.push({
+        params: { project: undefined },
+        props: { projects },
+    });
+
+    return paths;
+}
+
+const { projects } = Astro.props;
+---
+
+<MinimalLayout
+    title="Projects"
+    crumbs={[
+        {
+            name: "Home",
+            path: "/",
+        },
+        {
+            name: "Projects",
+        },
+    ]}
+>
+    <ProjectList
+        path="projects"
+        data={projects.map((project) => ({
+            ...project,
+            selected: project.id === Astro.params.project,
+        }))}
+        client:load
+    />
+</MinimalLayout>

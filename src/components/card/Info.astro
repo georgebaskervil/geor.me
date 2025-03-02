@@ -1,0 +1,31 @@
+---
+import { Card } from "@/components/ui/card";
+
+import { CopyrightIcon } from "lucide-react";
+
+// Obtain the version and commit hash
+import { version } from "package.json";
+import { CF_PAGES_COMMIT_SHA } from "astro:env/client";
+import { cn } from "@/lib/utils";
+const year = new Date().getFullYear();
+
+interface Props {
+    grids: string;
+}
+
+const { grids } = Astro.props;
+---
+
+<Card className={cn(grids)}>
+    <div
+        class="flex flex-col justify-center items-center gap-y-1 p-6 md:p-0 h-full text-muted-foreground text-xs"
+    >
+        <span class="flex items-center gap-x-1">
+            <CopyrightIcon size={12} />
+            {year} Tahir Murata
+        </span>
+        <span class="font-mono">
+            {version} ({CF_PAGES_COMMIT_SHA.substring(0, 7)})
+        </span>
+    </div>
+</Card>

@@ -1,0 +1,70 @@
+---
+import { BlogList } from "@/components/BlogList";
+import Prose from "@/components/Prose.astro";
+import MinimalLayout from "@/layouts/MinimalLayout.astro";
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+    const blog = await getCollection("blog");
+    blog.sort((a, b) => {
+        return (
+            new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+        );
+    });
+
+    let paths = blog.map((post) => ({
+        params: {
+            post: post.data.slug.toLowerCase() as string | undefined,
+        },
+        props: post.data.slug ? { blog, post } : { blog },
+    }));
+    paths.push({
+        params: { post: undefined },
+        props: { blog },
+    });
+    return paths;
+}
+
+const { blog, post } = Astro.props;
+let Content: AstroComponentFactory | undefined;
+
+if (post) {
+    const rendered = await render(post);
+    Content = rendered.Content;
+}
+---
+
+<MinimalLayout
+    title={post ? post.data.title : "Blog"}
+    crumbs={[
+        { name: "Home", path: "/" },
+        {
+            name: "Blog",
+            ...(post ? { path: "/blog/" } : {}),
+        },
+        ...(post ? [{ name: post.data.title }] : []),
+    ]}
+    date={post && post.data.date}
+>
+    {
+        (!post && (
+            <BlogList
+                client:load
+                path="blog"
+                data={blog.map((post) => ({
+                    ...post,
+                    selected:
+                        post.data.slug.toLowerCase() === Astro.params.post,
+                }))}
+            />
+        )) ||
+            (post && Content && (
+                <div class="mt-6">
+                    <Prose>
+                        <Content />
+                    </Prose>
+                </div>
+            ))
+    }
+</MinimalLayout>

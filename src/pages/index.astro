@@ -1,0 +1,43 @@
+---
+import Layout from "@/layouts/Layout.astro";
+
+import Introduction from "@/components/card/Introduction.astro";
+import AboutMe from "@/components/card/AboutMe.astro";
+import Socials from "@/components/card/Socials.astro";
+import Projects from "@/components/card/Projects.astro";
+import Blog from "@/components/card/Blog.astro";
+import Info from "@/components/card/Info.astro";
+import ModeToggle from "@/components/card/ModeToggle.astro";
+import TimeZone from "@/components/card/TimeZone.astro";
+---
+
+<Layout title="Tahir Murata">
+	<main
+		class="gap-2 sm:gap-2 md:gap-3 lg:gap-4 grid md:grid-cols-3 lg:grid-cols-4 md:grid-rows-9 lg:grid-rows-8 m-auto p-2 sm:p-4 md:p-6 w-full max-w-xl md:max-w-6xl"
+	>
+		<Introduction
+			grids="md:col-span-3 lg:col-span-3 md:row-span-2 lg:row-span-4"
+		/>
+		<AboutMe
+			grids="lg:col-start-4 md:row-span-7 lg:row-span-7 md:row-start-3"
+		/>
+		<Socials
+			grids="md:row-span-3 lg:row-span-4 md:row-start-3 lg:row-start-5"
+		/>
+		<Projects
+			grids="lg:col-start-2 md:row-span-3 lg:row-span-3 md:row-start-3 lg:row-start-6"
+		/>
+		<Blog
+			grids="md:col-start-3 lg:col-start-3 md:row-span-3 lg:row-span-3 md:row-start-6 lg:row-start-6"
+		/>
+		<ModeToggle
+			grids="md:col-start-2 lg:col-start-2 md:row-start-6 md:row-span-2 lg:row-span-1 lg:row-start-5"
+		/>
+		<TimeZone
+			grids="md:col-start-2 lg:col-start-3 md:row-start-8 md:row-span-2 lg:row-start-5 lg:row-span-1"
+		/>
+		<Info
+			grids="md:col-start-3 lg:col-start-4 md:row-start-9 lg:row-start-8"
+		/>
+	</main>
+</Layout>

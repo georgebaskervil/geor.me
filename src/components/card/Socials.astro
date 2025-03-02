@@ -1,0 +1,79 @@
+---
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { Lock } from "lucide-react"
+
+interface Props {
+    grids: string;
+}
+
+const { grids } = Astro.props;
+
+const socials = [
+    {
+        serviceName: "GitHub",
+        serviceURL: "https://github.com/tahirmurata",
+    },
+    {
+        serviceName: "GitLab",
+        serviceURL: "https://gitlab.com/paste",
+    },
+    {
+        serviceName: "Twitter",
+        serviceURL: "https://twitter.com/tahirmurata",
+    },
+];
+---
+
+<Card className={cn(grids)}>
+    <CardHeader>
+        <CardTitle>Contact me</CardTitle>
+    </CardHeader>
+    <CardContent>
+        <p class="text-muted-foreground">Email</p>
+        <ul class="my-2">
+            <li>
+                <a id="email" class="text-muted-foreground">
+                    Enable Javascript
+                </a>
+            </li>
+        </ul>
+        <p class="mt-4 text-muted-foreground">Socials</p>
+        <ul class="mt-2 text-base text-foreground [&>li]:mt-1">
+            {
+                socials.map((social) => (
+                    <li>
+                        <a href={social.serviceURL} class="hover:underline flex items-center gap-1 max-w-min">
+                            {social.serviceName}
+                            {(social.serviceName != "GitHub") ? <Lock size={14} strokeWidth={2.5} /> : <></> }
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </CardContent>
+</Card>
+
+<script>
+    import { xchacha20poly1305 } from "@noble/ciphers/chacha";
+    import { managedNonce } from "@noble/ciphers/webcrypto";
+    import { hexToBytes, bytesToUtf8 } from "@noble/ciphers/utils";
+    const key = hexToBytes(
+        "1006ee0113156d1a1d0b9843a271df3bbb20d387cf4a1dbb5a96a43e1311d220",
+    );
+    const chacha = managedNonce(xchacha20poly1305)(key);
+    const ciphertext = new Uint8Array([
+        36, 38, 111, 87, 217, 20, 230, 166, 117, 220, 17, 147, 52, 124, 11, 140,
+        115, 216, 142, 67, 15, 87, 105, 18, 33, 50, 2, 2, 64, 176, 249, 135, 85,
+        13, 216, 186, 77, 94, 68, 115, 153, 193, 211, 76, 151, 64, 148, 207,
+        205, 164, 61, 213, 22, 90, 195, 237, 103, 109, 255, 116, 236, 59, 74,
+        181, 22, 203, 138, 110,
+    ]);
+    const data_ = chacha.decrypt(ciphertext);
+
+    const a = document.querySelector("#email") as HTMLAnchorElement;
+    a.href = `${bytesToUtf8(data_)}`;
+    a.textContent = bytesToUtf8(data_).split("mailto:")[1]!;
+    a.classList.remove("text-muted-foreground");
+    a.classList.add("hover:underline");
+</script>

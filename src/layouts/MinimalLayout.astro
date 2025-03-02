@@ -1,0 +1,80 @@
+---
+import MinimalModeToggle from "@/components/MinimalModeToggle.astro";
+import Layout from "@/layouts/Layout.astro";
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+
+interface Props {
+    title: string;
+    crumbs: { name: string; path?: string }[];
+    date?: Date | undefined;
+}
+
+const { title, crumbs, date } = Astro.props;
+---
+
+<Layout title={title}>
+    <main>
+        <div class="flex flex-col m-auto p-5 md:pt-10 w-full max-w-2xl">
+            <div class="flex flex-col gap-y-5">
+                <div class="flex flex-row justify-between">
+                    <Breadcrumb>
+                        <BreadcrumbList>
+                            {
+                                crumbs.map(({ name, path }) => (
+                                    <>
+                                        <BreadcrumbItem>
+                                            {!path ? (
+                                                <BreadcrumbPage>
+                                                    {name}
+                                                </BreadcrumbPage>
+                                            ) : (
+                                                <BreadcrumbLink href={path}>
+                                                    {name}
+                                                </BreadcrumbLink>
+                                            )}
+                                        </BreadcrumbItem>
+                                        {path && <BreadcrumbSeparator />}
+                                    </>
+                                ))
+                            }
+                        </BreadcrumbList>
+                    </Breadcrumb>
+                    <MinimalModeToggle />
+                </div>
+                <div class="flex flex-col gap-y-2">
+                    {
+                        date ? (
+                            <span class="text-muted-foreground text-sm">
+                                Published on{" "}
+                                {date.toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                })}
+                            </span>
+                            <h1
+                                class="scroll-m-20 font-bold text-3xl lg:text-4xl tracking-tight"
+                            >
+                                {title}
+                            </h1>
+                        ) : (                    
+                            <h1
+                                class="scroll-m-20 first:mt-0 pb-2 border-b font-semibold text-3xl tracking-tight"
+                            >
+                                {title}
+                            </h1>
+                        )
+                    }
+                </div>
+            </div>
+            <slot />
+        </div>
+    </main>
+</Layout>

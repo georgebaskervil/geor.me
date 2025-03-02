@@ -1,0 +1,50 @@
+{
+  "name": "portfolio",
+  "type": "module",
+  "version": "1.2.3",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^4.0.7",
+    "@astrojs/react": "^4.2.0",
+    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/tailwind": "^5.1.5",
+    "@noble/ciphers": "^1.2.1",
+    "@radix-ui/react-accordion": "^1.2.2",
+    "@radix-ui/react-avatar": "^1.1.2",
+    "@radix-ui/react-scroll-area": "^1.2.2",
+    "@radix-ui/react-separator": "^1.1.1",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-switch": "^1.1.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "astro": "5.1.8",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.18.2",
+    "lucide-react": "^0.460.0",
+    "react": "^18.3.1",
+    "react-compiler-runtime": "19.0.0-beta-b2e8e9c-20241220",
+    "react-dom": "^18.3.1",
+    "sharp": "^0.33.5",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
+  }
+}

@@ -1,0 +1,78 @@
+---
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { getCollection } from "astro:content";
+import { ArrowUpRight } from "lucide-react";
+
+interface Props {
+    grids: string;
+}
+
+const { grids } = Astro.props;
+
+const blog = await getCollection("blog");
+---
+
+<Card
+    className={cn(
+        "flex flex-col group hover:cursor-pointer sm:hover:border-muted-foreground",
+        grids,
+    )}
+    id="blog_card"
+>
+    <CardHeader>
+        <CardTitle className="flex flex-row justify-between items-center">
+            <span class="text-xl">Blog</span>
+            <ArrowUpRight
+                className="transition-transform sm:group-hover:translate-x-1 sm:group-hover:-translate-y-1 duration-200 size-6"
+            />
+        </CardTitle>
+    </CardHeader>
+    <CardContent>
+        <ul class="ml-5 text-foreground list-disc text-base [&>li]:mt-1">
+            {
+                blog.slice(0, 5).map((post) => (
+                    <li>
+                        <a
+                            class="hover:underline"
+                            href={`/blog/${post.data.slug}/`}
+                        >
+                            {post.data.title}
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </CardContent>
+</Card>
+
+<script>
+    import { prefetch } from "astro:prefetch";
+
+    const blogCard = document.getElementById("blog_card");
+    if (blogCard) {
+        const links = blogCard.getElementsByTagName("a");
+
+        // Add click handlers to all links to prevent event bubbling
+        Array.from(links).forEach((link) => {
+            link.onclick = (e) => {
+                e.stopPropagation();
+            };
+        });
+
+        // Prefetch on hover
+        blogCard.onmouseenter = () => {
+            prefetch("/blog/");
+        };
+
+        // Navigate on click
+        blogCard.onclick = () => {
+            window.location.href = "/blog/";
+        };
+    }
+</script>

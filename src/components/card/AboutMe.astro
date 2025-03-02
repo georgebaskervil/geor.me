@@ -1,0 +1,41 @@
+---
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
+interface Props {
+    grids: string;
+}
+
+const skills = ["Go", "Vue", "React", "TypeScript", "Tailwind CSS"].sort(
+    (a, b) => a.length - b.length,
+);
+
+const { grids } = Astro.props;
+---
+
+<Card className={cn(grids)}>
+    <CardHeader>
+        <CardTitle>About me</CardTitle>
+    </CardHeader>
+    <CardContent>
+        <section class="text-pretty dark:prose-invert prose prose-sm">
+            <p>
+                I enjoy working on projects that solve real problems and am
+                proficient in both Japanese and English.
+            </p>
+            <h4>Core technical skills</h4>
+            <ul>
+                {skills.map((skill) => <li>{skill}</li>)}
+            </ul>
+            <p>
+                I'm primarily a backend developer, but I also enjoy creating
+                modern, minimalist websites—just like this one.
+            </p>
+            <p>
+                When I'm not coding, you'll find me exploring new technologies,
+                reading tech blogs, or working on side projects that catch my
+                interest.
+            </p>
+        </section>
+    </CardContent>
+</Card>

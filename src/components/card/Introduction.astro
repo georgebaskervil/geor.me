@@ -1,0 +1,101 @@
+---
+import {
+    Card,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import BoxReveal from "@/components/ui/box-reveal";
+import { Image } from "astro:assets";
+import banner from "@/assets/banner.jpg";
+import { cn } from "@/lib/utils";
+
+interface Props {
+    grids: string;
+}
+
+const { grids } = Astro.props;
+---
+
+<Card className={cn("relative h-full overflow-hidden ", grids)}>
+    <!-- 
+        Artwork by Gracile https://www.gracile.jp/
+    -->
+    <Image
+        src={banner}
+        loading="eager"
+        alt=""
+        class="absolute inset-0 blur-md md:blur-sm lg:blur-none w-full h-full object-center object-cover"
+    />
+    <div class="right-0 bottom-0 absolute p-2 dark">
+        <BoxReveal
+            client:visible
+            boxColor={"hsl(191.6 91.4% 36.5%)"}
+            duration={0.4}
+        >
+            <p
+                class="font-thin text-foreground text-xs lg:text-muted-foreground dark"
+            >
+                Artwork by <a
+                    class="underline"
+                    href="https://www.gracile.jp"
+                    target="_blank">Gracile</a
+                >
+            </p>
+        </BoxReveal>
+        <p
+            class="block md:hidden font-thin text-foreground text-xs lg:text-muted-foreground dark"
+        >
+            Artwork by <a
+                class="underline"
+                href="https://www.gracile.jp"
+                target="_blank">Gracile</a
+            >
+        </p>
+    </div>
+    <CardHeader className="relative z-10 mb-4">
+        <CardDescription
+            className="md:block hidden font-thin text-foreground lg:text-muted-foreground dark"
+        >
+            <BoxReveal
+                client:visible
+                boxColor={"hsl(191.6 91.4% 36.5%)"}
+                duration={0.4}
+            >
+                <span>welcome</span>
+            </BoxReveal>
+            <span class="block md:hidden">welcome</span>
+        </CardDescription>
+        <CardTitle
+            className="!mt-0 md:!mt-1 sm:w-[26rem] font-extralight text-foreground leading-7 dark"
+        >
+            <BoxReveal
+                client:visible
+                boxColor={"hsl(191.6 91.4% 36.5%)"}
+                duration={0.4}
+            >
+                <h1>
+                    Hi, I'm
+                    <span class="font-semibold text-nowrap">Tahir Murata</span>,
+                    a <span
+                        class="font-medium text-nowrap underline decoration-cyan-400 lg:decoration-cyan-600"
+                        >software developer</span
+                    > based in <span
+                        class="font-medium text-nowrap underline decoration-cyan-400 lg:decoration-cyan-600"
+                        >Japan</span
+                    >.
+                </h1>
+            </BoxReveal>
+            <h1 class="block md:hidden">
+                Hi, I'm
+                <span class="font-semibold text-nowrap">Tahir Murata</span>, a <span
+                    class="font-medium text-nowrap underline decoration-cyan-400"
+                    >software developer</span
+                > based in <span
+                    class="font-medium text-nowrap underline decoration-cyan-400"
+                    >Japan</span
+                >.
+            </h1>
+        </CardTitle>
+    </CardHeader>
+</Card>

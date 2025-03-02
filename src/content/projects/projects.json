@@ -1,0 +1,75 @@
+[
+    {
+        "title": "Portfolio",
+        "slug": "portfolio",
+        "description": "Portfolio website built with React.",
+        "tags": [
+            "Astro",
+            "React",
+            "TypeScript",
+            "Tailwind CSS"
+        ],
+        "links": [
+            {
+                "name": "GitHub",
+                "url": "https://github.com/tahirmurata/portfolio"
+            },
+            {
+                "name": "URL",
+                "url": "https://muratahir.com"
+            }
+        ]
+    },
+    {
+        "title": "F3S",
+        "slug": "f3s",
+        "description": "F3S is a system that simplifies tracking and managing purchases at food stalls during school festivals.",
+        "tags": [
+            "Go",
+            "PostgreSQL",
+            "Vue"
+        ],
+        "links": [
+            {
+                "name": "GitHub",
+                "url": "https://github.com/f3sys"
+            }
+        ]
+    },
+    {
+        "title": "Vero",
+        "slug": "vero",
+        "description": "The vero package generates random numbers for online casinos games such as dice, roll, crash, etc.",
+        "tags": [
+            "Go"
+        ],
+        "links": [
+            {
+                "name": "GitHub",
+                "url": "https://github.com/pastc/vero"
+            },
+            {
+                "name": "Go Package",
+                "url": "https://pkg.go.dev/github.com/pastc/vero"
+            }
+        ]
+    },
+    {
+        "title": "Petch",
+        "slug": "petch",
+        "description": "A pretty system information tool written in Go.",
+        "tags": [
+            "Go"
+        ],
+        "links": [
+            {
+                "name": "GitHub",
+                "url": "https://github.com/pastc/petch"
+            },
+            {
+                "name": "Go Package",
+                "url": "https://pkg.go.dev/github.com/pastc/petch"
+            }
+        ]
+    }
+]

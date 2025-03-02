@@ -1,0 +1,78 @@
+---
+import {
+    Card,
+    CardHeader,
+    CardContent,
+    CardTitle,
+} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { getCollection } from "astro:content";
+import { ArrowUpRight } from "lucide-react";
+
+interface Props {
+    grids: string;
+}
+
+const { grids } = Astro.props;
+
+const projects = await getCollection("projects");
+---
+
+<Card
+    className={cn(
+        "flex flex-col group hover:cursor-pointer sm:hover:border-muted-foreground",
+        grids,
+    )}
+    id="project_card"
+>
+    <CardHeader>
+        <CardTitle className="flex flex-row justify-between items-center">
+            <span class="text-xl">Projects</span>
+            <ArrowUpRight
+                className="transition-transform sm:group-hover:translate-x-1 sm:group-hover:-translate-y-1 duration-200 size-6"
+            />
+        </CardTitle>
+    </CardHeader>
+    <CardContent>
+        <ul class="ml-5 text-foreground list-disc text-base [&>li]:mt-1">
+            {
+                projects.slice(0, 5).map((project) => (
+                    <li>
+                        <a
+                            class="hover:underline"
+                            href={`/projects/${project.id}/`}
+                        >
+                            {project.data.title}
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+     </CardContent>
+</Card>
+
+<script>
+    import { prefetch } from "astro:prefetch";
+
+    const projectCard = document.getElementById("project_card");
+    if (projectCard) {
+        const links = projectCard.getElementsByTagName("a");
+
+        // Add click handlers to all links to prevent event bubbling
+        Array.from(links).forEach((link) => {
+            link.onclick = (e) => {
+                e.stopPropagation();
+            };
+        });
+
+        // Prefetch on hover
+        projectCard.onmouseenter = () => {
+            prefetch("/projects/");
+        };
+
+        // Navigate on click
+        projectCard.onclick = () => {
+            window.location.href = "/projects/";
+        };
+    }
+</script>
