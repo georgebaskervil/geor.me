@@ -1,0 +1,2 @@
+module DiffractorHelper
+end

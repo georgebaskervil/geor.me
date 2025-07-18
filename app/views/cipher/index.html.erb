@@ -1,0 +1,32 @@
+<h1 class="cipher-h1">Eclecticon Cipher</h1>
+<div class="cipher-container" data-controller="cipher">
+  <div class="cipher-controls">
+    <button data-action="cipher#toggleMode" class="cipher-button">
+      Mode:
+      <span data-cipher-target="modeDisplay">decrypt</span>
+    </button>
+    <button data-action="cipher#randomize" class="cipher-button">Randomize</button>
+    <button data-action="cipher#clear" class="cipher-button">Clear</button>
+  </div>
+
+  <textarea
+    class="cipher-input"
+    data-cipher-target="input"
+    data-action="input->cipher#processText"
+    placeholder="Enter text to encrypt/decrypt"
+  ></textarea>
+
+  <div class="cipher-grid" data-cipher-target="cipherGrid">
+    <% ('A'..'Z').each do |letter| %>
+      <div class="cipher-cell" data-letter="<%= letter %>">
+        <%= letter %>
+      </div>
+    <% end %>
+  </div>
+
+  <div
+    class="cipher-output"
+    data-cipher-target="output"
+    aria-label="Encrypted/Decrypted result"
+  ></div>
+</div>

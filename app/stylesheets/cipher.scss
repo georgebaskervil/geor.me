@@ -1,0 +1,143 @@
+@use "variables";
+@use "sass:color";
+
+.cipher-container {
+  margin: 2rem auto;
+  font-family: SpaceMono-Regular-subset, monospace;
+}
+
+.cipher-input {
+  width: 100%;
+  min-height: 150px;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: color.adjust(#1a1b26, $lightness: 5%);
+  color: variables.$text;
+  font-family: SpaceMono-Regular-subset, monospace;
+  border: 1px solid variables.$neutral;
+  transition: all 0.3s ease;
+
+  @apply rounded-lg;
+
+  &:hover {
+    box-shadow: variables.$box-shadow;
+  }
+}
+
+.cipher-output {
+  width: 100%;
+  min-height: 150px;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: color.adjust(#1a1b26, $lightness: -5%);
+  color: variables.$text;
+  border: 1px solid variables.$neutral;
+  transition: all 0.3s ease;
+
+  @apply rounded-lg;
+
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  user-select: text;
+  pointer-events: all;
+  opacity: 0.8;
+
+  &:hover {
+    box-shadow: none;
+  }
+}
+
+.cipher-grid {
+  display: grid;
+  grid-template-columns: repeat(13, 1fr);
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.cipher-cell {
+  aspect-ratio: 1;
+  border: 1px solid variables.$neutral;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: SpaceMono-Regular-subset, monospace;
+  color: variables.$text;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background-color: #1a1b26;
+
+  @apply rounded-lg;
+
+  &.mapped {
+    color: variables.$accent;
+    border-color: variables.$accent;
+  }
+
+  &:hover {
+    transform: rotate(5deg) scale(1.2);
+    color: variables.$accent;
+
+    /* Enable optimization only during hover */
+    will-change: transform, color;
+  }
+
+  &:not(:hover) {
+    /* Remove optimization when not hovering */
+    will-change: auto;
+  }
+}
+
+.cipher-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  button {
+    color: variables.$text;
+    background: transparent;
+    border: 1px solid variables.$neutral;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: variables.$accent;
+      transform: scale(1.1);
+
+      /* Enable optimization during hover */
+      will-change: transform, color;
+    }
+
+    &:not(:hover) {
+      /* Remove optimization when not hovering */
+      will-change: auto;
+    }
+  }
+}
+
+.cipher-button {
+  color: variables.$text;
+  background: transparent;
+  border: 1px solid variables.$neutral;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  @apply rounded-lg;
+
+  &:hover {
+    color: variables.$accent;
+    transform: scale(1.1);
+
+    /* Enable optimization during hover */
+    will-change: transform, color;
+  }
+
+  &:not(:hover) {
+    /* Remove optimization when not hovering */
+    will-change: auto;
+  }
+}
+
+.cipher-h1 {
+  @apply text-4xl font-bold mb-4 text-text;
+}

@@ -1,0 +1,77 @@
+<h1 class="cipher-h1">Eclecticon Coloursquare</h1>
+<div data-controller="coloursquare" class="coloursquare-container">
+  <div class="coloursquare-row">
+    <label class="coloursquare-text">Red</label>
+    <input
+      data-coloursquare-target="editR"
+      data-action="input->coloursquare#updateFromEdit"
+      class="coloursquare-number"
+      type="number"
+      min="0"
+      max="255"
+      value="128"
+      autocomplete="off"
+    >
+    <input
+      data-coloursquare-target="sliderR"
+      data-action="input->coloursquare#updateFromSlider"
+      class="coloursquare-slider"
+      type="range"
+      min="0"
+      max="255"
+      value="128"
+      autocomplete="off"
+    >
+  </div>
+  <div class="coloursquare-row">
+    <label class="coloursquare-text">Green</label>
+    <input
+      data-coloursquare-target="editG"
+      data-action="input->coloursquare#updateFromEdit"
+      class="coloursquare-number"
+      type="number"
+      min="0"
+      max="255"
+      value="128"
+      autocomplete="off"
+    >
+    <input
+      data-coloursquare-target="sliderG"
+      data-action="input->coloursquare#updateFromSlider"
+      class="coloursquare-slider"
+      type="range"
+      min="0"
+      max="255"
+      value="128"
+      autocomplete="off"
+    >
+  </div>
+  <div class="coloursquare-row">
+    <label class="coloursquare-text">Blue</label>
+    <input
+      data-coloursquare-target="editB"
+      data-action="input->coloursquare#updateFromEdit"
+      class="coloursquare-number"
+      type="number"
+      min="0"
+      max="255"
+      value="128"
+      autocomplete="off"
+    >
+    <input
+      data-coloursquare-target="sliderB"
+      data-action="input->coloursquare#updateFromSlider"
+      class="coloursquare-slider"
+      type="range"
+      min="0"
+      max="255"
+      value="128"
+      autocomplete="off"
+    >
+  </div>
+  <div class="coloursquare-square" data-coloursquare-target="squareBox">Color</div>
+  <div
+    class="coloursquare-square coloursquare-inverse"
+    data-coloursquare-target="inverseBox"
+  >Inverse</div>
+</div>

@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+
+# Start the Rails application with iodine server
+# This script provides convenient options for starting iodine with different configurations
+
+require 'optparse'
+
+# Default options
+options = {
+  port: ENV.fetch('PORT', 3000),
+  threads: ENV.fetch('THREADS', 5),
+  workers: ENV.fetch('WEB_CONCURRENCY', 1),
+  verbose: false,
+  environment: ENV.fetch('RAILS_ENV', 'development')
+}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: bin/iodine [options]"
+
+  opts.on("-p", "--port PORT", "Port to listen on (default: #{options[:port]})") do |port|
+    options[:port] = port
+  end
+
+  opts.on("-t", "--threads THREADS", "Number of threads (default: #{options[:threads]})") do |threads|
+    options[:threads] = threads
+  end
+
+  opts.on("-w", "--workers WORKERS", "Number of workers (default: #{options[:workers]})") do |workers|
+    options[:workers] = workers
+  end
+
+  opts.on("-e", "--environment ENV", "Rails environment (default: #{options[:environment]})") do |env|
+    options[:environment] = env
+  end
+
+  opts.on("-v", "--[no-]verbose", "Enable verbose logging") do |v|
+    options[:verbose] = v
+  end
+
+  opts.on("-h", "--help", "Show this help message") do
+    puts opts
+    exit
+  end
+end.parse!
+
+# Build the command
+cmd_parts = []
+cmd_parts << "RAILS_ENV=#{options[:environment]}"
+cmd_parts << "bundle exec iodine"
+cmd_parts << "-p #{options[:port]}"
+cmd_parts << "-t #{options[:threads]}"
+cmd_parts << "-w #{options[:workers]}"
+cmd_parts << "-v" if options[:verbose]
+
+cmd = cmd_parts.join(' ')
+
+puts "Starting iodine server with: #{cmd}"
+exec cmd

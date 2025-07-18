@@ -1,0 +1,50 @@
+.waveform-h1 {
+  font-size: 2.5rem;
+  margin-bottom: 24px;
+
+  @apply text-4xl font-bold mb-4 text-text;
+}
+
+.waveform-p {
+  margin-bottom: 16px;
+
+  @apply text-text;
+}
+
+.waveform-link-2 {
+  @apply text-accent no-underline hover:underline;
+}
+
+.wf-canvas {
+  width: 100%;
+  height: 700px;
+  border: 1px solid #2d2a2a;
+  border-radius: 10px;
+}
+
+.wf-controls {
+  margin-bottom: 10px;
+  color: #c0caf5;
+}
+
+.wf-controls input,
+.wf-controls button {
+  background-color: transparent;
+  color: #c0caf5;
+  border: 1px solid #2d2a2a;
+  padding: 5px;
+  margin-right: 10px;
+  border-radius: 10px;
+}
+
+.wf-controls input[type="file"] {
+  color: transparent;
+}
+
+.wf-controls input[type="file"]::file-selector-button {
+  background-color: transparent;
+  color: #c0caf5;
+  border: 1px solid #2d2a2a;
+  padding: 5px;
+  border-radius: 10px;
+}

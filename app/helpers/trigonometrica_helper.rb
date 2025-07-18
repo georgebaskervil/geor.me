@@ -1,0 +1,2 @@
+module TrigonometricaHelper
+end

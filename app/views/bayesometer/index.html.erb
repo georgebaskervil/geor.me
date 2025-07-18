@@ -1,0 +1,86 @@
+<h1 class="bayesometer-h1">Eclecticon Bayesometer</h1>
+<div data-controller="bayesometer" class="bayesometer-container">
+  <div class="bayesometer-inputs-grid">
+    <div class="bayesometer-input-group">
+      <label for="ph">P(H) - Probability of Hypothesis:</label>
+      <input
+        type="number"
+        id="ph"
+        data-bayesometer-target="ph"
+        data-action="input->bayesometer#inputChanged"
+        min="0"
+        max="1"
+        step="0.1"
+        value="0.5"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="bayesometer-input-group">
+      <label for="pth">P(T|H) - Probability of Test given H:</label>
+      <input
+        type="number"
+        id="pth"
+        data-bayesometer-target="pth"
+        data-action="input->bayesometer#inputChanged"
+        min="0"
+        max="1"
+        step="0.1"
+        value="0.8"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="bayesometer-input-group">
+      <label for="ptnh">P(T|¬H) - Probability of Test given not H:</label>
+      <input
+        type="number"
+        id="ptnh"
+        data-bayesometer-target="ptnh"
+        data-action="input->bayesometer#inputChanged"
+        min="0"
+        max="1"
+        step="0.1"
+        value="0.2"
+        autocomplete="off"
+      >
+    </div>
+  </div>
+
+  <div class="bayesometer-results-grid">
+    <div class="bayesometer-results" data-bayesometer-target="results">
+      <h3>Results:</h3>
+      <div
+        class="bayesometer-error"
+        data-bayesometer-target="error"
+        style="display: none;"
+      >
+        Invalid probability combination
+      </div>
+      <div data-bayesometer-target="validResults">
+        <h4>Given Test Positive (T):</h4>
+        <p>P(H|T) =
+          <span data-bayesometer-target="pht">0.000</span></p>
+        <p>P(¬H|T) =
+          <span data-bayesometer-target="pnotht">0.000</span></p>
+
+        <h4>Given Test Negative (¬T):</h4>
+        <p>P(H|¬T) =
+          <span data-bayesometer-target="phnott">0.000</span></p>
+        <p>P(¬H|¬T) =
+          <span data-bayesometer-target="pnothnott">0.000</span></p>
+
+        <h4>Overall Test Probabilities:</h4>
+        <p>P(T) =
+          <span data-bayesometer-target="pt">0.000</span></p>
+        <p>P(¬T) =
+          <span data-bayesometer-target="pnott">0.000</span></p>
+      </div>
+    </div>
+    <div
+      class="bayesometer-plot"
+      data-bayesometer-target="plot"
+      onwheel="event.stopPropagation()"
+    ></div>
+  </div>
+</div>

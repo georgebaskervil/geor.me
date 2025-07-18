@@ -1,0 +1,83 @@
+<h1 class="neudec-h1">Audio Decomposer</h1>
+<div class="neudec-container" data-controller="neudec">
+  <!-- Encode Section -->
+  <section class="neudec-section neudec-encode">
+    <h2 class="neudec-section-title">Encode WAV to XML:</h2>
+    <form id="neudec-encode-form">
+      <label class="neudec-label" for="encode-wav">Select WAV file:</label>
+      <input
+        class="neudec-input"
+        data-neudec-target="encodeWav"
+        type="file"
+        id="encode-wav"
+        accept=".wav"
+        autocomplete="off"
+      >
+      <button
+        class="neudec-button"
+        type="button"
+        id="encode-btn"
+        data-action="click->neudec#encode"
+      >Encode</button>
+    </form>
+    <div id="encode-download-container" class="neudec-download"></div>
+  </section>
+  <!-- Decode Section -->
+  <section class="neudec-section neudec-decode">
+    <h2 class="neudec-section-title">Decode XML to WAV:</h2>
+    <form id="neudec-decode-form">
+      <label class="neudec-label" for="decode-xml-file">Select XML file:</label>
+      <input
+        class="neudec-input"
+        type="file"
+        id="decode-xml-file"
+        accept=".xml"
+        data-neudec-target="decodeXML"
+        autocomplete="off"
+      >
+      <button
+        class="neudec-button"
+        type="button"
+        id="decode-btn"
+        data-action="click->neudec#decode"
+      >Decode</button>
+    </form>
+    <div id="download-link-container" class="neudec-download"></div>
+  </section>
+  <!-- Analysis Section -->
+  <section class="neudec-section neudec-analysis">
+    <h2 class="neudec-section-title">Analyze Encoded vs Decoded:</h2>
+    <form id="neudec-analysis-form">
+      <label class="neudec-label" for="analysis-xml">Select XML file (Encoded):</label>
+      <input
+        class="neudec-input"
+        type="file"
+        id="analysis-xml"
+        accept=".xml"
+        data-neudec-target="analysisXML"
+        autocomplete="off"
+      >
+      <label class="neudec-label" for="analysis-wav">Select WAV file (Decoded):</label>
+      <input
+        class="neudec-input"
+        type="file"
+        id="analysis-wav"
+        accept=".wav"
+        data-neudec-target="analysisWav"
+        autocomplete="off"
+      >
+      <button
+        class="neudec-button"
+        type="button"
+        id="analyze-btn"
+        data-action="click->neudec#analyze"
+      >Analyze</button>
+    </form>
+  </section>
+  <div
+    class="neudec-analysis-stats"
+    id="analysis-stats"
+    data-neudec-target="analysisStats"
+  ></div>
+  <div class="neudec-plot" id="analysis-plot" data-neudec-target="analysisPlot"></div>
+</div>

@@ -1,0 +1,24 @@
+<h1 class="posts-header-text-text">Latest Posts</h1>
+
+<p class="dl-link-box">
+  Articles licensed under CC0 1.0 Universal. Download them on the
+  <a
+    href="https://github.com/georgebaskervil/Personal-Website/tree/main/data/articles"
+    target="_blank"
+    rel="noopener"
+  >GitHub repo</a>.
+</p>
+
+<section class="posts-section">
+  <% @all_posts.each do |article| %>
+    <%= link_to post_path(File.basename(article[:file_path], '.md')), class: "posts-card" do %>
+      <h2 class="posts-title"><%= article[:title] %></h2>
+      <p class="posts-content"><%= article[:description] %></p>
+      <p class="posts-published-date-card-ver">Published on the
+        <%= article[:published_at].day.ordinalize %>
+        of
+        <%= article[:published_at].strftime("%B") %>
+        <%= article[:published_at].strftime("%Y") %></p>
+    <% end %>
+  <% end %>
+</section>

@@ -1,0 +1,66 @@
+<h1 class="binomilator-h1">Eclecticon Binomilator</h1>
+
+<div data-controller="binomilator" class="binomilator-container">
+  <div class="controls-grid">
+    <div class="input-group">
+      <label for="n">N (Number of trials):</label>
+      <input
+        type="number"
+        id="n"
+        data-binomilator-target="n"
+        data-action="input->binomilator#inputChanged"
+        min="1"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="input-group">
+      <label for="p">p (Probability of success):</label>
+      <input
+        type="number"
+        id="p"
+        data-binomilator-target="p"
+        data-action="input->binomilator#inputChanged"
+        step="0.01"
+        min="0"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="input-group">
+      <label for="x">x (Number of successes):</label>
+      <input
+        type="number"
+        id="x"
+        data-binomilator-target="x"
+        data-action="input->binomilator#inputChanged"
+        min="0"
+        autocomplete="off"
+      >
+    </div>
+  </div>
+
+  <div class="toggles-grid">
+    <label>
+      <input
+        type="checkbox"
+        data-action="change->binomilator#togglePoisson"
+        autocomplete="off"
+      >
+      Show Poisson
+    </label>
+    <label>
+      <input
+        type="checkbox"
+        data-action="change->binomilator#toggleNormal"
+        autocomplete="off"
+      >
+      Show Normal
+    </label>
+  </div>
+
+  <div class="results-grid">
+    <div data-binomilator-target="results"></div>
+    <div data-binomilator-target="plot"></div>
+  </div>
+</div>

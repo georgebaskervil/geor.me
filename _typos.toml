@@ -1,0 +1,3 @@
+[files]
+# Ignore all files in the /app/emoji directory
+extend-exclude = ["app/emoji/**"]

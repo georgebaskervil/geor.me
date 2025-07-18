@@ -1,0 +1,42 @@
+<h1 class="misc-h1">Miscellaneous Items</h1>
+
+<p class="misc-p">The pages on this site that don't fit anywhere else.</p>
+
+<% misc_items = [
+  {
+    title: "Netflix, Do Better",
+    description:
+      "This was a meme about the page the used to exist on the Netflix site that just contained an h1 with \"Hello World!!\". Due to global includes, the page used ~400kb of javascript to do this. This is my version without any JS and using noncompliant HTML, which is about 23 bytes.",
+    path: "/netflixdobetter",
+  },
+  {
+    title: "Javascript Waveform Viewer",
+    description:
+      "A simple waveform viewer that uses the Web Audio API to display a waveform of an audio file. I made it while researching audio compression for the <a href=\"https://x.com/neuralink/status/1747020548212437228\" target=\"_blank\" rel=\"noopener noreferrer\">neuralink compression challenge</a>.",
+    path: "/waveform",
+  },
+  {
+    title: "Site data analytics",
+    description:
+      "A page displaying anonymous data about the site. Some is coded manually, some is through an <a href=\"https://umami.is\" target=\"_blank\" rel=\"noopener noreferrer\">umami</a> analytics share URL.",
+    path: "/data",
+  },
+  {
+    title: "Eclecticon Apps",
+    description:
+      "Some of the apps from <a class=\"eclecticonapps-link\" href=\"https://eclecticon.info\" target=\"_blank\" rel=\"noopener\">eclecticon.info</a> that I've ported to javascript. Unfinished and now discontinued.",
+    path: "/eclecticonapps",
+  },
+] %>
+
+<% misc_items.each_with_index do |item, index| %>
+  <p class="misc-p">
+    <strong><%= index + 1 %>:
+      <%= item[:title] %></strong>
+  </p>
+  <p class="misc-p"><%= sanitize(item[:description], tags: %w[a], attributes: %w[href target rel class]) %></p>
+  <p class="misc-p">
+    Link:
+    <a href="<%= item[:path] %>" rel="noopener" class="misc-link"><%= item[:title] %></a>
+  </p>
+<% end %>

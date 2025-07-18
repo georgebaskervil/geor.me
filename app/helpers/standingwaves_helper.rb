@@ -1,0 +1,2 @@
+module StandingwavesHelper
+end

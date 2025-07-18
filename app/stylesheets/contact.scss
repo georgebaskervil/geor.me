@@ -1,0 +1,30 @@
+.container {
+  max-width: 100%;
+}
+
+.p-spacing {
+  margin-bottom: 1em;
+}
+
+.c-h1 {
+  font-size: 2.5rem;
+  margin-bottom: 24px;
+
+  @apply text-4xl font-bold mb-4 text-text;
+}
+
+.c-paragraph {
+  margin-bottom: 0;
+}
+
+.c-main {
+  @apply container mx-auto w-full;
+}
+
+.c-paragraph-heading {
+  @apply p-spacing text-text;
+}
+
+.c-link {
+  @apply text-accent no-underline hover:underline;
+}

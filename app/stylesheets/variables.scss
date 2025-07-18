@@ -1,0 +1,95 @@
+$accent: #c39399;
+$background-colour: #161820;
+$text: #c6c2c7;
+$box-shadow: rgb(0 0 0 / 20%);
+$strong-box-shadow: rgb(0 0 0 / 80%);
+$medium-box-shadow: rgb(0 0 0 / 50%);
+$hp-primary: #989ef1;
+$hp-secondary: #b09ffc;
+$vulcan: #0f1420;
+$mirage: #17202a;
+$ebony: #0e0c23;
+$background: #0e0e0e;
+$glass: rgb(128 128 128 / 30%);
+$glass-border: rgb(255 255 255 / 30%);
+$progress-bar: #472a43;
+$sp-primary: #c995a4;
+$sidebar-icon: #808080;
+$neutral: #2d2a2a;
+$text-color: #222;
+$surface: #c0c0c0;
+$button-highlight: #fff;
+$button-face: #dfdfdf;
+$button-shadow: #a0a0a0;
+$window-frame: #707070;
+$dialog-blue: #4a76a8;
+$dialog-blue-light: #6ca0d1;
+$dialog-gray: #808080;
+$dialog-gray-light: #b5b5b5;
+$link-blue: #00f;
+$ent-spacing: 8px;
+$grouped-button-spacing: 4px;
+$grouped-element-spacing: 6px;
+$radio-width: 12px;
+$checkbox-width: 13px;
+$radio-label-spacing: 6px;
+$range-track-height: 4px;
+$range-spacing: 10px;
+$radio-total-width-precalc: $radio-width + $radio-label-spacing;
+$radio-total-width: $radio-total-width-precalc;
+$radio-left: -1 * $radio-total-width-precalc;
+$radio-dot-width: 4px;
+$radio-dot-top: $radio-width * 0.5 - $radio-dot-width * 0.5;
+$radio-dot-left: -1 * $radio-total-width-precalc + $radio-width * 0.5
+  $radio-dot-width * 0.5;
+$checkbox-total-width-precalc: $checkbox-width + $radio-label-spacing;
+$checkbox-total-width: $checkbox-total-width-precalc;
+$checkbox-left: -1 * $checkbox-total-width-precalc;
+$checkmark-width: 7px;
+$checkmark-left: 3px;
+$border-width: 1px;
+$border-raised-outer:
+  inset -1px -1px $window-frame,
+  inset 1px 1px $button-highlight;
+$border-raised-inner:
+  inset -2px -2px $button-shadow,
+  inset 2px 2px $button-face;
+$border-sunken-outer:
+  inset -1px -1px $button-highlight,
+  inset 1px 1px $window-frame;
+$border-sunken-inner:
+  inset -2px -2px $button-face,
+  inset 2px 2px $button-shadow;
+$default-button-border-raised-outer:
+  inset -2px -2px $window-frame,
+  inset 1px 1px $window-frame;
+$default-button-border-raised-inner:
+  inset 2px 2px $button-highlight,
+  inset -3px -3px $button-shadow,
+  inset 3px 3px $button-face;
+$default-button-border-sunken-outer:
+  inset 2px 2px $window-frame,
+  inset -1px -1px $window-frame;
+$default-button-border-sunken-inner:
+  inset -2px -2px $button-highlight,
+  inset 3px 3px $button-shadow,
+  inset -3px -3px $button-face;
+$border-window-outer:
+  inset -1px -1px $window-frame,
+  inset 1px 1px $button-face;
+$border-window-inner:
+  inset -2px -2px $button-shadow,
+  inset 2px 2px $button-highlight;
+$border-field:
+  inset -1px -1px $button-highlight,
+  inset 1px 1px $button-shadow,
+  inset -2px -2px $button-face,
+  inset 2px 2px $window-frame;
+$border-status-field:
+  inset -1px -1px $button-face,
+  inset 1px 1px $button-shadow;
+$border-tab:
+  inset -1px 0 $window-frame,
+  inset 1px 1px $button-face,
+  inset -2px 0 $button-shadow,
+  inset 2px 2px $button-highlight;

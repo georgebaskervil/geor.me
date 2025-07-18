@@ -1,0 +1,53 @@
+@use "variables";
+
+.images-title {
+  @apply text-4xl font-bold mb-1 text-text;
+}
+
+.images-description {
+  @apply opacity-40;
+}
+
+.images-container {
+  @apply flex flex-col gap-4;
+}
+
+.images-grid {
+  @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
+}
+
+.image-container {
+  @apply relative flex justify-center items-center overflow-hidden;
+  @apply transition-all duration-300 ease-in-out; /* Changed from transition-transform to transition-all */
+  @apply w-full;
+
+  aspect-ratio: 3 / 2;
+
+  img {
+    @apply w-full h-full object-cover rounded-lg;
+  }
+
+  /* Default state for all image containers */
+  opacity: 1;
+  z-index: 1;
+
+  &:hover {
+    transform: rotate(5deg) scale(1.2);
+    z-index: 2;
+    opacity: 1; /* Explicitly set to ensure it stays fully visible */
+    box-shadow: variables.$strong-box-shadow;
+
+    /* Enable optimization only during hover */
+    will-change: transform, box-shadow;
+  }
+
+  /* Transition back when mouse leaves */
+  &:not(:hover) {
+    transform: rotate(0deg) scale(1); /* Reset transform */
+    z-index: 1; /* Reset z-index */
+    opacity: 1; /* Reset opacity */
+
+    /* Remove optimization when not hovering */
+    will-change: auto;
+  }
+}

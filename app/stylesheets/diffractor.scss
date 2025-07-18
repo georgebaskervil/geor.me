@@ -1,0 +1,63 @@
+@use "variables";
+
+.diffractor-container {
+  @apply flex flex-col;
+
+  font-family: SpaceMono-Regular-subset, monospace;
+  color: variables.$text;
+}
+
+.diffractor-h1 {
+  @apply text-4xl font-bold mb-6;
+
+  color: variables.$text;
+}
+
+.diffractor-controls {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+.diffractor-control-group {
+  @apply flex flex-col gap-2;
+
+  label {
+    @apply text-sm font-medium;
+
+    color: variables.$text;
+  }
+
+  input[type="range"] {
+    @apply w-full;
+
+    accent-color: variables.$accent;
+  }
+
+  input[type="number"] {
+    @apply px-3 py-2 rounded-md;
+
+    background-color: variables.$background-colour;
+    border: 1px solid variables.$neutral;
+    color: variables.$text;
+
+    &:focus {
+      border-color: variables.$accent;
+      outline: none;
+    }
+  }
+}
+
+.diffractor-button {
+  @apply px-4 py-2 rounded-md transition-colors duration-200;
+
+  background-color: variables.$accent;
+  color: variables.$text;
+  border: 1px solid variables.$neutral;
+
+  &:hover {
+    background-color: variables.$accent;
+  }
+}
+
+.diffractor-plot {
+  @apply w-full h-[500px];
+}

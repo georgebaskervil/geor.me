@@ -1,0 +1,57 @@
+<h1 class="eclecticonapps-h1">
+  Ecelcticon Apps
+</h1>
+<p class="eclecticonapps-p">
+  My (unfinished and now discontinued) port of all of the apps on
+  <a
+    href="http://www.eclecticon.info"
+    target="_blank"
+    class="eclecticonapps-link"
+  >eclecticon.info</a>
+</p>
+
+<% eclecticonapps = %w[
+  bayesometer
+  binomilator
+  cipher
+  coloursquare
+  diffractor
+  edemo
+  encryptor
+  eyam
+  fgraph
+  forces
+  gradientor
+  guitemplate
+  harmonograph
+  inequalityplotter
+  insult
+  integra
+  julia
+  matrixtransformations
+  momentum
+  movie2xyt
+  normalstats
+  orbits
+  poweraid
+  projectile
+  quadratica
+  shm
+  slope
+  soundanalyser
+  soundsnipper
+  spherium
+  standingwaves
+  factorizer
+  transformer
+  trigonometrica
+  waveformer
+] %>
+
+<ul>
+  <% eclecticonapps.each do |app| %>
+    <li class="eclecticonapps-p">
+      <a href="/<%= app %>" rel="noopener" class="eclecticonapps-link"><%= app.titleize %></a>
+    </li>
+  <% end %>
+</ul>

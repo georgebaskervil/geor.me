@@ -1,0 +1,2 @@
+module EncryptorHelper
+end

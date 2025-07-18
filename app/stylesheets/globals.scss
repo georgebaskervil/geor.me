@@ -1,0 +1,463 @@
+@use "variables";
+
+* {
+  cursor:
+    url("~/icons/cursor.svg") 8 8,
+    auto !important;
+  text-rendering: optimizelegibility;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  font-family: SpaceMono-Regular-subset, monospace;
+  background: variables.$background-colour;
+}
+
+img {
+  user-select: none;
+}
+
+@font-face {
+  font-family: SpaceMono-Regular-subset;
+  src:
+    url("~/fonts/SpaceMono-Regular-subset.woff2") format("woff2"),
+    url("~/fonts/SpaceMono-Regular-subset.woff") format("woff"),
+    url("~/fonts/SpaceMono-Regular-subset.eot") format("embedded-opentype"),
+    url("~/fonts/SpaceMono-Regular-subset.svg#SpaceMono-Regular-subset")
+      format("svg");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: WaitingfortheSunrise-Regular-subset;
+  src:
+    url("~/fonts/WaitingfortheSunrise-Regular-subset.woff2") format("woff2"),
+    url("~/fonts/WaitingfortheSunrise-Regular-subset.woff") format("woff"),
+    url("~/fonts/WaitingfortheSunrise-Regular-subset.eot")
+      format("embedded-opentype"),
+    url("~/fonts/WaitingfortheSunrise-Regular-subset.svg#WaitingfortheSunrise-Regular-subset")
+      format("svg");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: PixelatedEleganceRegular-ovyAA-subset;
+  src:
+    url("~/fonts/PixelatedEleganceRegular-ovyAA-subset.woff2") format("woff2"),
+    url("~/fonts/PixelatedEleganceRegular-ovyAA-subset.woff") format("woff"),
+    url("~/fonts/PixelatedEleganceRegular-ovyAA-subset.eot")
+      format("embedded-opentype"),
+    url("~/fonts/PixelatedEleganceRegular-ovyAA-subset.svg#PixelatedEleganceRegular-ovyAA-subset")
+      format("svg");
+  font-display: swap;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.turbo-progress-bar {
+  background: variables.$accent;
+}
+
+.dl-link-box {
+  @apply bottom-0 text-left text-mamba text-sm mt-0 mb-3;
+}
+
+.dl-link {
+  @apply hover:underline;
+}
+
+.emoji {
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+  margin: 0 0.05em 0 0.1em;
+  vertical-align: -0.1em;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 1em 1em;
+  user-select: auto;
+}
+
+.drawer-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100vw;
+  height: 60px;
+  display: flex;
+  z-index: 4;
+  transition: height 0.3s;
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
+}
+
+/* Drawer container styles */
+.drawer {
+  display: flex;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  margin: 0 2.5%;
+  height: 60px; /* Fixed height when collapsed */
+  width: 350px;
+  background-color: variables.$background-colour;
+  box-shadow: 0 4px 30px variables.$medium-box-shadow;
+  border-top: 1px solid variables.$neutral;
+  border-left: 1px solid variables.$neutral;
+  border-right: 1px solid variables.$neutral;
+  border-radius: 0.5rem 0.5rem 0 0;
+  overflow: hidden;
+  z-index: 3;
+  transition:
+    height 0.3s ease,
+    box-shadow 0.3s ease;
+  flex-direction: column;
+
+  /* Optimize for height/box-shadow animations */
+  will-change: height, box-shadow;
+}
+
+.drawer.drawer-expanded {
+  height: 600px; /* Expanded height */
+  box-shadow: 0 4px 30px variables.$strong-box-shadow;
+}
+
+/* Merge all .drawer-contents declarations */
+.drawer-contents {
+  flex: 1;
+  position: relative;
+  height: 0;
+  transition: height 0.3s ease;
+  overflow: hidden;
+}
+
+.drawer-expanded .drawer-contents {
+  height: calc(600px - 60px);
+  overflow: hidden; // Container remains hidden
+}
+
+.drawer-content-container {
+  position: relative; // Required for Locomotive Scroll
+  height: 100%;
+  overflow-y: auto; // Enable native scrolling as fallback
+  font-size: 18px;
+  text-align: left;
+}
+
+.drawer-content {
+  padding: 20px 5%;
+  box-sizing: border-box;
+  font-size: 18px;
+  color: variables.$text;
+  text-align: left;
+  margin-left: 5%;
+  margin-right: 5%;
+
+  @media screen and (width <= 600px) {
+    font-size: 16px;
+  }
+}
+
+.drawer-link {
+  font-size: 18px;
+  color: variables.$accent;
+  text-decoration: underline;
+}
+
+@media screen and (width <= 600px) {
+  .drawer-link {
+    font-size: 16px;
+  }
+}
+
+.drawer-title {
+  font-size: 20px;
+  color: variables.$text;
+  margin-left: 5%;
+  display: flex;
+  align-items: center;
+}
+
+.drawer-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px; /* Match drawer collapsed height */
+}
+
+.drawer-ul-spacing {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.drawer-li-spacing {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.drawer-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 45px;
+  height: 45px;
+  background: none;
+  border: none;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.drawer-icons {
+  width: 100%;
+  user-select: none;
+  transition: transform 0.3s ease;
+
+  /* Optimize for rotation animation */
+  will-change: transform;
+}
+
+.drawer.drawer-expanded .drawer-icons {
+  transform: rotate(180deg); /* Rotate icon when expanded */
+}
+
+/**
+  Loosely based on and containing parts of 98.css
+  Copyright (c) 2020 Jordan Scales <thatjdanisso.cool>
+  https://github.com/jdan/98.css/blob/main/LICENSE
+  Copyright 2020 Jordan Scales
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), 
+  to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+  and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+.floating-window.window98 {
+  position: fixed;
+  width: 300px;
+  background: variables.$surface;
+  border: 2px solid variables.$window-frame;
+  box-shadow: 2px 2px 5px rgb(0 0 0 / 50%);
+  z-index: 5;
+  font-family: PixelatedEleganceRegular-ovyAA-subset, Arial, sans-serif;
+  user-select: none;
+
+  &.window-width-override {
+    width: 572px;
+  }
+}
+
+.window98 .title-bar {
+  background: variables.$dialog-blue;
+  color: white;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+  font-weight: bold;
+  border-bottom: 2px solid variables.$window-frame;
+}
+
+.window98 .title-bar-text {
+  font-size: 14px;
+}
+
+.window98 .window-body {
+  padding: 10px;
+  background: variables.$surface;
+  border-top: 1px solid variables.$button-face;
+  border-left: 1px solid variables.$button-face;
+  border-bottom: 1px solid variables.$window-frame;
+  border-right: 1px solid variables.$window-frame;
+  color: variables.$text-color;
+  font-size: 12px;
+}
+
+.window98 .title-bar-controls button:hover {
+  background-color: variables.$button-face;
+}
+
+.distracting-video {
+  width: 100%;
+  height: 100%;
+  border-top: 1px solid variables.$button-face;
+  border-left: 1px solid variables.$button-face;
+  border-bottom: 1px solid variables.$window-frame;
+  border-right: 1px solid variables.$window-frame;
+  pointer-events: none;
+}
+
+.doom-canvas {
+  width: 548px;
+  height: 308px;
+  display: block;
+  border-top: 1px solid variables.$button-face;
+  border-left: 1px solid variables.$button-face;
+  border-bottom: 1px solid variables.$window-frame;
+  border-right: 1px solid variables.$window-frame;
+}
+
+.main {
+  @apply container py-0 w-full;
+}
+
+.dragging * {
+  pointer-events: none;
+}
+
+.dragging .window98.currently-dragging {
+  pointer-events: auto;
+}
+
+/* Custom Cursor Styles */
+
+.custom-cursor-circle.initializing {
+  opacity: 0 !important;
+  transition: opacity 0.3s ease;
+}
+
+.custom-cursor-circle.no-transition {
+  transition: none !important;
+}
+
+/* Outer Circle */
+.custom-cursor-circle {
+  /* Define CSS variables for translation using kebab-case */
+  --translate-x: 0px;
+  --translate-y: 0px;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #e5e4da;
+  border-radius: 50%;
+  pointer-events: none; /* Ensure cursor elements don't block interactions */
+
+  /* Use CSS variables for transforms */
+  transform: translate(var(--translate-x), var(--translate-y))
+    translate(-50%, -50%) scale(1);
+
+  /* Updated transition durations */
+  transition:
+    transform 0.1s ease,
+    opacity 0.3s ease;
+  z-index: 2147483644;
+
+  /* Initially visible */
+  opacity: 1;
+
+  /* will-change is now managed dynamically via JavaScript */
+}
+
+/* Shrink Effect on Click (applied only to the circle) */
+.custom-cursor-circle.shrink {
+  /* Maintain translation and only scale */
+  transform: translate(var(--translate-x), var(--translate-y))
+    translate(-50%, -50%) scale(0.7);
+
+  /* Ensure the transform transition is smooth */
+  transition: transform 0.2s ease;
+}
+
+.oneko {
+  width: 32px;
+  height: 32px;
+  position: fixed;
+  image-rendering: pixelated;
+  z-index: 2147483646;
+  background-image: url("~/images/oneko.gif");
+  background-repeat: no-repeat;
+
+  /* Optimize for constant position updates */
+  will-change: transform, background-position;
+}
+
+.oneko-hidden {
+  display: none;
+}
+
+.hp-custom-breadcrumbs li {
+  position: relative;
+}
+
+.popover-content {
+  position: fixed;
+  display: none;
+  z-index: 3;
+  background: variables.$background-colour;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgb(255 255 255 / 10%);
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+  transform: rotate(5deg);
+  transition: opacity 0.2s ease;
+
+  /* Optimize for transform and opacity changes */
+  will-change: transform, opacity;
+}
+
+.popover-content.active {
+  display: block;
+}
+
+.meme-video {
+  pointer-events: none;
+
+  @apply rounded-lg;
+}
+
+.distraction-button {
+  @apply hover:underline;
+}
+
+// Oneko heart explosion styles
+@keyframes heart-burst {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.heart {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  animation: heart-burst 1s ease-out;
+  animation-fill-mode: forwards;
+  pointer-events: none;
+  user-select: none;
+  z-index: 2147483648; // Number.MAX_VALUE equivalent
+
+  /* Optimize for animation */
+  will-change: transform, opacity;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Hint GPU that the smooth-scroll container will be transformed continuously.
+[data-scroll-container] {
+  will-change: transform;
+}

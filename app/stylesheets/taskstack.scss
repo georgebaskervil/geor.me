@@ -1,0 +1,547 @@
+@use "variables";
+
+// General Layout
+.app-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 0 auto;
+  width: 100%;
+}
+
+// Typography
+.taskstack-h1 {
+  font-size: 2.5rem;
+  margin-bottom: 24px;
+
+  @apply text-4xl font-bold mb-4 text-text;
+}
+
+.taskstack-p {
+  margin-bottom: 16px;
+
+  @apply text-text;
+}
+
+// Form Elements
+.form-group {
+  margin-bottom: 15px;
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: variables.$text;
+  }
+}
+
+.taskstack-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #292d3e;
+  background-color: #1e212b;
+  border-radius: 4px;
+  font-size: 16px;
+  color: variables.$text;
+
+  &:focus {
+    outline: 2px solid variables.$accent;
+    border-color: variables.$accent;
+  }
+}
+
+.taskstack-button {
+  padding: 10px 15px;
+  background-color: variables.$accent;
+  color: variables.$background-colour;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s;
+
+  &:disabled {
+    background-color: #444;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #d1a0a7;
+  }
+}
+
+// Task Creator
+.task-creator {
+  background: #1e212b;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 10px 20px variables.$box-shadow;
+  margin-bottom: 15px;
+}
+
+// Task Stack Container
+.task-stack-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &-inner {
+    position: relative;
+    overflow: visible;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+
+      &-track {
+        background: #272b38;
+        border-radius: 4px;
+      }
+
+      &-thumb {
+        background-color: variables.$accent;
+        border-radius: 4px;
+      }
+    }
+  }
+}
+
+.stack-controls {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pop-btn {
+  background-color: #8c373a;
+
+  &:hover:not(:disabled) {
+    background-color: #aa4448;
+  }
+}
+
+.task-stack-wrapper {
+  flex-grow: 1;
+  overflow-y: visible;
+  position: relative;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.task-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  min-height: 100%;
+  overflow: visible;
+}
+
+// Empty State
+.empty-stack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+
+  &-message {
+    text-align: center;
+    padding: 40px;
+    color: variables.$text;
+    font-size: 20px;
+    border: 3px dashed #292d3e;
+    border-radius: 8px;
+    background-color: rgb(30 33 43 / 70%);
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+  }
+}
+
+// Add Task Component
+.add-task {
+  &-container {
+    margin-bottom: 20px;
+    padding: 0;
+  }
+
+  &-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px;
+    background-color: rgb(195 147 153 / 15%);
+    color: variables.$text;
+    border: 2px dashed variables.$accent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgb(195 147 153 / 30%);
+    }
+  }
+
+  &-form {
+    background-color: #272b38;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: variables.$box-shadow;
+  }
+
+  &-input {
+    margin-bottom: 10px;
+    color: variables.$text;
+    padding: 12px;
+  }
+
+  &-actions {
+    display: flex;
+    gap: 10px;
+
+    button {
+      flex: 1;
+    }
+  }
+}
+
+.add-icon {
+  font-size: 18px;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.cancel-task-button {
+  background-color: #41454f;
+  color: variables.$text;
+
+  &:hover:not(:disabled) {
+    background-color: #565b69;
+  }
+}
+
+// Task Item Styling
+.stack-item {
+  position: relative;
+  padding: 5px 0;
+  transform-style: preserve-3d;
+  overflow: visible;
+  margin: 5px 0;
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.6, 0.35, 1),
+    margin 0.25s cubic-bezier(0.2, 0.6, 0.35, 1),
+    opacity 0.2s ease;
+  touch-action: none;
+  user-select: none;
+  will-change: transform, opacity, margin;
+
+  &.is-dragging {
+    opacity: 0.5;
+    transition: none !important;
+    position: relative;
+    z-index: 1000;
+  }
+
+  // Space adjustment classes
+  &.make-space-above {
+    margin-top: 40px;
+    transition: margin 0.2s ease;
+  }
+
+  &.make-space-below {
+    margin-bottom: 40px;
+    transition: margin 0.2s ease;
+  }
+
+  &.make-space-up {
+    transform: translateY(-40px);
+    margin-bottom: 40px;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      height: 4px;
+      background: variables.$accent;
+      border-radius: 2px;
+      opacity: 0.9;
+      z-index: 5;
+      box-shadow: 0 0 10px rgb(195 147 153 / 80%);
+      bottom: -20px;
+    }
+  }
+
+  &.make-space-down {
+    transform: translateY(40px);
+    margin-top: 40px;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      height: 4px;
+      background: variables.$accent;
+      border-radius: 2px;
+      opacity: 0.9;
+      z-index: 5;
+      box-shadow: 0 0 10px rgb(195 147 153 / 80%);
+      top: -20px;
+    }
+  }
+}
+
+.stack-item-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+// Task Block
+.task-block {
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #292d3e;
+  box-shadow: 0 2px 5px variables.$box-shadow;
+  position: relative;
+  cursor: grab;
+  opacity: 1;
+  z-index: 1;
+  color: variables.$text;
+  touch-action: none;
+
+  &.is-dragging {
+    z-index: 100;
+    opacity: 0.9;
+    box-shadow: variables.$box-shadow;
+    transition: none;
+  }
+
+  &.being-moved {
+    transition: transform 0.5s cubic-bezier(0.2, 0.6, 0.35, 1);
+  }
+}
+
+.is-dragging .task-block {
+  box-shadow: 0 20px 40px variables.$strong-box-shadow !important;
+  cursor: grabbing !important;
+  background-color: #32364f;
+  border-left-width: 6px;
+  transform: scale(1.05);
+  outline: 2px solid rgb(195 147 153 / 50%);
+}
+
+.most-important .task-block {
+  box-shadow: 0 4px 10px variables.$box-shadow;
+  border-left: 6px solid variables.$accent;
+}
+
+.task-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-label {
+  font-weight: bold;
+  font-size: 18px;
+  flex-grow: 1;
+  user-select: none;
+  pointer-events: none;
+}
+
+.task-controls {
+  display: flex;
+}
+
+.control-btn {
+  padding: 6px 10px;
+  background-color: rgb(195 147 153 / 20%);
+  color: variables.$text;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.pop-task-btn {
+  background-color: rgb(140 55 58 / 40%);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgb(170 68 72 / 70%);
+    transform: scale(1.05);
+
+    /* Enable optimization during hover */
+    will-change: transform, background-color;
+  }
+
+  &:not(:hover) {
+    /* Remove optimization when not hovering */
+    will-change: auto;
+  }
+}
+
+// Drop Areas
+.drop-area {
+  height: 12px;
+  border-radius: 6px;
+  background-color: rgb(195 147 153 / 10%);
+  transition: all 0.2s ease;
+  margin: 4px 0;
+  z-index: 1;
+  position: relative;
+
+  &-final {
+    height: 20px;
+    margin-top: 10px;
+    border-radius: 4px;
+    background-color: transparent;
+    transition: all 0.2s ease;
+  }
+
+  &-active {
+    background-color: variables.$accent;
+    height: 16px;
+  }
+}
+
+.first-drop-area {
+  margin-top: 0;
+}
+
+// Drag and Drop
+.draggable-item {
+  cursor: grab;
+  user-select: none;
+  z-index: 1;
+  will-change: transform, opacity, box-shadow;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.is-dragging {
+  cursor: grabbing !important;
+  box-shadow: 0 15px 30px rgb(0 0 0 / 40%) !important;
+  opacity: 0.95;
+  pointer-events: none;
+  transform-origin: center center;
+  animation: subtle-pulse 1s infinite alternate;
+}
+
+.drag-handle {
+  cursor: grab;
+  margin-right: 10px;
+  color: variables.$accent;
+}
+
+.ghost-task {
+  opacity: 0.5;
+  background-color: #434860;
+}
+
+.ghost-preview {
+  display: none;
+}
+
+.drag-placeholder {
+  box-sizing: border-box;
+  border: 2px dashed rgb(195 147 153 / 30%);
+  border-radius: 8px;
+  background: rgb(195 147 153 / 5%);
+  transition: all 0.2s;
+}
+
+.drop-indicator {
+  animation: pulse 1.5s infinite;
+  transform-origin: center center;
+}
+
+// Animations
+@keyframes subtle-pulse {
+  from {
+    box-shadow: 0 15px 30px rgb(0 0 0 / 40%);
+  }
+
+  to {
+    box-shadow: 0 20px 40px rgb(0 0 0 / 60%);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+    transform: scaleY(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleY(1.2);
+  }
+
+  100% {
+    opacity: 0.5;
+    transform: scaleY(1);
+  }
+}
+
+// Transition Animations
+.task-list-move {
+  transition: transform 0.5s cubic-bezier(0.2, 0.6, 0.35, 1);
+}
+
+.task-list-enter-active {
+  transition: all 0.3s ease-out;
+  position: relative;
+  z-index: 0;
+}
+
+.task-list-leave-active {
+  transition: all 0.3s ease-in;
+  position: absolute;
+  width: 100%;
+  z-index: 0;
+}
+
+.task-list-enter-from,
+.task-list-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+// Priority Indicators
+.priority-badge {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  background-color: variables.$accent;
+  color: variables.$background-colour;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 5;
+}
+
+// Responsive Styles
+@media (width <= 768px) {
+  .main-content {
+    height: auto;
+  }
+
+  .main-stack {
+    height: calc(100vh - 270px);
+  }
+}

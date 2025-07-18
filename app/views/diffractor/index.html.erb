@@ -1,0 +1,65 @@
+<h1 class="diffractor-h1">Eclecticon Diffractor</h1>
+<div class="diffractor-container" data-controller="diffractor">
+  <div class="diffractor-controls">
+    <div class="diffractor-control-group">
+      <label>Wavelength (nm)</label>
+      <input
+        type="number"
+        data-diffractor-target="wavelength"
+        data-action="input->diffractor#update"
+        value="650"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="diffractor-control-group">
+      <label>Number of Slits</label>
+      <input
+        type="range"
+        min="1"
+        max="100"
+        data-diffractor-target="slitCount"
+        data-action="input->diffractor#update"
+        value="10"
+        autocomplete="off"
+      >
+      <span data-diffractor-target="slitCountDisplay">10</span>
+    </div>
+
+    <div class="diffractor-control-group">
+      <label>Slit Width (λ)</label>
+      <input
+        type="range"
+        min="0.001"
+        max="5"
+        step="0.001"
+        data-diffractor-target="slitWidth"
+        data-action="input->diffractor#update"
+        value="1"
+        autocomplete="off"
+      >
+      <span data-diffractor-target="slitWidthDisplay">1</span>
+    </div>
+
+    <div class="diffractor-control-group">
+      <label>Slit Spacing (λ)</label>
+      <input
+        type="range"
+        min="0.001"
+        max="20"
+        step="0.001"
+        data-diffractor-target="slitSpacing"
+        data-action="input->diffractor#update"
+        value="3"
+        autocomplete="off"
+      >
+      <span data-diffractor-target="slitSpacingDisplay">3</span>
+    </div>
+
+    <button class="diffractor-button" data-action="click->diffractor#toggleDB">
+      Toggle dB Scale
+    </button>
+  </div>
+
+  <div class="diffractor-plot" data-diffractor-target="plot"></div>
+</div>

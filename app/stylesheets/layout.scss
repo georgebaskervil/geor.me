@@ -1,0 +1,97 @@
+.layout-main {
+  @apply mx-auto flex flex-col gap-9 px-10 pt-8 pb-2 md:gap-20;
+}
+
+.layout-header {
+  @apply flex w-full gap-3 md:gap-2 flex-row justify-between pb-5 md:pb-0;
+
+  user-select: none;
+}
+
+.layout-home-link {
+  @apply text-sm md:text-xl lg:text-xl whitespace-nowrap mr-4 text-text;
+}
+
+.layout-home-link:hover {
+  text-decoration-line: underline;
+}
+
+.custom-breadcrumbs {
+  max-width: 100%;
+  overflow-x: auto;
+  padding-top: 0.5%;
+
+  @apply scrollbar-hide;
+}
+
+.custom-breadcrumbs > ul {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  min-height: min-content;
+}
+
+.custom-breadcrumbs > ul > li {
+  display: flex;
+  align-items: center;
+}
+
+.custom-breadcrumbs > ul > li > a {
+  display: flex;
+  align-items: center;
+}
+
+@media (hover: hover) {
+  .custom-breadcrumbs > ul > li > a:hover {
+    text-decoration-line: underline;
+  }
+}
+
+.custom-breadcrumbs > ul > li > a:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.custom-breadcrumbs > ul > li > a:focus-visible {
+  outline: 2px solid currentcolor;
+  outline-offset: 2px;
+}
+
+.custom-breadcrumbs > ul > li + *::before {
+  content: "/";
+  margin-left: 0.5rem /* 8px */;
+  margin-right: 0.75rem /* 12px */;
+  display: block;
+  opacity: 0.4;
+  background-color: transparent;
+}
+
+.layout-nav {
+  @apply text-xs md:text-sm lg:text-sm custom-breadcrumbs text-text;
+}
+
+.noscript {
+  background-color: #dbebf9;
+  color: #333;
+  padding: 15px;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: top 0.3s;
+  border: 1px solid #c1d0db;
+}
+
+.underconstruction {
+  background-color: #fdf3dc;
+  color: #333;
+  padding: 15px;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: top 0.3s;
+  border: 1px solid #c0b9a8;
+}

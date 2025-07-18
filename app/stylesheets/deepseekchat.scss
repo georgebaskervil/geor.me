@@ -1,0 +1,82 @@
+@use "variables";
+
+.deepseek-chat {
+  width: 547px;
+  height: 385px;
+  border-top: 1px solid variables.$button-face;
+  border-left: 1px solid variables.$button-face;
+  border-bottom: 1px solid variables.$window-frame;
+  border-right: 1px solid variables.$window-frame;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  font-family: PixelatedElegance-Regular, monospace;
+  color: variables.$text;
+  background-color: #7f3670;
+
+  textarea {
+    flex: 1;
+    width: 100%;
+    height: 60px;
+    resize: none;
+    margin-bottom: 0;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+  }
+
+  .deepseek-chat-app {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+
+    .user-message,
+    .assistant-message,
+    .thinking-message {
+      max-width: 75%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .user-message {
+      align-self: flex-end;
+      background-color: #eff6ff;
+      color: #0f172a;
+    }
+
+    .assistant-message {
+      align-self: flex-start;
+      background-color: #f7f7f7;
+      color: #1f2937;
+    }
+
+    .thinking-message {
+      align-self: center;
+      background-color: #e5e7eb;
+      color: #6b7280;
+      font-style: italic;
+    }
+  }
+
+  form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .deepseek-chat-input {
+    background-color: #eff6ff;
+    border-radius: 0.5rem;
+  }
+
+  .deepseek-chat-sendbutton {
+    background-color: #eff6ff;
+    border-radius: 0.5rem;
+  }
+}

@@ -1,0 +1,2 @@
+module ShmHelper
+end

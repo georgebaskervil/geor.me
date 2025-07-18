@@ -1,0 +1,152 @@
+@use "variables";
+
+.posts-text {
+  @apply text-neutral;
+
+  margin-bottom: 16px;
+  font-size: 2rem;
+}
+
+.posts-header {
+  @apply text-4xl font-bold mb-2 text-neutral;
+
+  font-size: 4.97rem;
+}
+
+.posts-header-text-text {
+  @apply text-4xl font-bold mb-2 text-text;
+}
+
+.posts-description {
+  @apply text-neutral mb-4;
+
+  font-size: 1.75rem;
+}
+
+.posts-section {
+  @apply grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
+}
+
+.posts-card {
+  @apply p-4 rounded-lg border border-neutral shadow-md;
+  @apply transition-all duration-300 ease-in-out; /* Changed for consistent behavior */
+
+  background-color: variables.$background-colour;
+  opacity: 1;
+  z-index: 1;
+
+  &:hover {
+    transform: rotate(5deg) scale(1.2);
+    z-index: 2;
+    opacity: 1;
+    box-shadow: variables.$strong-box-shadow; /* Assuming $box-shadow is defined elsewhere */
+
+    /* Enable optimization only during hover */
+    will-change: transform, box-shadow;
+  }
+
+  &:not(:hover) {
+    transform: rotate(0deg) scale(1);
+    z-index: 1;
+    opacity: 1;
+    box-shadow: variables.$strong-box-shadow; /* Assuming $box-shadow-lg is defined for the 'lg' shadow */
+
+    /* Remove optimization when not hovering */
+    will-change: auto;
+  }
+}
+
+.posts-title {
+  @apply text-xl font-semibold mb-2 text-text;
+}
+
+.posts-published-date {
+  @apply text-neutral;
+
+  font-size: 1.5rem;
+}
+
+.posts-published-date-card-ver {
+  @apply text-mamba text-sm;
+}
+
+.posts-read-more-link {
+  @apply text-accent hover:underline mt-4 inline-block;
+}
+
+.posts-content {
+  @apply text-text mb-3;
+}
+
+.paper-container {
+  width: 90%;
+  margin: 0 auto;
+  padding: 4rem;
+  background-color: #fff;
+  background-image: image-set(
+    url("~/images/paper.avif") type("image/avif"),
+    url("~/images/paper.webp") type("image/webp"),
+    url("~/images/paper.jxl") type("image/jxl"),
+    url("~/images/paper.jpg") type("image/jpeg")
+  );
+  background-repeat: repeat-y;
+  background-size: 100% auto;
+  border-radius: 10px;
+  box-shadow:
+    0 4px 8px rgb(0 0 0 / 20%),
+    0 6px 20px rgb(0 0 0 / 10%);
+  position: relative;
+  overflow: visible;
+
+  @media (width <= 1000px) {
+    padding: 1rem;
+    padding-top: 2rem;
+  }
+}
+
+// New overlay elements that use pre-inverted images
+.paper-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-repeat: repeat-y;
+  background-size: 100% auto;
+  border-radius: 10px;
+  z-index: -1;
+}
+
+.paper-overlay-pos {
+  // Pre-inverted image with 10% inversion applied ahead of time (e.g., paper-inverted-0.1)
+  background-image: image-set(
+    url("~/images/paper-inverted-0.1.avif") type("image/avif"),
+    url("~/images/paper-inverted-0.1.webp") type("image/webp"),
+    url("~/images/paper-inverted-0.1.jxl") type("image/jxl"),
+    url("~/images/paper-inverted-0.1.jpg") type("image/jpeg")
+  );
+  transform: rotate(1deg);
+
+  @media (width <= 1000px) {
+    visibility: hidden;
+  }
+}
+
+.paper-overlay-neg {
+  // Pre-inverted image with 15% inversion applied ahead of time (e.g., paper-inverted-0.15)
+  background-image: image-set(
+    url("~/images/paper-inverted-0.15.avif") type("image/avif"),
+    url("~/images/paper-inverted-0.15.webp") type("image/webp"),
+    url("~/images/paper-inverted-0.15.jxl") type("image/jxl"),
+    url("~/images/paper-inverted-0.15.jpg") type("image/jpeg")
+  );
+  transform: rotate(-2deg);
+
+  @media (width <= 1000px) {
+    visibility: hidden;
+  }
+}
+
+.posts-article {
+  font-family: WaitingfortheSunrise-Regular-subset, cursive;
+}

@@ -1,0 +1,42 @@
+.coloursquare-container {
+  @apply flex flex-col gap-4 p-4;
+
+  max-width: 400px;
+}
+
+.coloursquare-row {
+  @apply flex items-center gap-4;
+}
+
+.coloursquare-number {
+  @apply bg-zinc-900 text-text border border-zinc-700 
+         rounded px-2 py-1 w-20;
+
+  &:focus {
+    @apply outline-none border-accent;
+  }
+}
+
+.coloursquare-slider {
+  @apply flex-1;
+}
+
+.coloursquare-square {
+  @apply w-32 h-32 rounded-lg border border-zinc-700 
+         flex items-center justify-center text-text;
+
+  margin: 1rem 0;
+  transition: background-color 0.2s ease;
+}
+
+.coloursquare-inverse {
+  @apply border-zinc-700;
+}
+
+.coloursquare-text {
+  @apply text-text;
+}
+
+.coloursquare-h1 {
+  @apply text-4xl font-bold mb-4 text-text;
+}

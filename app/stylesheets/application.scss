@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+// globals
+@use "normalise.scss";
+@use "tailwind.scss";
+@use "locomotive-scroll/dist/locomotive-scroll";
+// end scss normaliser
+
+// import variables
+@use "variables";
+// end import variables
+
+// start individual style imports
+@use "avatar";
+@use "contact";
+@use "credits";
+@use "data";
+@use "dmca";
+@use "doomdisclaimer";
+@use "homepage";
+@use "images";
+@use "legal";
+@use "licensing";
+@use "miscellaneous";
+@use "neudec";
+@use "posts";
+@use "privacy";
+@use "waveform";
+@use "eclecticonapps";
+@use "deepseekchat";
+@use "taskstack";
+//end invidiual imports
+
+// eclecticon apps imports
+@use "bayesometer";
+@use "binomilator";
+@use "cipher";
+@use "coloursquare";
+@use "diffractor";
+@use "edemo";
+@use "encryptor";
+@use "eyam";
+@use "fgraph";
+@use "forces";
+@use "gradientor";
+@use "guitemplate";
+@use "harmonograph";
+@use "inequalityplotter";
+@use "insult";
+@use "integra";
+@use "julia";
+@use "matrixtransformations";
+@use "momentum";
+@use "movie2xyt";
+@use "normalstats";
+@use "orbits";
+@use "poweraid";
+@use "projectile";
+@use "quadratica";
+@use "shm";
+@use "slope";
+@use "soundanalyser";
+@use "soundsnipper";
+@use "spherium";
+@use "standingwaves";
+@use "factorizer";
+@use "transformer";
+@use "trigonometrica";
+@use "waveformer";
+// end eclecticon apps
+
+// import global items
+@use "footer";
+@use "globals";
+@use "layout";
+// end global items

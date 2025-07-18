@@ -1,0 +1,16 @@
+.d-h1 {
+  font-size: 2.5rem;
+  margin-bottom: 24px;
+
+  @apply text-4xl font-bold mb-4 text-text;
+}
+
+.d-p {
+  margin-bottom: 16px;
+
+  @apply text-text;
+}
+
+.d-link {
+  @apply text-accent no-underline hover:underline;
+}
