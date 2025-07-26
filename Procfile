@@ -1,2 +1,2 @@
-vite: bin/vite dev
+vite: bun run vite
 web: bundle exec iodine
