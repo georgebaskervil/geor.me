@@ -84,10 +84,7 @@
   padding: 4rem;
   background-color: #fff;
   background-image: image-set(
-    url("~/images/paper.avif") type("image/avif"),
-    url("~/images/paper.webp") type("image/webp"),
-    url("~/images/paper.jxl") type("image/jxl"),
-    url("~/images/paper.jpg") type("image/jpeg")
+    url("~/images/paper.avif") type("image/avif")
   );
   background-repeat: repeat-y;
   background-size: 100% auto;
@@ -120,10 +117,7 @@
 .paper-overlay-pos {
   // Pre-inverted image with 10% inversion applied ahead of time (e.g., paper-inverted-0.1)
   background-image: image-set(
-    url("~/images/paper-inverted-0.1.avif") type("image/avif"),
-    url("~/images/paper-inverted-0.1.webp") type("image/webp"),
-    url("~/images/paper-inverted-0.1.jxl") type("image/jxl"),
-    url("~/images/paper-inverted-0.1.jpg") type("image/jpeg")
+    url("~/images/paper-inverted-0.1.avif") type("image/avif")
   );
   transform: rotate(1deg);
 
@@ -135,10 +129,7 @@
 .paper-overlay-neg {
   // Pre-inverted image with 15% inversion applied ahead of time (e.g., paper-inverted-0.15)
   background-image: image-set(
-    url("~/images/paper-inverted-0.15.avif") type("image/avif"),
-    url("~/images/paper-inverted-0.15.webp") type("image/webp"),
-    url("~/images/paper-inverted-0.15.jxl") type("image/jxl"),
-    url("~/images/paper-inverted-0.15.jpg") type("image/jpeg")
+    url("~/images/paper-inverted-0.15.avif") type("image/avif")
   );
   transform: rotate(-2deg);
 

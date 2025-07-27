@@ -18,20 +18,6 @@ COMPRESSIBLE_CONTENT_TYPES = %w[
   application/x-mpegURL
 ].map(&:downcase).freeze
 
-Rails.application.config.middleware.use Rack::Deflater,
-                                        sync: false,
-                                        include: COMPRESSIBLE_CONTENT_TYPES
-
-Rails.application.config.middleware.use Rack::Brotli,
-                                        quality: 11,
-                                        deflater: {
-                                          lgwin: 22,
-                                          lgblock: 0,
-                                          mode: :text
-                                        },
-                                        sync: false,
-                                        include: COMPRESSIBLE_CONTENT_TYPES
-
 Rails.application.config.middleware.use Rack::Zstd,
                                         window_log: 27,
                                         chain_log: 27,

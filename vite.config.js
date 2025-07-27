@@ -9,8 +9,6 @@ import postcssFlexbugsFixes from "postcss-flexbugs-fixes";
 import cssnano from "cssnano";
 import tailwindcss from "tailwindcss";
 import coffee from "vite-plugin-coffee";
-import vitePluginCompression from "vite-plugin-compression";
-import { constants } from "node:zlib";
 import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({

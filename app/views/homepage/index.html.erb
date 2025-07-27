@@ -45,10 +45,8 @@
     </div>
     <picture class="hp-image-container hp-picture">
       <source srcset="<%= vite_asset_path('~/images/me.avif') %>" type="image/avif">
-      <source srcset="<%= vite_asset_path('~/images/me.webp') %>" type="image/webp">
-      <source srcset="<%= vite_asset_path('~/images/me.jxl') %>" type="image/jxl">
       <%= image_tag(
-        vite_asset_path("~/images/me.jpg"),
+        vite_asset_path("~/images/me.avif"),
         alt: "A picture of me",
         loading: "eager",
         width: "654",

@@ -66,16 +66,16 @@ class ApplicationController < ActionController::Base
     images_cache_key = "images_list-#{images_checksum}"
 
     @images = Rails.cache.fetch(images_cache_key) do
-      glob_pattern = Rails.root.join("app/photos/JPGs/**/*.JPG")
+      glob_pattern = Rails.root.join("app/photos/AVIFs/**/*.avif")
 
-      photos_dir = Rails.root.join("app/photos/JPGs")
-      unless Dir.exist?(photos_dir)
-        Rails.logger.warn "Directory app/photos/JPGs does not exist."
+      avif_dir = Rails.root.join("app/photos/AVIFs")
+      unless Dir.exist?(avif_dir)
+        Rails.logger.warn "Directory app/photos/AVIFs does not exist."
         return []
       end
 
       files = Dir.glob(glob_pattern)
-      mapped_files = files.map { |f| f.sub(%r{.*app/photos/}, "") }
+      mapped_files = files.map { |f| File.basename(f, ".avif") }
 
       mapped_files
     end
@@ -180,7 +180,7 @@ class ApplicationController < ActionController::Base
 
   # Generates a checksum based on the filenames and their last modified times
   def images_checksum
-    files = Rails.root.glob("app/photos/JPGs/**/*.JPG")
+    files = Rails.root.glob("app/photos/AVIFs/**/*.avif")
     Digest::MD5.hexdigest(
       files.sort.map { |f| "#{f}:#{File.mtime(f).to_i}" }.join("|")
     )
@@ -206,8 +206,8 @@ class ApplicationController < ActionController::Base
   end
 
   def images_last_modified
-    photos_dir = Rails.root.join("app/photos/JPGs")
+    photos_dir = Rails.root.join("app/photos/AVIFs")
     return nil unless Dir.exist?(photos_dir)
-    Dir.glob(photos_dir.join("**/*.JPG")).map { |f| File.mtime(f) }.max
+    Dir.glob(photos_dir.join("**/*.avif")).map { |f| File.mtime(f) }.max
   end
 end
