@@ -1,2 +1,2 @@
 vite: bun run vite
-web: bundle exec iodine
+passenger: bundle exec passenger start --port 3000 --environment ${RAILS_ENV:-development}

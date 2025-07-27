@@ -4,6 +4,7 @@ ruby "3.4.1"
 
 gem "better_html"
 gem "bootsnap"
+gem "fiddle"
 gem "iodine"
 gem "kramdown"
 gem "nokogiri", "1.18.7"
@@ -20,6 +21,7 @@ gem "unicode"
 gem "vite_plugin_legacy"
 gem "vite_rails"
 gem "zstd-ruby"
+gem "passenger"
 
 group :development, :test do
   gem "debug"

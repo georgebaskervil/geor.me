@@ -102,4 +102,4 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
 VOLUME /data
-CMD ["bundle", "exec", "iodine"]
+CMD ["bundle", "exec", "passenger", "start", "--port", "3000", "--environment", "production", "--max-pool", "4"]
