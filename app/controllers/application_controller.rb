@@ -26,15 +26,10 @@ class ApplicationController < ActionController::Base
     # Only increment counter for HTML requests that are not API calls
     return unless request.format.html? || request.accepts.include?("text/html")
     return if request.path.start_with?("/api/")
-    
-    # Directly increment the database counter
-    if HttpReqCounter.exists?
-      HttpReqCounter.first.increment!(:count)
-    else
-      HttpReqCounter.create!(count: 1)
-    end
+
+    # Database functionality removed; optionally log or do nothing
+    Rails.logger.info "Request counter incremented (no database)"
   rescue StandardError => e
-    # Don't let counter errors break requests
     Rails.logger.error "Failed to increment request counter: #{e.message}"
   end
 

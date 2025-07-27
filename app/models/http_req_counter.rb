@@ -1,2 +1,0 @@
-class HttpReqCounter < ApplicationRecord
-end

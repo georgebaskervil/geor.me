@@ -20,7 +20,7 @@ RUN gem update --system --no-document \
 RUN --mount=type=cache,id=dev-apt-cache,sharing=locked,target=/var/cache/apt \
   --mount=type=cache,id=dev-apt-lib,sharing=locked,target=/var/lib/apt \
   apt-get update -qq \
-  && apt-get install --no-install-recommends -y curl sqlite3
+  && apt-get install --no-install-recommends -y curl
 
 # Set production environment
 ENV BUNDLE_DEPLOYMENT="1" \
@@ -94,8 +94,7 @@ RUN groupadd --system --gid 1000 rails \
 USER 1000:1000
 
 # Deployment options
-ENV DATABASE_URL="sqlite3:///data/production.sqlite3" \
-  RUBY_YJIT_ENABLE="1"
+ENV RUBY_YJIT_ENABLE="1"
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
