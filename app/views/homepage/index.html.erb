@@ -214,20 +214,8 @@
           target="_blank"
         >
           <picture>
-            <source
-              srcset="<%= vite_asset_path("photos/AVIFs/#{base_name}.avif") %>"
-              type="image/avif"
-            >
-            <source
-              srcset="<%= vite_asset_path("photos/WebPs/#{base_name}.webp") %>"
-              type="image/webp"
-            >
-            <source
-              srcset="<%= vite_asset_path("photos/JXLs/#{base_name}.jxl") %>"
-              type="image/jxl"
-            >
             <%= image_tag(
-              vite_asset_path("photos/#{img}"),
+              vite_asset_path("photos/AVIFs/#{base_name}.avif"),
               loading: "lazy",
               decoding: "async",
               fetchpriority: "low",

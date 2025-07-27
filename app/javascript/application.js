@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/browser";
+import "../stylesheets/application.scss";
 
 if (!import.meta.env.DEV) {
   // Only initialize Sentry when not in development mode

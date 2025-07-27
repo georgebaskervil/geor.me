@@ -17,11 +17,10 @@
         <a
           href="<%= vite_asset_path("losslessphotos/#{base_name.sub(/^resized_/, '') + ext}") %>"
           target="_blank"
-          rel="noopener"
         >
           <picture>
             <%= image_tag(
-              vite_asset_path("photos/#{base_name}.avif"),
+              vite_asset_path("photos/AVIFs/#{base_name}.avif"),
               loading: "lazy",
               decoding: "async",
               fetchpriority: "low",
