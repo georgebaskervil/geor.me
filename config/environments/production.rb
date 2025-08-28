@@ -27,9 +27,6 @@ Rails.application.configure do
   # Iodine automatically supports X-Sendfile when serving static files
   # No need to configure X-Sendfile headers since Iodine handles this internally
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
-
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
   # config.action_cable.url = "wss://example.com/cable"
