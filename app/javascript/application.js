@@ -33,14 +33,6 @@ if (!import.meta.env.DEV) {
       return event;
     },
 
-    // Disable automatic breadcrumbs that might collect personal data
-    integrations: [
-      new Sentry.BrowserTracing({
-        // Disable automatic route tracking
-        routingInstrumentation: false,
-      }),
-    ],
-
     // Disable performance monitoring
     tracesSampleRate: 0,
 
