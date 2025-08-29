@@ -88,75 +88,126 @@ class ApplicationController < ActionController::Base
     articles_cache_key = "articles_list-#{articles_checksum}"
 
     @articles = Rails.cache.fetch(articles_cache_key) do
-      articles_glob = Rails.root.join("app//articles/**/*.md")
+      md_glob = Rails.root.join("app/articles/**/*.md")
+      pdf_glob = Rails.root.join("app/articles/**/*.pdf")
 
-      articles_dir = Rails.root.join("app//articles")
+      articles_dir = Rails.root.join("app/articles")
       unless Dir.exist?(articles_dir)
-        Rails.logger.warn "Directory app//articles does not exist."
+        Rails.logger.warn "Directory app/articles does not exist."
         return []
       end
 
-      article_files = Dir.glob(articles_glob)
+      article_files = Dir.glob(md_glob) + Dir.glob(pdf_glob)
 
       articles = article_files.map do |file|
-        content = File.read(file)
-        parts = content.split(/^---$/, 3)
+        ext = File.extname(file).downcase
 
-        if parts.size >= 3
-          front_matter = parts[1]
-          body = parts[2]
+        if ext == ".md"
+          content = File.read(file)
+          parts = content.split(/^---$/, 3)
 
-          begin
-            metadata = YAML.safe_load(front_matter, permitted_classes: [ Date ]) # Updated safe_load with permitted_classes
+          if parts.size >= 3
+            front_matter = parts[1]
+            body = parts[2]
 
-            # Extract filename as slug if not specified
-            slug = metadata["slug"] || File.basename(file, ".md")
+            begin
+              metadata = YAML.safe_load(front_matter, permitted_classes: [ Date ]) # Updated safe_load with permitted_classes
 
-            # Process tags from comma-separated string or array
-            tags = if metadata["tags"].is_a?(String)
-                    metadata["tags"].split(",").map(&:strip)
-            elsif metadata["tags"].is_a?(Array)
-                    metadata["tags"]
-            else
-                    []
-            end
+              # Extract filename as slug if not specified; strip any question marks
+              slug = (metadata["slug"] || File.basename(file, ".md")).to_s.delete("?")
 
-            # Get the section or default to 'Blog'
-            section = metadata["section"] || "Blog"
+              # Process tags from comma-separated string or array
+              tags = if metadata["tags"].is_a?(String)
+                      metadata["tags"].split(",").map(&:strip)
+              elsif metadata["tags"].is_a?(Array)
+                      metadata["tags"]
+              else
+                      []
+              end
 
-            # Handle the updated_at date
-            updated_at = metadata["updatedAt"] || metadata["publishedAt"]
+              # Get the section or default to 'Blog'
+              section = metadata["section"] || "Blog"
 
-            # Handle the preview image
-            preview_image = metadata["previewImage"]
+              # Handle the updated_at date
+              updated_at = metadata["updatedAt"] || metadata["publishedAt"]
 
-            {
-              title: metadata["title"],
-              description: metadata["description"],
-              published_at: metadata["publishedAt"], # Directly use the Date object
-              updated_at: updated_at,
-              content_html: Nokogiri::HTML::DocumentFragment.parse(Kramdown::Document.new(body).to_html).tap do |doc|
-                doc.traverse do |node|
-                  if node.element?
-                    existing_classes = node["class"] || ""
-                    node["class"] = (existing_classes.split + [ "posts-text" ]).uniq.join(" ")
+              # Handle the preview image
+              preview_image = metadata["previewImage"]
+
+              {
+                title: metadata["title"],
+                description: metadata["description"],
+                published_at: metadata["publishedAt"], # Directly use the Date object
+                updated_at: updated_at,
+                content_html: Nokogiri::HTML::DocumentFragment.parse(Kramdown::Document.new(body).to_html).tap do |doc|
+                  doc.traverse do |node|
+                    if node.element?
+                      existing_classes = node["class"] || ""
+                      node["class"] = (existing_classes.split + [ "posts-text" ]).uniq.join(" ")
+                    end
                   end
-                end
-              end.to_html,
-              file_path: file,
-              slug: slug,
-              tags: tags,
-              section: section,
-              author: metadata["author"] || "George Baskerville",
-              preview_image: preview_image
-            }
-          rescue StandardError => e
-            Rails.logger.warn "Error parsing YAML front matter in #{file}: #{e.message}"
+                end.to_html,
+                file_path: file,
+                slug: slug,
+                tags: tags,
+                section: section,
+                author: metadata["author"] || "George Baskerville",
+                preview_image: preview_image,
+                format: :markdown
+              }
+            rescue StandardError => e
+              Rails.logger.warn "Error parsing YAML front matter in #{file}: #{e.message}"
+              nil
+            end
+          else
+            Rails.logger.warn "No valid front matter found in #{file}"
             nil
           end
-        else
-          Rails.logger.warn "No valid front matter found in #{file}"
-          nil
+        elsif ext == ".pdf"
+          # Optional sidecar metadata: basename.yml or basename.yaml
+          base = file.delete_suffix(".pdf")
+          sidecar = [ "#{base}.yml", "#{base}.yaml" ].find { |p| File.exist?(p) }
+
+          metadata = {}
+          if sidecar
+            begin
+              metadata = YAML.safe_load(File.read(sidecar), permitted_classes: [ Date ]) || {}
+            rescue StandardError => e
+              Rails.logger.warn "Error parsing PDF sidecar metadata #{sidecar}: #{e.message}"
+              metadata = {}
+            end
+          end
+
+          # Extract filename as slug if not specified; strip any question marks
+          raw_base_name = File.basename(file, ".pdf")
+          slug = (metadata["slug"] || raw_base_name).to_s.delete("?")
+          raw_tags = metadata["tags"]
+          tags = if raw_tags.is_a?(String)
+            raw_tags.split(",").map(&:strip)
+          elsif raw_tags.is_a?(Array)
+            raw_tags
+          else
+            []
+          end
+          section = metadata["section"] || "Blog"
+          published_at = metadata["publishedAt"] || File.mtime(file).to_date
+          updated_at = metadata["updatedAt"] || published_at
+          preview_image = metadata["previewImage"]
+
+          {
+            title: metadata["title"] || raw_base_name.tr("-_,", "   ").split.map(&:capitalize).join(" "),
+            description: metadata["description"],
+            published_at: published_at,
+            updated_at: updated_at,
+            content_html: nil, # Rendered via PDF embed in view
+            file_path: file,
+            slug: slug,
+            tags: tags,
+            section: section,
+            author: metadata["author"] || "George Baskerville",
+            preview_image: preview_image,
+            format: :pdf
+          }
         end
       end.compact
 
@@ -168,7 +219,8 @@ class ApplicationController < ActionController::Base
   def set_article
     identifier = params[:id]
     @article = @articles.find do |article|
-      article[:slug] == identifier || File.basename(article[:file_path], ".md") == identifier
+  base = File.basename(article[:file_path], File.extname(article[:file_path]))
+  article[:slug] == identifier || base == identifier
     end
   end
 
@@ -189,7 +241,7 @@ class ApplicationController < ActionController::Base
   end
 
   def articles_checksum
-    files = Rails.root.glob("app/articles/**/*.md")
+  files = Rails.root.glob("app/articles/**/*.{md,pdf,yml,yaml}")
     Digest::MD5.hexdigest(
       files.sort.map { |f| "#{f}:#{File.mtime(f).to_i}" }.join("|")
     )
@@ -205,7 +257,7 @@ class ApplicationController < ActionController::Base
     articles_dir = Rails.root.join("app/articles")
     return nil unless Dir.exist?(articles_dir)
 
-    Dir.glob(articles_dir.join("*.md")).map { |f| File.mtime(f) }.max
+  Dir.glob(File.join(articles_dir, "**/*.{md,pdf,yml,yaml}")).map { |f| File.mtime(f) }.max
   end
 
   def images_last_modified

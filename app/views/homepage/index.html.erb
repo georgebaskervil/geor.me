@@ -210,7 +210,7 @@
         <%# `img` here is already the basename without extension, e.g. "resized_DSC_0019" %>
         <% base_name = img %>
         <% avif_name = "#{base_name}.avif" %>
-        <% jpg_name  = "#{base_name.sub(/^resized_/, '')}.JPG" %>
+        <% jpg_name = "#{base_name.sub(/^resized_/, "")}.JPG" %>
         <a
           href="<%= vite_asset_path("~/losslessphotos/#{jpg_name}") %>"
           target="_blank"

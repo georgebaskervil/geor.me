@@ -4,11 +4,31 @@
   <article class="posts-article">
     <h1 class="posts-header"><%= @article[:title] %></h1>
     <p class="posts-description"><%= @article[:description] %></p>
-    <%= sanitize(
-      @article[:content_html],
-      tags: %w[h1 h2 h3 p strong em a ul ol li blockquote code img],
-      attributes: %w[href src alt class],
-    ) %>
+    <% if @article[:format] == :pdf %>
+      <p class="posts-text"><a
+          class="dl-link"
+          href="<%= post_file_path(@article[:slug]) %>"
+          target="_blank"
+          rel="noopener"
+        >Open PDF</a>
+        ·
+        <a class="dl-link" href="<%= post_file_path(@article[:slug]) %>" download>Download PDF</a></p>
+      <div class="posts-text" style="height: 80vh;">
+        <iframe
+          src="<%= post_file_path(@article[:slug]) %>"
+          title="<%= @article[:title] %>"
+          width="100%"
+          height="100%"
+          style="border: 0; border-radius: 0.5rem; overflow: hidden;"
+        ></iframe>
+      </div>
+    <% else %>
+      <%= sanitize(
+        @article[:content_html],
+        tags: %w[h1 h2 h3 p strong em a ul ol li blockquote code img],
+        attributes: %w[href src alt class],
+      ) %>
+    <% end %>
     <p class="posts-text">George Baskerville,
       <%= @article[:published_at].day.ordinalize %>
       of

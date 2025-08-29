@@ -11,7 +11,7 @@
 
 <section class="posts-section">
   <% @all_posts.each do |article| %>
-    <%= link_to post_path(File.basename(article[:file_path], '.md')), class: "posts-card" do %>
+    <%= link_to post_path(article[:slug]), class: "posts-card" do %>
       <h2 class="posts-title"><%= article[:title] %></h2>
       <p class="posts-content"><%= article[:description] %></p>
       <p class="posts-published-date-card-ver">Published on the

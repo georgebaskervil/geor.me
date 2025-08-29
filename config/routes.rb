@@ -54,6 +54,8 @@ Rails.application.routes.draw do
   get "/doomdisclaimer", to: "doomdisclaimer#index"
   get "/posts", to: "posts#index"
   get "/posts/:id", to: "posts#show", as: :post
+  # Serve original files for posts (e.g., PDFs)
+  get "/posts/:id/file", to: "posts#file", as: :post_file
   get "/images", to: "images#index"
   get "/legal", to: "legal#index"
   get "/miscellaneous", to: "miscellaneous#index"
