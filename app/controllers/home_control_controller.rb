@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HomeControlController < ApplicationController
   def index
     # Serve the main home control panel

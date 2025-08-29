@@ -9,6 +9,10 @@ export default class extends Controller
         scroll = new LocomotiveScroll
           el: el
           smooth: true
+          repeat: true
+          gestureDirection: 'vertical'
+          reloadOnContextChange: false
+          resetNativeScroll: false
           smartphone:
             smooth: true
           tablet:

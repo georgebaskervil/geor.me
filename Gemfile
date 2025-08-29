@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
 ruby "3.4.1"
 
 gem "better_html"
-gem "bootsnap"
-gem "fiddle"
+gem "bootsnap", require: false
 gem "kramdown"
 gem "nokogiri", "1.18.7"
+gem "puma"
 gem "rack-attack"
-gem "rack-brotli"
 gem "rails", "8.0.1"
 gem "sentry-rails"
 gem "sentry-ruby"
@@ -17,10 +18,8 @@ gem "turbo-mount"
 gem "turbo-rails"
 gem "tzinfo-data"
 gem "unicode"
-gem "vite_plugin_legacy"
 gem "vite_rails"
 gem "zstd-ruby"
-gem "passenger"
 
 group :development, :test do
   gem "debug"
@@ -34,6 +33,7 @@ group :development do
   gem "fasterer"
   gem "foreman"
   gem "rubocop"
+  gem "rubocop-performance"
   gem "rubocop-rails"
   gem "web-console"
 end

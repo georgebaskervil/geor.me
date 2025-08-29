@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
@@ -19,13 +21,10 @@ Rails.application.configure do
   # key such as config/credentials/production.key. This key is used to decrypt credentials (and other encrypted files).
   # config.require_master_key = true
 
-  # Disable Rails' public file server since Iodine handles static files natively
-  # Iodine automatically serves static files from the public folder with better performance
-  # and bypasses Ruby entirely, which means our RequestCounter won't count static file requests
-  config.public_file_server.enabled = false
+  # Static files are conditionally enabled in an initializer depending on reverse proxy.
+  # Default here leaves it untouched; see config/initializers/static_files.rb
 
-  # Iodine automatically supports X-Sendfile when serving static files
-  # No need to configure X-Sendfile headers since Iodine handles this internally
+  # If serving static files via Rails, Rack will handle sendfile when configured by the proxy.
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil

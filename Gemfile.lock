@@ -90,7 +90,6 @@ GEM
       msgpack (~> 1.2)
     brakeman (7.1.0)
       racc
-    brotli (0.7.0)
     builder (3.3.0)
     capybara (3.40.0)
       addressable
@@ -125,7 +124,6 @@ GEM
     erubi (1.13.1)
     fasterer (0.11.0)
       ruby_parser (>= 3.19.1)
-    fiddle (1.1.8)
     foreman (0.90.0)
       thor (~> 1.4)
     globalid (1.2.1)
@@ -187,10 +185,6 @@ GEM
     parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
-    passenger (6.0.27)
-      rack (>= 1.6.13)
-      rackup (>= 1.0.1)
-      rake (>= 12.3.3)
     pp (0.6.2)
       prettyprint
     prettier_print (1.2.1)
@@ -200,13 +194,12 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
+    puma (6.6.1)
+      nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.16)
     rack-attack (6.7.0)
       rack (>= 1.0, < 4)
-    rack-brotli (2.0.0)
-      brotli (>= 0.3)
-      rack (>= 3)
     rack-proxy (0.7.7)
       rack
     rack-session (2.1.1)
@@ -269,6 +262,10 @@ GEM
     rubocop-ast (1.46.0)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
+    rubocop-performance (1.25.0)
+      lint_roller (~> 1.1)
+      rubocop (>= 1.75.0, < 2.0)
+      rubocop-ast (>= 1.38.0, < 2.0)
     rubocop-rails (2.32.0)
       activesupport (>= 4.2.0)
       lint_roller (~> 1.1)
@@ -318,8 +315,6 @@ GEM
     unicode-emoji (4.0.4)
     uri (1.0.3)
     useragent (0.16.11)
-    vite_plugin_legacy (3.0.2)
-      vite_ruby (~> 3.0, >= 3.0.4)
     vite_rails (3.0.19)
       railties (>= 5.1, < 9)
       vite_ruby (~> 3.0, >= 3.2.2)
@@ -364,15 +359,14 @@ DEPENDENCIES
   erb-formatter
   erb_lint
   fasterer
-  fiddle
   foreman
   kramdown
   nokogiri (= 1.18.7)
-  passenger
+  puma
   rack-attack
-  rack-brotli
   rails (= 8.0.1)
   rubocop
+  rubocop-performance
   rubocop-rails
   selenium-webdriver
   sentry-rails
@@ -382,7 +376,6 @@ DEPENDENCIES
   turbo-rails
   tzinfo-data
   unicode
-  vite_plugin_legacy
   vite_rails
   web-console
   zstd-ruby

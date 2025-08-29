@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "nokogiri"
 require "kramdown"
 require "yaml"
@@ -42,10 +44,11 @@ class ApplicationController < ActionController::Base
     response.set_header("X-UA-Compatible", "IE=edge,chrome=1")
 
     # Passenger Turbocache compatibility: only cache GET HTML responses in production
-    if Rails.env.production? && request.get? && (request.format.html? || request.accepts.include?("text/html"))
+    return unless Rails.env.production? && request.get? && (request.format.html? || request.accepts.include?("text/html"))
+
       # Use a checksum of articles and images for ETag
-      etag = Digest::SHA256.hexdigest([articles_checksum, images_checksum].join(":"))
-      last_modified = [articles_last_modified, images_last_modified].max
+      etag = Digest::SHA256.hexdigest([ articles_checksum, images_checksum ].join(":"))
+      last_modified = [ articles_last_modified, images_last_modified ].max
       response.set_header("ETag", etag)
       response.set_header("Last-Modified", last_modified.httpdate) if last_modified
       # Turbocache maxes at 2 seconds, so set max-age=2 for shared cache
@@ -58,7 +61,6 @@ class ApplicationController < ActionController::Base
           Time.httpdate(request.headers["If-Modified-Since"]) >= last_modified)
         head :not_modified
       end
-    end
   end
 
   def load_images
@@ -202,12 +204,14 @@ class ApplicationController < ActionController::Base
   def articles_last_modified
     articles_dir = Rails.root.join("app/articles")
     return nil unless Dir.exist?(articles_dir)
+
     Dir.glob(articles_dir.join("*.md")).map { |f| File.mtime(f) }.max
   end
 
   def images_last_modified
     photos_dir = Rails.root.join("app/photos/AVIFs")
     return nil unless Dir.exist?(photos_dir)
+
     Dir.glob(photos_dir.join("**/*.avif")).map { |f| File.mtime(f) }.max
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require Rails.root.join("app/middleware/rack_zstd")
 require Rails.root.join("app/middleware/whitespace_compressor")
 

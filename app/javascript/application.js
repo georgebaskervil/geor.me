@@ -5,14 +5,14 @@ if (!import.meta.env.DEV) {
   // Only initialize Sentry when not in development mode
   Sentry.init({
     dsn: "https://9037f39780e6400bac586d00e38790dc@app.glitchtip.com/12062",
-    
+
     // GDPR-friendly configuration - minimal data collection
     beforeSend(event) {
       // Remove IP addresses and user info
       delete event.user;
       delete event.request?.headers;
       delete event.request?.cookies;
-      
+
       // Remove potentially sensitive data from stack traces
       if (event.exception?.values) {
         for (const exception of event.exception.values) {
@@ -20,7 +20,8 @@ if (!import.meta.env.DEV) {
             for (const frame of exception.stacktrace.frames) {
               // Keep filename and line numbers for debugging, remove absolute paths
               if (frame.filename) {
-                frame.filename = frame.filename.split('/').pop() || frame.filename;
+                frame.filename =
+                  frame.filename.split("/").pop() || frame.filename;
               }
               // Remove local variables that might contain sensitive data
               delete frame.vars;
@@ -28,10 +29,10 @@ if (!import.meta.env.DEV) {
           }
         }
       }
-      
+
       return event;
     },
-    
+
     // Disable automatic breadcrumbs that might collect personal data
     integrations: [
       new Sentry.BrowserTracing({
@@ -39,19 +40,19 @@ if (!import.meta.env.DEV) {
         routingInstrumentation: false,
       }),
     ],
-    
+
     // Disable performance monitoring
     tracesSampleRate: 0,
-    
+
     // Only capture errors, not performance data
     enableTracing: false,
-    
+
     // Limit data collection
     maxBreadcrumbs: 5,
-    
+
     // Don't capture console logs
     captureConsole: false,
-    
+
     // Environment info (keep this for debugging context)
     environment: "production",
   });

@@ -100,6 +100,7 @@ ENV RUBY_YJIT_ENABLE="1"
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
+ENV RUBYOPT="--yjit --yjit-exec-mem-size=200 --yjit-mem-size=256 --yjit-call-threshold=20 --yjit-disable"
 EXPOSE 3000
 VOLUME /data
-CMD ["bundle", "exec", "passenger", "start", "--port", "3000", "--environment", "production", "--max-pool", "4"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

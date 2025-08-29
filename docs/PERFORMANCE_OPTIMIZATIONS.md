@@ -109,13 +109,11 @@ A new utility file `app/javascript/utils/performance.js` provides:
 To verify these optimizations:
 
 1. **Chrome DevTools Performance Tab**
-
    - Record performance during animations
    - Check for reduced paint/composite times
    - Verify fewer composite layers created
 
 2. **Browser Memory Usage**
-
    - Monitor memory usage before/after hover states
    - Ensure memory is freed when animations stop
 

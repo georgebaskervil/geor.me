@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProxyController < ApplicationController
   skip_forgery_protection only: [ :umami_script ]
 

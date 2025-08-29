@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 class EmojiReplacer
   require "unicode"
 

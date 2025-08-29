@@ -225,13 +225,10 @@ export default defineConfig(({ mode }) => {
 
     /** Dependency Optimization */
     optimizeDeps: {
-      include: [
-        "@hotwired/turbo",
-        "@hotwired/stimulus",
-      ],
+      include: ["@hotwired/turbo", "@hotwired/stimulus"],
       exclude: [
         // Add problematic dependency here
-        "@wllama/wllama/esm/index.js"
+        "@wllama/wllama/esm/index.js",
       ],
       force: isDevelopment && process.env.VITE_FORCE_DEPS === "true",
     },

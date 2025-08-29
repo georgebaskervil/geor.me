@@ -45,9 +45,13 @@
       crossorigin="anonymous"
     >
     <%= vite_javascript_tag "~/javascript/application.js" %>
-    <%= vite_legacy_javascript_tag "~/javascript/application.js" %>
     <% if Rails.env.production? %>
-      <script defer src="/umami/script.js" data-website-id="77d51e44-cbc3-43da-8dd8-f4e21d38c495"></script>
+      <script
+        async
+        defer
+        src="/umami/script.js"
+        data-website-id="77d51e44-cbc3-43da-8dd8-f4e21d38c495"
+      ></script>
     <% end %>
     <!--Basic HTML metadata-->
     <meta charset="utf-8">
@@ -194,26 +198,9 @@
     <%= render 'layouts/shortcutswrapper' do %>
       <%= render 'layouts/distractionmodewrapper' do %>
         <%= render 'layouts/locomotivescrollwrapper' do %>
-          <!--
           <%= render "layouts/underconstruction" %>
-          -->
           <%= render "layouts/noscript" %>
-          <div class="relative isolate flex items-center gap-x-6 overflow-hidden bg-gray-800/50 px-6 py-2.5 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 sm:px-3.5 sm:before:flex-1">
-            <div aria-hidden="true" class="absolute top-1/2 left-[max(-7rem,calc(50%-52rem))] -z-10 -translate-y-1/2 transform-gpu blur-2xl">
-              <div style="clip-path: polygon(74.8% 41.9%, 97.2% 73.2%, 100% 34.9%, 92.5% 0.4%, 87.5% 0%, 75% 28.6%, 58.5% 54.6%, 50.1% 56.8%, 46.9% 44%, 48.3% 17.4%, 24.7% 53.9%, 0% 27.9%, 11.9% 74.2%, 24.9% 54.1%, 68.6% 100%, 74.8% 41.9%)" class="aspect-577/310 w-144.25 bg-linear-to-r from-[#ff80b5] to-[#9089fc] opacity-40"></div>
-            </div>
-            <div aria-hidden="true" class="absolute top-1/2 left-[max(45rem,calc(50%+8rem))] -z-10 -translate-y-1/2 transform-gpu blur-2xl">
-              <div style="clip-path: polygon(74.8% 41.9%, 97.2% 73.2%, 100% 34.9%, 92.5% 0.4%, 87.5% 0%, 75% 28.6%, 58.5% 54.6%, 50.1% 56.8%, 46.9% 44%, 48.3% 17.4%, 24.7% 53.9%, 0% 27.9%, 11.9% 74.2%, 24.9% 54.1%, 68.6% 100%, 74.8% 41.9%)" class="aspect-577/310 w-144.25 bg-linear-to-r from-[#ff80b5] to-[#9089fc] opacity-40"></div>
-            </div>
-            <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-              <p class="text-sm/6 text-gray-100">
-                My side project Libreverse now has a public alpha:
-              </p>
-              <a href="https://libreverse-main.geor.me" class="flex-none rounded-full bg-white/10 px-3.5 py-1 text-sm font-semibold text-white shadow-xs inset-ring-white/20 hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Take a look <span aria-hidden="true">&rarr;</span></a>
-            </div>
-            <div class="flex flex-1 justify-end">
-            </div>
-          </div>
+          <%= render "layouts/libreverse" %>
           <div class="layout-main">
             <header class="layout-header">
               <a href="/" class="layout-home-link" rel="noopener">George Baskerville</a>

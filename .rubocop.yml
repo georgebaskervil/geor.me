@@ -1,6 +1,7 @@
 # Modified from rubocop-rails-omakase licensed under the MIT License
 plugins:
   - rubocop-rails
+  - rubocop-performance
 
 inherit_mode:
   merge:
@@ -11,8 +12,9 @@ AllCops:
   SuggestExtensions: false
   Exclude:
     - "data/**/*"
+    - ".codeql/**/*"
 
-# All cops except your using extensions are disabled by default.
+# Enable key departments
 Bundler:
   Enabled: true
 Gemspec:
@@ -24,204 +26,283 @@ Lint:
 Metrics:
   Enabled: false
 Naming:
-  Enabled: false
+  Enabled: true
+Performance:
+  Enabled: true
 Rails:
   Enabled: true
+  TargetRailsVersion: 8.0.2
 Security:
-  Enabled: false
+  Enabled: false # Disabled globally; only CompoundHash enabled below
 Style:
   Enabled: true
 
-# Align `when` with `end`.
+# Set a maximum line length for readability
+Layout/LineLength:
+  Enabled: false
+  Description: "Sets no limit on line length."
+
+# Layout cops
 Layout/CaseIndentation:
   Enabled: true
   EnforcedStyle: end
+  Description: "Aligns `when` with `end` in case statements."
 
-# Align comments with method definitions.
 Layout/CommentIndentation:
   Enabled: true
+  Description: "Ensures comments align with method definitions."
 
 Layout/ElseAlignment:
   Enabled: true
+  Description: "Aligns `else` with its corresponding `if` or `unless`."
 
 Layout/EmptyLineAfterMagicComment:
   Enabled: true
+  Description: "Requires an empty line after magic comments."
 
 Layout/EmptyLinesAroundBlockBody:
   Enabled: true
+  Description: "Enforces empty lines around block bodies."
 
-# In a regular class definition, no empty lines around the body.
 Layout/EmptyLinesAroundClassBody:
   Enabled: true
+  Description: "No empty lines around class bodies in regular definitions."
 
-# In a regular method definition, no empty lines around the body.
 Layout/EmptyLinesAroundMethodBody:
   Enabled: true
+  Description: "No empty lines around method bodies in regular definitions."
 
-# In a regular module definition, no empty lines around the body.
 Layout/EmptyLinesAroundModuleBody:
   Enabled: true
+  Description: "No empty lines around module bodies in regular definitions."
 
-# Align `end` with the matching keyword or starting expression except for
-# assignments, where it should be aligned with the LHS.
 Layout/EndAlignment:
   Enabled: true
   EnforcedStyleAlignWith: variable
+  Description: "Aligns `end` with the starting expression or LHS in assignments."
 
-# Method definitions after `private` or `protected` isolated calls need one
-# extra level of indentation.
-#
-# We break this rule in context, though, e.g. for private-only concerns,
-# so we leave it disabled.
 Layout/IndentationConsistency:
   Enabled: false
   EnforcedStyle: indented_internal_methods
+  Description: "Disabled due to issues with private-only concerns."
 
-# Detect hard tabs, no hard tabs.
 Layout/IndentationStyle:
   Enabled: true
+  Description: "Detects hard tabs; enforces spaces over tabs."
 
-# Two spaces, no tabs (for indentation).
-#
-# Doesn't behave properly with private-only concerns, so it's disabled.
 Layout/IndentationWidth:
   Enabled: false
+  Description: "Disabled due to issues with private-only concerns."
 
 Layout/LeadingCommentSpace:
   Enabled: true
-
-Layout/LineLength:
-  Enabled: false
+  Description: "Requires a space after comment markers."
 
 Layout/SpaceAfterColon:
   Enabled: true
+  Description: "Enforces a space after colons."
 
 Layout/SpaceAfterComma:
   Enabled: true
+  Description: "Enforces a space after commas."
 
 Layout/SpaceAroundEqualsInParameterDefault:
   Enabled: true
+  Description: "Enforces spaces around `=` in default parameter values."
 
 Layout/SpaceAroundKeyword:
   Enabled: true
+  Description: "Enforces spaces around keywords like `if` and `while`."
 
-# Use `foo {}` not `foo{}`.
 Layout/SpaceBeforeBlockBraces:
   Enabled: true
+  Description: "Uses `foo {}` instead of `foo{}`."
 
 Layout/SpaceBeforeComma:
   Enabled: true
+  Description: "Disallows spaces before commas."
 
 Layout/SpaceBeforeFirstArg:
   Enabled: true
+  Description: "Enforces consistent spacing before the first argument."
 
-# Use `->(x, y) { x + y }` not `-> (x, y) { x + y }`
 Layout/SpaceInLambdaLiteral:
   Enabled: true
+  Description: "Uses `->(x, y) {}` instead of `-> (x, y) {}`."
 
-# Use `[ a, [ b, c ] ]` not `[a, [b, c]]`
-# Use `[]` not `[ ]`
 Layout/SpaceInsideArrayLiteralBrackets:
   Enabled: true
   EnforcedStyle: space
   EnforcedStyleForEmptyBrackets: no_space
+  Description: "Uses `[ a, b ]` instead of `[a, b]` and `[]` instead of `[ ]`."
 
-# Use `%w[ a b ]` not `%w[ a   b ]`.
 Layout/SpaceInsideArrayPercentLiteral:
   Enabled: true
+  Description: "Uses `%w[ a b ]` instead of `%w[ a   b ]`."
 
-# Use `foo { bar }` not `foo {bar}`.
-# Use `foo { }` not `foo {}`.
 Layout/SpaceInsideBlockBraces:
   Enabled: true
   EnforcedStyleForEmptyBraces: space
+  Description: "Uses `foo { bar }` instead of `foo {bar}` and `foo { }` instead of `foo {}`."
 
-# Use `{ a: 1 }` not `{a:1}`.
-# Use `{}` not `{  }`.
 Layout/SpaceInsideHashLiteralBraces:
   Enabled: true
   EnforcedStyle: space
   EnforcedStyleForEmptyBraces: no_space
+  Description: "Uses `{ a: 1 }` instead of `{a:1}` and `{}` instead of `{  }`."
 
-# Use `foo(bar)` not `foo( bar )`
 Layout/SpaceInsideParens:
   Enabled: true
+  Description: "Uses `foo(bar)` instead of `foo( bar )`."
 
-# Requiring a space is not yet supported as of 0.59.2
-# Use `%w[ foo ]` not `%w[foo]`
 Layout/SpaceInsidePercentLiteralDelimiters:
   Enabled: false
-  #EnforcedStyle: space
+  Description: "Disabled due to lack of support as of RuboCop 0.59.2."
 
-# Use `hash[:key]` not `hash[ :key ]`
 Layout/SpaceInsideReferenceBrackets:
   Enabled: true
+  Description: "Uses `hash[:key]` instead of `hash[ :key ]`."
 
-# Blank lines should not have any spaces.
 Layout/TrailingEmptyLines:
   Enabled: true
+  Description: "Disallows spaces in blank lines."
 
-# No trailing whitespace.
 Layout/TrailingWhitespace:
   Enabled: true
+  Description: "Disallows trailing whitespace."
 
+# Lint cops
 Lint/RedundantStringCoercion:
   Enabled: true
+  Description: "Flags unnecessary string coercion."
 
-# Use my_method(my_arg) not my_method( my_arg ) or my_method my_arg.
 Lint/RequireParentheses:
   Enabled: true
+  Description: "Enforces parentheses in method calls like `my_method(my_arg)`."
 
 Lint/UriEscapeUnescape:
   Enabled: true
+  Description: "Checks for proper URI escape/unescape usage."
 
 Lint/EmptyFile:
   Enabled: false
+  Description: "Allows empty files."
 
-# Prefer assert_not over assert !
+# Rails cops
+
 Rails/AssertNot:
   Include:
     - "test/**/*"
+  Description: "Prefers `assert_not` over `assert !` in tests."
 
-# Prefer assert_not_x over refute_x
 Rails/RefuteMethods:
   Include:
     - "test/**/*"
+  Description: "Prefers `assert_not_x` over `refute_x` in tests."
 
-# We generally prefer &&/|| but like low-precedence and/or in context
+# Performance cops (only default-enabled cops from rubocop-performance)
+Performance/Count:
+  Enabled: true
+  Description: "Optimizes inefficient count operations."
+
+Performance/Detect:
+  Enabled: true
+  Description: "Prefers `detect` over `select.first` for efficiency."
+
+Performance/EndWith:
+  Enabled: true
+  Description: "Optimizes string end checks."
+
+Performance/FlatMap:
+  Enabled: true
+  Description: "Prefers `flat_map` over `map.flatten` for efficiency."
+
+Performance/RedundantMatch:
+  Enabled: true
+  Description: "Optimizes redundant match operations."
+
+Performance/RedundantMerge:
+  Enabled: true
+  Description: "Optimizes redundant hash merges."
+
+Performance/RegexpMatch:
+  Enabled: true
+  Description: "Optimizes regexp match operations."
+
+Performance/ReverseEach:
+  Enabled: true
+  Description: "Prefers `reverse_each` over `reverse.each` for efficiency."
+
+Performance/Size:
+  Enabled: true
+  Description: "Optimizes size checks."
+
+Performance/StartWith:
+  Enabled: true
+  Description: "Optimizes string start checks."
+
+Performance/StringReplacement:
+  Enabled: true
+  Description: "Optimizes string replacements."
+
+# Security cops (only CompoundHash enabled)
+Security/CompoundHash:
+  Enabled: true
+  Description: "Flags compound hash keys to prevent potential DoS vulnerabilities."
+
+# Style cops
 Style/AndOr:
   Enabled: false
+  Description: "Disabled to allow contextual use of `and`/`or`."
+
+Style/Attr:
+  Enabled: true
+  Description: "Prefers `attr_reader`/`attr_writer` over manual getters/setters."
 
 Style/BlockComments:
   Enabled: false
+  Description: "Disabled to allow block comments where needed."
 
-# Prefer Foo.method over Foo::method
 Style/ColonMethodCall:
   Enabled: true
+  Description: "Prefers `Foo.method` over `Foo::method`."
 
 Style/DefWithParentheses:
   Enabled: true
+  Description: "Requires parentheses in method definitions."
 
 Style/Documentation:
   Enabled: false
+  Description: "Disables documentation enforcement."
 
 Style/EmptyMethod:
   Enabled: false
+  Description: "Allows empty method bodies."
+
+Style/For:
+  Enabled: true
+  Description: "Checks for proper `for` loop usage vs `each`."
 
 Style/FrozenStringLiteralComment:
-  Enabled: false
+  Enabled: true
+  Description: "Enforces frozen string literal comments for performance."
 
-# Use Ruby >= 1.9 syntax for hashes. Prefer { a: :b } over { :a => :b }.
+Style/GlobalVars:
+  Enabled: false
+  Description: "Disables global variable checks to allow their use."
+
 Style/HashSyntax:
   Enabled: true
   EnforcedShorthandSyntax: either
+  Description: "Prefers modern hash syntax; allows both `a: 1` and `:a => 1`."
 
-# Defining a method with parameters needs parentheses.
 Style/MethodDefParentheses:
   Enabled: true
+  Description: "Requires parentheses for method definitions with parameters."
 
 Style/ParenthesesAroundCondition:
   Enabled: true
+  Description: "Enforces parentheses around conditions."
 
 Style/PercentLiteralDelimiters:
   Enabled: true
@@ -232,23 +313,34 @@ Style/PercentLiteralDelimiters:
     "%r": "{}"
     "%w": "[]"
     "%W": "[]"
+  Description: "Sets preferred delimiters for percent literals."
 
-# Use quotes for string literals when they are enough.
+Style/RedundantFetchBlock:
+  Enabled: false
+  Description: "Disabled to avoid indiscriminate changes to fetch calls."
+
 Style/RedundantPercentQ:
   Enabled: false
+  Description: "Allows redundant `%q` where clarity is preferred."
 
 Style/RedundantReturn:
   Enabled: true
   AllowMultipleReturnValues: true
+  Description: "Flags redundant `return` except with multiple values."
+
+Style/Sample:
+  Enabled: true
+  Description: "Prefers `sample` over `shuffle.first` for efficiency."
 
 Style/Semicolon:
   Enabled: true
   AllowAsExpressionSeparator: true
+  Description: "Enforces proper semicolon usage."
 
 Style/StabbyLambdaParentheses:
   Enabled: true
+  Description: "Enforces parentheses in stabby lambdas."
 
-# Use `"foo"` not `'foo'` unless escaping is required
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: double_quotes
@@ -258,9 +350,29 @@ Style/StringLiterals:
     - "lib/**/*"
     - "test/**/*"
     - "Gemfile"
+  Description: "Prefers double quotes over single quotes unless escaping is needed."
+
+Style/SymbolProc:
+  Enabled: true
+  Description: "Prefers symbol to proc syntax like `map(&:method)`."
 
 Style/TrailingCommaInArrayLiteral:
   Enabled: true
+  Description: "Enforces trailing commas in array literals."
 
 Style/TrailingCommaInHashLiteral:
   Enabled: true
+  Description: "Enforces trailing commas in hash literals."
+
+# Naming cops
+Naming/FileName:
+  Enabled: true
+  Description: "Ensures filenames match class/module names."
+
+Naming/PredicatePrefix:
+  Enabled: false
+  Description: "Allow has_ prefix for predicate methods."
+
+Naming/AccessorMethodName:
+  Enabled: false
+  Description: "Allow has_ prefix for accessor methods."
