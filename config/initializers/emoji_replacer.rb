@@ -1,4 +1,4 @@
-# frozen_string_literal: false
+# frozen_string_literal: true
 
 class EmojiReplacer
   require "unicode"
@@ -14,9 +14,11 @@ class EmojiReplacer
 
     if headers["Content-Type"]&.include?("text/html")
 
-      new_body = ""
+      new_body = +"" # unfrozen string
       body.each do |part|
-        new_part = part.gsub(EMOJI_REGEX) do |emoji|
+        # ensure we don't try to gsub! a frozen string
+        safe_part = part.dup
+        new_part = safe_part.gsub(EMOJI_REGEX) do |emoji|
           # Re-enable caching
           img_tag = Rails.cache.fetch(cache_key(emoji), expires_in: 12.hours) do
             build_img_tag(emoji)
@@ -43,7 +45,8 @@ class EmojiReplacer
   rescue StandardError => e
     Rails.logger.error "EmojiReplacer: Error processing request: #{e.message}"
     Rails.logger.error e.backtrace.join("\n")
-    [ 500, { "Content-Type" => "text/plain" }, [ "Internal Server Error" ] ]
+  # Fail-safe: return the original response on error
+  [ status || 200, headers || { "Content-Type" => "text/html" }, body || [ "" ] ]
   end
 
   private

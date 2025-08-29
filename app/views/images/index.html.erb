@@ -10,17 +10,19 @@
 
 <article class="images-container">
   <section class="images-grid">
-    <% @images.each_with_index do |img, index| %>
+  <% @images.each_with_index do |img, index| %>
       <div class="image-container">
-        <% ext = File.extname(img) %>
-        <% base_name = File.basename(img, ext) %>
+    <%# `img` is already the basename without extension %>
+    <% base_name = img %>
+    <% avif_name = "#{base_name}.avif" %>
+    <% jpg_name  = "#{base_name.sub(/^resized_/, '')}.JPG" %>
         <a
-          href="<%= vite_asset_path("losslessphotos/#{base_name.sub(/^resized_/, '') + ext}") %>"
+      href="<%= vite_asset_path("~/losslessphotos/#{jpg_name}") %>"
           target="_blank"
         >
           <picture>
             <%= image_tag(
-              vite_asset_path("photos/AVIFs/#{base_name}.avif"),
+        vite_asset_path("~/photos/AVIFs/#{avif_name}"),
               loading: "lazy",
               decoding: "async",
               fetchpriority: "low",
