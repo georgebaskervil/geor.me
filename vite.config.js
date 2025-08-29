@@ -138,7 +138,7 @@ export default defineConfig(({ mode }) => {
           top_retain: null,
           typeofs: true,
           unsafe: true,
-          unsafe_arrows: true,
+          unsafe_arrows: false,
           unsafe_comps: true,
           unsafe_Function: true,
           unsafe_math: true,
