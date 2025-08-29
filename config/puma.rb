@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "English"
-require "Etc"
+require "etc"
 
 # -- CPU core detection (favor physical cores where possible)
 def hardware_cores
