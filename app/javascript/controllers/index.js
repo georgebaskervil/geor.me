@@ -153,3 +153,6 @@ application.register("turbo-mount", TurboMountController);
 
 import ReactMountController from "./react_mount_controller";
 application.register("react-mount", ReactMountController);
+
+import SpaceshooterController from "./spaceshooter_controller";
+application.register("spaceshooter", SpaceshooterController);

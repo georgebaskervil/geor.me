@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  get "/spaceshooter", to: "spaceshooter#index"
   get "/taskstack", to: "taskstack#index"
   get "/neudec", to: "neudec#index"
   get "/eclecticonapps", to: "eclecticonapps#index"

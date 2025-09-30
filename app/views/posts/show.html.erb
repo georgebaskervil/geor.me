@@ -5,9 +5,10 @@
     <h1 class="posts-header"><%= @article[:title] %></h1>
     <p class="posts-description"><%= @article[:description] %></p>
     <% if @article[:format] == :pdf %>
+      <% pdf_viewer_fragment = '#toolbar=0&navpanes=0&view=FitH' %>
       <p class="posts-text"><a
           class="dl-link"
-          href="<%= post_file_path(@article[:slug]) %>"
+          href="<%= post_file_path(@article[:slug]) + pdf_viewer_fragment %>"
           target="_blank"
           rel="noopener"
         >Open PDF</a>
@@ -15,7 +16,7 @@
         <a class="dl-link" href="<%= post_file_path(@article[:slug]) %>" download>Download PDF</a></p>
       <div class="posts-text" style="height: 80vh;">
         <iframe
-          src="<%= post_file_path(@article[:slug]) %>"
+          src="<%= post_file_path(@article[:slug]) + pdf_viewer_fragment %>"
           title="<%= @article[:title] %>"
           width="100%"
           height="100%"
