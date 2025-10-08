@@ -37,10 +37,8 @@ class ApplicationController < ActionController::Base
 
   def set_custom_headers
     # Only set strict COEP headers in production to avoid blocking development tools
-    unless Rails.env.development?
-      response.set_header("Cross-Origin-Embedder-Policy", "require-corp")
-      response.set_header("Cross-Origin-Opener-Policy", "same-origin")
-    end
+    response.set_header("Cross-Origin-Embedder-Policy", "credentialless")
+    response.set_header("Cross-Origin-Opener-Policy", "same-origin")
     response.set_header("X-UA-Compatible", "IE=edge,chrome=1")
 
     # Passenger Turbocache compatibility: only cache GET HTML responses in production
