@@ -4,7 +4,7 @@
   <a
     href="https://github.com/georgebaskervil/Personal-Website/tree/main/data/images"
     class="dl-link"
-    target="_blank"
+    target="_self"
   >GitHub repo</a>
 </p>
 
@@ -18,7 +18,7 @@
         <% jpg_name = "#{base_name.sub(/^resized_/, "")}.JPG" %>
         <a
           href="<%= vite_asset_path("~/losslessphotos/#{jpg_name}") %>"
-          target="_blank"
+          target="_self"
         >
           <picture>
             <%= image_tag(

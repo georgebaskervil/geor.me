@@ -1,6 +1,14 @@
 import * as Sentry from "@sentry/browser";
 import "../stylesheets/application.scss";
 
+// Add loading class to body only during page-changing navigation
+document.addEventListener("turbo:visit", () => {
+    document.body.classList.add("turbo-loading");
+});
+document.addEventListener("turbo:load", () => {
+    document.body.classList.remove("turbo-loading");
+});
+
 if (!import.meta.env.DEV) {
   // Only initialize Sentry when not in development mode
   Sentry.init({

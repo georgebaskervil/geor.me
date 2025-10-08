@@ -1,0 +1,15 @@
+.robustext-embed {
+  @apply w-full;
+  max-width: 721px;
+  aspect-ratio: 721 / 560;
+  overflow: hidden;
+  background: #161820;
+}
+
+.robustext-embed iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #161820;
+}

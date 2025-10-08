@@ -218,8 +218,8 @@
                       <% if item[:external] %>
                         <a
                           href="<%= item[:path] %>"
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          target="_self"
+                          rel="noopener"
                           class="<%= 'text-accent' if !item[:external] && request.path == item[:path] %>"
                         >
                           <%= item[:title] %>

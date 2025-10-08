@@ -35,7 +35,7 @@
         <ul>
           <% social_links.each do |link| %>
             <li>
-              <a href="<%= link[:url] %>" target="_blank" rel="noopener" class="text-accent">
+              <a href="<%= link[:url] %>" target="_self" rel="noopener" class="text-accent">
                 <%= link[:name] %>
               </a>
             </li>
@@ -83,7 +83,7 @@
       {
         title: "RobusText",
         demo_url: "/streaming/robustext_video",
-        link_url: "https://github.com/georgebaskervil/robustext",
+        link_url: "/robustext",
         description:
           "A text editor designed to handle malformed unicode characters gracefully.",
         type: "video",
@@ -164,8 +164,8 @@
                 </div>
                 <a
                   href="<%= project[:link_url] %>"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  target="_self"
+                  rel="noopener"
                   class="project-link-btn"
                   aria-label="View <%= project[:title] %> project"
                 >
@@ -200,7 +200,7 @@
 <article class="hp-spacing">
   <header class="hp-header">
     <h3 class="hp-h3">Some of the best photos I have taken:</h3>
-    <a href="/images" class="hp-small-link">
+    <a href="/images" class="hp-small-link" rel="noopener">
       See all photos
     </a>
   </header>
@@ -213,7 +213,7 @@
         <% jpg_name = "#{base_name.sub(/^resized_/, "")}.JPG" %>
         <a
           href="<%= vite_asset_path("~/losslessphotos/#{jpg_name}") %>"
-          target="_blank"
+          target="_self"
         >
           <picture>
             <%= image_tag(
@@ -232,7 +232,7 @@
 <article>
   <header class="hp-header">
     <h3 class="hp-h3">The latest blog posts I have written:</h3>
-    <a href="/posts" class="hp-small-link">
+    <a href="/posts" class="hp-small-link" rel="noopener">
       See all posts
     </a>
   </header>

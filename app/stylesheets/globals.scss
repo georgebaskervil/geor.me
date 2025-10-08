@@ -57,8 +57,28 @@ body {
   overflow-x: hidden;
 }
 
+.turbo-loading {
+    pointer-events: none; /* Disables pointer events on body */
+    position: relative; /* Ensures pseudo-element positioning */
+}
+
+.turbo-loading::before {
+    content: "";
+    position: fixed; /* Cover the entire viewport */
+    inset: 0;
+    background: rgb(0 0 0 / 30%); /* Semi-transparent dark overlay */
+    backdrop-filter: blur(3px); /* Subtle blur effect */
+    pointer-events: auto; /* Allows pseudo-element to show cursor */
+    z-index: 9999; /* Ensures it’s on top */
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIxOCIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjQiIGZpbGw9Im5vbmUiIHN0cm9rZS1kYXNoYXJyYXk9IjI4IDI4IiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJyb3RhdGUiIGZyb209IjAgMjAgMjAiIHRvPSIzNjAgMjAgMjAiIGR1cj0iMXMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIi8+CiAgPC9jaXJjbGU+Cjwvc3ZnPg==");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+}
+
 .turbo-progress-bar {
-  background: variables.$accent;
+    display: none !important;
+    will-change: width, opacity;
 }
 
 .dl-link-box {
