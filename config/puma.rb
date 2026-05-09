@@ -79,12 +79,11 @@ if %w[production development].include?(rails_env)
     nil
   end
   workers_count = if rails_env == "development"
-  # In dev, scale to full hardware by default; only honor positive overrides.
   env_override&.positive? ? env_override : default_workers_dev
   else
   env_override&.positive? ? env_override : default_workers_prod
   end
-  workers workers_count if workers_count.positive?
+  workers workers_count.clamp(1, 2) if workers_count.positive?
 end
 threads min_threads, max_threads
 

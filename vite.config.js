@@ -1,3 +1,4 @@
+import "v8-compile-cache";
 import MillionLint from "@million/lint";
 import { defineConfig } from "vite";
 import rubyPlugin from "vite-plugin-ruby";
@@ -5,192 +6,77 @@ import fullReload from "vite-plugin-full-reload";
 import stimulusHMR from "vite-plugin-stimulus-hmr";
 import cssnano from "cssnano";
 import tailwindcss from "tailwindcss";
-import coffee from "vite-plugin-coffee";
 import vue from "@vitejs/plugin-vue";
+import babel from "vite-plugin-babel";
+import postcssInlineRtl from "postcss-inline-rtl";
+import postcssUrl from "postcss-url";
+import postcssRemoveRoot from "postcss-remove-root";
+import cssMqpacker from "css-mqpacker";
+import stylehacks from "stylehacks";
+import postcssMqOptimize from "postcss-mq-optimize";
+import autoprefixer from "autoprefixer";
+import nodePolyfills from "rollup-plugin-polyfill-node";
+import legacy from "vite-plugin-legacy-swc";
+import vitePluginBundleObfuscator from "vite-plugin-bundle-obfuscator";
+import { purgePolyfills } from "unplugin-purge-polyfills";
+import replacements from "./vendor/javascript/unplugin-replacements/lib/vite.js";
+import coffeescript from "./plugins/coffeescript.js";
+import typehints from "./plugins/typehints.js";
+import removePrefix from "./plugins/postcss-remove-prefix.js";
+import {
+    allObfuscatorConfig,
+    commonDefine,
+    commonLegacyOptions,
+    createBabelOptions,
+    createCommonBuild,
+    createEsbuildConfig,
+    createOptimizeDepsForce,
+    createTypehintPlugin,
+    devViteSecurityHeaders,
+} from "./config/vite/common.js";
+import path from "node:path";
 
 export default defineConfig(({ mode }) => {
   const isDevelopment = mode === "development";
 
+  const typehintPlugin = createTypehintPlugin(typehints);
+
   return {
     /** Esbuild Options */
-    esbuild: {
-      target: "es2020",
-      keepNames: false,
-      treeShaking: isDevelopment ? false : true,
-      legalComments: isDevelopment ? "none" : "inline",
-    },
+    esbuild: createEsbuildConfig(isDevelopment),
 
     /** Resolve Options */
     resolve: {
-      extensions: [".js", ".json", ".coffee", ".scss"],
+      extensions: [".js", ".json", ".coffee", ".scss", ".snappy", ".es6"],
       alias: {
         "normalise.scss": "normalise.scss/normalise.scss",
       },
     },
 
     /** Asset Inclusion */
-    assetsInclude: ["**/*.jsdos", "**/*.gguf"],
+    assetsInclude: ["**/*.jsdos", "**/*.gguf", "**/*.wasm"],
 
     /** Build Options */
-    build: {
-      sourcemap: isDevelopment,
-      cache: true,
-      rollupOptions: {
-        input: {
-          application: "app/javascript/application.js",
-        },
-        output: {
-          entryFileNames: "[name]-[hash].js",
-          chunkFileNames: "[name]-[hash].js",
-          assetFileNames: "[name]-[hash].[ext]",
-          minifyInternalExports: true,
-          inlineDynamicImports: false,
-          compact: true,
-          generatedCode: {
-            preset: "es2015",
-            arrowFunctions: true,
-            constBindings: true,
-            objectShorthand: true,
-          },
-        },
-        external: [],
-        treeshake: {
-          moduleSideEffects: true,
-          propertyReadSideEffects: false,
-          tryCatchDeoptimization: false,
-          unknownGlobalSideEffects: false,
-        },
+    build: createCommonBuild({
+      isDevelopment,
+      rollupInput: {
+        application: "app/javascript/application.js",
       },
-      target: ["es2020", "edge88", "firefox78", "chrome87", "safari14"],
-      modulePreload: { polyfill: true },
-      cssCodeSplit: true,
-      assetsInlineLimit: 4096,
-      cssTarget: ["esnext"],
-      chunkSizeWarningLimit: 2147483647,
-      reportCompressedSize: false,
-      minify: "terser",
-      terserOptions: {
-        parse: {
-          bare_returns: false,
-          html5_comments: false,
-          shebang: false,
-          ecma: 2020,
-        },
-        compress: {
-          defaults: true,
-          arrows: true,
-          arguments: true,
-          booleans: true,
-          booleans_as_integers: false,
-          collapse_vars: true,
-          comparisons: true,
-          computed_props: true,
-          conditionals: true,
-          dead_code: true,
-          directives: true,
-          drop_console: true,
-          drop_debugger: true,
-          ecma: 2020,
-          evaluate: true,
-          expression: false,
-          global_defs: {},
-          hoist_funs: true,
-          hoist_props: true,
-          hoist_vars: true,
-          if_return: true,
-          inline: true,
-          join_vars: true,
-          keep_classnames: false,
-          keep_fargs: true,
-          keep_fnames: false,
-          keep_infinity: false,
-          loops: true,
-          negate_iife: true,
-          passes: 10,
-          properties: true,
-          pure_getters: "strict",
-          pure_funcs: [
-            "console.log",
-            "console.info",
-            "console.debug",
-            "console.warn",
-            "console.error",
-            "console.trace",
-            "console.dir",
-            "console.dirxml",
-            "console.group",
-            "console.groupCollapsed",
-            "console.groupEnd",
-            "console.time",
-            "console.timeEnd",
-            "console.timeLog",
-            "console.assert",
-            "console.count",
-            "console.countReset",
-            "console.profile",
-            "console.profileEnd",
-            "console.table",
-            "console.clear",
-          ],
-          reduce_vars: true,
-          reduce_funcs: true,
-          sequences: true,
-          side_effects: true,
-          switches: true,
-          toplevel: true,
-          top_retain: null,
-          typeofs: true,
-          unsafe: true,
-          unsafe_arrows: false,
-          unsafe_comps: true,
-          unsafe_Function: true,
-          unsafe_math: true,
-          unsafe_symbols: true,
-          unsafe_methods: true,
-          unsafe_proto: true,
-          unsafe_regexp: true,
-          unsafe_undefined: true,
-          unused: true,
-        },
-        mangle: {
-          eval: false,
-          keep_classnames: false,
-          keep_fnames: false,
-          reserved: [],
-          toplevel: true,
-          safari10: false,
-        },
-        format: {
-          ascii_only: false,
-          beautify: false,
-          braces: false,
-          comments: "some",
-          ecma: 2020,
-          indent_level: 0,
-          inline_script: true,
-          keep_numbers: false,
-          keep_quoted_props: false,
-          max_line_len: 0,
-          quote_keys: false,
-          preserve_annotations: false,
-          safari10: false,
-          semicolons: true,
-          shebang: false,
-          webkit: false,
-          wrap_iife: false,
-          wrap_func_args: false,
-        },
-      },
-    },
+    }),
 
     /** Server Options */
     server: {
-      hmr: { overlay: true },
-      headers: isDevelopment
-        ? {
-            "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
-          }
-        : {},
+      host: process.env.VITE_DEV_SERVER_HOST || "127.0.0.1",
+      port: Number(process.env.VITE_DEV_SERVER_PORT || 3036),
+      strictPort: true,
+      hmr: {
+        overlay: false,
+        protocol: "ws",
+        host: "localhost",
+        port: Number(process.env.VITE_DEV_SERVER_PORT || 3036),
+        clientPort: Number(process.env.VITE_DEV_SERVER_PORT || 3036),
+      },
+      headers: isDevelopment ? devViteSecurityHeaders() : {},
       fs: { strict: false },
     },
 
@@ -198,42 +84,70 @@ export default defineConfig(({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          api: "legacy",
+          api: "modern-compiler",
           includePaths: ["node_modules", "./node_modules"],
         },
       },
       postcss: {
         plugins: [
+          removePrefix(),
           tailwindcss(),
+          stylehacks({ lint: false }),
+          postcssInlineRtl(),
+          postcssUrl([
+            {
+              filter: "**/*.woff2",
+              url: "inline",
+              encodeType: "base64",
+              maxSize: 2_147_483_647,
+            },
+            {
+              url: "inline",
+              maxSize: 2_147_483_647,
+              encodeType: "encodeURIComponent",
+              optimizeSvgEncode: true,
+              ignoreFragmentWarning: true,
+            },
+          ]),
+          postcssRemoveRoot(),
+          cssMqpacker({
+            sort: true,
+          }),
+          postcssMqOptimize(),
           cssnano({
             preset: [
               "advanced",
               {
-                autoprefixer: true,
-                discardComments: { removeAllButCopyright: true },
-                normalizeString: true,
-                normalizeUrl: true,
-                normalizeCharset: true,
+                autoprefixer: false,
+                discardComments: {
+                  removeAllButCopyright: true,
+                },
+                discardUnused: true,
+                reduceIdents: true,
+                mergeIndents: true,
+                zindex: true,
               },
             ],
           }),
+          autoprefixer(),
         ],
       },
     },
 
     /** Define Options */
-    define: {
-      global: "globalThis",
-    },
+    define: commonDefine,
 
     /** Dependency Optimization */
     optimizeDeps: {
-      include: ["@hotwired/turbo", "@hotwired/stimulus"],
-      exclude: [
-        // Add problematic dependency here
-        "@wllama/wllama/esm/index.js",
+      include: [
+        "@hotwired/turbo",
+        "@hotwired/stimulus",
+        "@rails/request.js",
+        "@sentry/browser",
+        "stimulus-use",
       ],
-      force: isDevelopment && process.env.VITE_FORCE_DEPS === "true",
+      exclude: ["@hotwired/turbo", "@wllama/wllama/esm/index.js"],
+      ...createOptimizeDepsForce(isDevelopment),
     },
 
     /** Plugins */
@@ -242,13 +156,24 @@ export default defineConfig(({ mode }) => {
         enabled: true,
         optimizeDOM: true,
       }),
+      coffeescript(),
+      nodePolyfills(),
+      purgePolyfills.vite(),
+      replacements(),
+      legacy(commonLegacyOptions),
+      babel(createBabelOptions(path)),
       rubyPlugin(),
-      fullReload(["config/routes.rb", "app/views/**/*"]),
-      vue(),
-      coffee({
-        jsx: false,
-      }),
       stimulusHMR(),
+      fullReload([
+        "config/routes.rb",
+        "app/views/**/*",
+        "app/javascript/src/**/*",
+      ]),
+      isDevelopment ? undefined : typehintPlugin,
+      isDevelopment
+        ? undefined
+        : vitePluginBundleObfuscator(allObfuscatorConfig),
+      vue(),
     ],
   };
 });
