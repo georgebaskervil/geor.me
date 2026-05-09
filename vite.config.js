@@ -23,6 +23,9 @@ export default defineConfig(({ mode }) => {
     /** Resolve Options */
     resolve: {
       extensions: [".js", ".json", ".coffee", ".scss"],
+      alias: {
+        "normalise.scss": "normalise.scss/normalise.scss",
+      },
     },
 
     /** Asset Inclusion */
@@ -195,7 +198,7 @@ export default defineConfig(({ mode }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          api: "modern-compiler",
+          api: "legacy",
           includePaths: ["node_modules", "./node_modules"],
         },
       },

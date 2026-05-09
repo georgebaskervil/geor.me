@@ -2,7 +2,7 @@
 # check=error=true
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=3.4.1
+ARG RUBY_VERSION=3.3.7
 FROM quay.io/evl.ms/fullstaq-ruby:${RUBY_VERSION}-jemalloc-slim AS base
 
 ENV CFLAGS="-O3 -fno-fast-math -fstack-protector-strong -D_FORTIFY_SOURCE=2 -Wall -Wextra -fPIC -Wformat -Wformat-security"
@@ -93,7 +93,7 @@ RUN groupadd --system --gid 1000 rails \
   && chown -R 1000:1000 log storage tmp /data
 USER 1000:1000
 
-# Deployment options
+# Deployment options (production only - YJIT enabled for performance)
 ENV RUBY_YJIT_ENABLE="1"
 
 # Entrypoint prepares the database.

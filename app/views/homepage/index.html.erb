@@ -30,6 +30,7 @@
             "https://signal.me/#eu/Ui1-KTmlgnCbNj491iq3HSOJtrkY1aVHm4n0v97dvkGDbCqWsExOu66Fzg7-7iC9",
         },
         { name: "GitHub", url: "https://github.com/georgebaskervil" },
+        { name: "Email", url: "mailto:me@geor.me" },
       ] %>
       <div class="hp-custom-breadcrumbs hp-li-div">
         <ul>
@@ -91,7 +92,7 @@
       {
         title: "Georlist",
         demo_url: "/streaming/georlist_video",
-        link_url: "https://georlist.geor.me",
+        link_url: "/proxy/georlist",
         description:
           "A web service that compiles all the dns blocklists I use into one.",
         type: "video",
@@ -238,11 +239,20 @@
   </header>
   <section class="posts-section">
     <% @latest_posts.each do |article| %>
-      <%= link_to post_path(article[:slug]), class: "posts-card" do %>
-        <h2 class="posts-title"><%= article[:title] %></h2>
-        <p class="posts-content"><%= article[:description] %></p>
-        <p class="posts-published-date-card-ver">Published on
-          <%= article[:published_at].strftime("%B %d, %Y") %></p>
+      <% if article[:format] == :feed %>
+        <%= link_to article[:external_url], class: "posts-card", target: "_blank", rel: "noopener" do %>
+          <h2 class="posts-title"><%= article[:title] %></h2>
+          <p class="posts-content"><%= article[:description] %></p>
+          <p class="posts-published-date-card-ver">Published on
+            <%= article[:published_at].strftime("%B %d, %Y") %></p>
+        <% end %>
+      <% else %>
+        <%= link_to post_path(article[:slug]), class: "posts-card" do %>
+          <h2 class="posts-title"><%= article[:title] %></h2>
+          <p class="posts-content"><%= article[:description] %></p>
+          <p class="posts-published-date-card-ver">Published on
+            <%= article[:published_at].strftime("%B %d, %Y") %></p>
+        <% end %>
       <% end %>
     <% end %>
   </section>

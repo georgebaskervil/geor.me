@@ -11,14 +11,26 @@
 
 <section class="posts-section">
   <% @all_posts.each do |article| %>
-    <%= link_to post_path(article[:slug]), class: "posts-card" do %>
-      <h2 class="posts-title"><%= article[:title] %></h2>
-      <p class="posts-content"><%= article[:description] %></p>
-      <p class="posts-published-date-card-ver">Published on the
-        <%= article[:published_at].day.ordinalize %>
-        of
-        <%= article[:published_at].strftime("%B") %>
-        <%= article[:published_at].strftime("%Y") %></p>
+    <% if article[:format] == :feed %>
+      <%= link_to article[:external_url], class: "posts-card", target: "_blank", rel: "noopener" do %>
+        <h2 class="posts-title"><%= article[:title] %></h2>
+        <p class="posts-content"><%= article[:description] %></p>
+        <p class="posts-published-date-card-ver">Published on the
+          <%= article[:published_at].day.ordinalize %>
+          of
+          <%= article[:published_at].strftime("%B") %>
+          <%= article[:published_at].strftime("%Y") %></p>
+      <% end %>
+    <% else %>
+      <%= link_to post_path(article[:slug]), class: "posts-card" do %>
+        <h2 class="posts-title"><%= article[:title] %></h2>
+        <p class="posts-content"><%= article[:description] %></p>
+        <p class="posts-published-date-card-ver">Published on the
+          <%= article[:published_at].day.ordinalize %>
+          of
+          <%= article[:published_at].strftime("%B") %>
+          <%= article[:published_at].strftime("%Y") %></p>
+      <% end %>
     <% end %>
   <% end %>
 </section>

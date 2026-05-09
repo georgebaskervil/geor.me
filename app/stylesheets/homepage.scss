@@ -81,7 +81,16 @@
 }
 
 .hp-picture {
-  @apply rounded-lg border-neutral;
+  @apply border-neutral;
+  position: relative;
+}
+
+.hp-picture img {
+  border-radius: 0.5rem;
+}
+
+.moon-overlay {
+  display: none;
 }
 
 .hp-article-2 {
@@ -329,6 +338,12 @@
 
 .carousel-video {
   @apply w-full h-full object-cover;
+
+  background: #000;
+}
+
+.carousel-iframe {
+  @apply w-full h-full border-0;
 
   background: #000;
 }

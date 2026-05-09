@@ -97,9 +97,6 @@ application.register("neudec", NeudecController);
 import NormalstatsController from "./normalstats_controller";
 application.register("normalstats", NormalstatsController);
 
-import OnekoController from "./oneko_controller";
-application.register("oneko", OnekoController);
-
 import OrbitsController from "./orbits_controller";
 application.register("orbits", OrbitsController);
 

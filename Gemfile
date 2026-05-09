@@ -2,12 +2,13 @@
 
 source "https://rubygems.org"
 
-ruby "3.4.1"
+ruby "3.3.7"
 
 gem "better_html"
 gem "bootsnap", require: false
 gem "kramdown"
 gem "nokogiri", "1.18.7"
+gem "feedjira"
 gem "puma"
 gem "rack-attack"
 gem "rails", "8.0.1"

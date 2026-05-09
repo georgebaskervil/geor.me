@@ -5,6 +5,7 @@ require "kramdown"
 require "yaml"
 require "digest"
 require "date" # Added to handle Date parsing
+require "feedjira"
 
 class ApplicationController < ActionController::Base
   before_action :increment_request_counter
@@ -36,9 +37,11 @@ class ApplicationController < ActionController::Base
   end
 
   def set_custom_headers
-    # Only set strict COEP headers in production to avoid blocking development tools
-    response.set_header("Cross-Origin-Embedder-Policy", "credentialless")
-    response.set_header("Cross-Origin-Opener-Policy", "same-origin")
+    # Skip COEP headers for robustext and data to allow cross-origin iframe embed
+    unless controller_name == "robustext" || controller_name == "data"
+      response.set_header("Cross-Origin-Embedder-Policy", "credentialless")
+      response.set_header("Cross-Origin-Opener-Policy", "same-origin")
+    end
     response.set_header("X-UA-Compatible", "IE=edge,chrome=1")
 
     # Passenger Turbocache compatibility: only cache GET HTML responses in production
@@ -223,11 +226,58 @@ class ApplicationController < ActionController::Base
   end
 
   def set_latest_posts
-    @latest_posts = @articles&.first(4) || []
+    @latest_posts = @all_posts&.first(4) || []
   end
 
   def set_all_posts
-    @all_posts = @articles || []
+    local_posts = @articles || []
+    feed_posts = fetch_feed_posts
+
+    # Merge feed posts with local posts, sorting by published_at
+    @all_posts = (local_posts + feed_posts).sort_by { |post| post[:published_at] }.reverse
+  end
+
+  def fetch_feed_posts
+    feed_url = "https://libreverse.geor.me/feed/"
+    feed_cache_key = "feed_posts-#{feed_url}"
+
+    Rails.cache.fetch(feed_cache_key, expires_in: 5.minutes) do
+      begin
+        require "net/http"
+        require "uri"
+
+        uri = URI.parse(feed_url)
+        response = Net::HTTP.get_response(uri)
+
+        if response.is_a?(Net::HTTPSuccess)
+          feed = Feedjira.parse(response.body)
+
+          feed.entries.select { |entry| entry.author&.downcase&.include?("georgebaskervil") }.map do |entry|
+            {
+              title: entry.title,
+              description: (entry.summary || entry.content).to_s.truncate(100),
+              published_at: entry.published || entry.updated,
+              updated_at: entry.updated || entry.published,
+              content_html: entry.content,
+              file_path: nil,
+              slug: entry.url.split("/").last || entry.id,
+              tags: entry.categories || [],
+              section: "Blog",
+              author: entry.author,
+              preview_image: nil,
+              format: :feed,
+              external_url: entry.url
+            }
+          end
+        else
+          Rails.logger.error "Error fetching feed: HTTP #{response.code}"
+          []
+        end
+      rescue StandardError => e
+        Rails.logger.error "Error fetching feed: #{e.message}"
+        []
+      end
+    end
   end
 
   # Generates a checksum based on the filenames and their last modified times

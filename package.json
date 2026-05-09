@@ -51,11 +51,11 @@
     "terser": "^5.43.1",
     "three": "^0.174.0",
     "turbo-mount": "^0.4.3",
-    "vite": "^6.3.5",
+    "vite": "^8.0.0",
     "vite-plugin-coffee": "^2.2.1",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-full-reload": "^1.2.0",
-    "vite-plugin-ruby": "^5.1.1",
+    "vite-plugin-ruby": "^5.2.0",
     "vite-plugin-stimulus-hmr": "^3.0.0",
     "vue": "^3.5.18",
     "vue-eslint-parser": "^9.4.3"

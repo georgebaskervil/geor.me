@@ -14,3 +14,7 @@
 .d-link {
   @apply text-accent no-underline hover:underline;
 }
+
+.umami-iframe {
+  @apply w-full h-screen border border-neutral rounded-lg shadow-lg bg-neutral;
+}

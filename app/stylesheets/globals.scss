@@ -1,17 +1,67 @@
 @use "variables";
 
 * {
-  cursor:
-    url("~/icons/cursor.svg") 8 8,
-    auto !important;
-  text-rendering: optimizelegibility;
+  cursor: auto;
+  text-rendering: geometricprecision;
+  text-shadow: 1px 1px 2px rgb(0 0 0 / 50%); /* Subtle text shadow */
 }
 
 html {
   height: 100%;
   width: 100%;
   font-family: SpaceMono-Regular-subset, monospace;
-  background: variables.$background-colour;
+  background-color: #2C2A2F;
+  background-image:
+    /* Very subtle star field */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Ccircle cx='25' cy='40' r='1.1' fill='%23fff' opacity='0.25'/%3E%3Ccircle cx='95' cy='18' r='0.7' fill='%23fff' opacity='0.2'/%3E%3Ccircle cx='155' cy='85' r='1.2' fill='%23fff' opacity='0.25'/%3E%3Ccircle cx='45' cy='165' r='0.8' fill='%23fff' opacity='0.2'/%3E%3Ccircle cx='190' cy='135' r='0.9' fill='%23fff' opacity='0.25'/%3E%3Ccircle cx='205' cy='35' r='1' fill='%23fff' opacity='0.25'/%3E%3Ccircle cx='75' cy='205' r='0.6' fill='%23fff' opacity='0.2'/%3E%3C/svg%3E"),
+    /* Lunar texture */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Cdefs%3E%3Cfilter id='lunar' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='300' height='300' fill='%239e9e9e' filter='url(%23lunar)' opacity='0.19'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 220px 220px, 300px 300px;
+  background-attachment: fixed;
+}
+
+.scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 1px,
+    rgba(0, 0, 0, 0.15) 1px,
+    rgba(0, 0, 0, 0.15) 2px
+  );
+}
+
+#crt-content {
+  animation-direction: alternate;
+  animation-duration: 0.01s;
+  animation-iteration-count: infinite;
+  animation-name: textflicker;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #crt-content {
+    animation: none !important;
+  }
+}
+
+@keyframes textflicker {
+  0% {
+    text-shadow:
+      1px 0 0 #ea36af,
+      -2px 0 0 #75fa69;
+  }
+  to {
+    text-shadow:
+      2px 0.5px 2px #ea36af,
+      -1px -0.5px 2px #75fa69;
+  }
 }
 
 img {
@@ -340,75 +390,6 @@ body {
 
 .dragging .window98.currently-dragging {
   pointer-events: auto;
-}
-
-/* Custom Cursor Styles */
-
-.custom-cursor-circle.initializing {
-  opacity: 0 !important;
-  transition: opacity 0.3s ease;
-}
-
-.custom-cursor-circle.no-transition {
-  transition: none !important;
-}
-
-/* Outer Circle */
-.custom-cursor-circle {
-  /* Define CSS variables for translation using kebab-case */
-  --translate-x: 0px;
-  --translate-y: 0px;
-
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  border: 2px solid #e5e4da;
-  border-radius: 50%;
-  pointer-events: none; /* Ensure cursor elements don't block interactions */
-
-  /* Use CSS variables for transforms */
-  transform: translate(var(--translate-x), var(--translate-y))
-    translate(-50%, -50%) scale(1);
-
-  /* Updated transition durations */
-  transition:
-    transform 0.1s ease,
-    opacity 0.3s ease;
-  z-index: 2147483644;
-
-  /* Initially visible */
-  opacity: 1;
-
-  /* will-change is now managed dynamically via JavaScript */
-}
-
-/* Shrink Effect on Click (applied only to the circle) */
-.custom-cursor-circle.shrink {
-  /* Maintain translation and only scale */
-  transform: translate(var(--translate-x), var(--translate-y))
-    translate(-50%, -50%) scale(0.7);
-
-  /* Ensure the transform transition is smooth */
-  transition: transform 0.2s ease;
-}
-
-.oneko {
-  width: 32px;
-  height: 32px;
-  position: fixed;
-  image-rendering: pixelated;
-  z-index: 2147483646;
-  background-image: url("~/images/oneko.gif");
-  background-repeat: no-repeat;
-
-  /* Optimize for constant position updates */
-  will-change: transform, background-position;
-}
-
-.oneko-hidden {
-  display: none;
 }
 
 .hp-custom-breadcrumbs li {

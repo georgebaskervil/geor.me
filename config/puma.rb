@@ -106,14 +106,16 @@ lowlevel_error_handler do |ex, _env|
 end
 
 on_worker_boot do
-  # Enable YJIT in worker processes (after fork) for better CoW behavior
-  if defined?(RubyVM::YJIT) && RubyVM::YJIT.respond_to?(:enable)
-    begin
-      needs_enable = !RubyVM::YJIT.respond_to?(:enabled?) || !RubyVM::YJIT.enabled?
-      RubyVM::YJIT.enable if needs_enable
-      Rails.logger.info "YJIT clause executed"
-    rescue StandardError => e
-      warn "YJIT enable failed: #{e.class}: #{e.message}"
+  # Enable YJIT in worker processes (after fork) for better CoW behavior (production only)
+  if defined?(Rails) && Rails.env.production?
+    if defined?(RubyVM::YJIT) && RubyVM::YJIT.respond_to?(:enable)
+      begin
+        needs_enable = !RubyVM::YJIT.respond_to?(:enabled?) || !RubyVM::YJIT.enabled?
+        RubyVM::YJIT.enable if needs_enable
+        Rails.logger.info "YJIT clause executed"
+      rescue StandardError => e
+        warn "YJIT enable failed: #{e.class}: #{e.message}"
+      end
     end
   end
   # Re-establish DB connection if using ActiveRecord
