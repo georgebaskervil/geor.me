@@ -340,11 +340,6 @@ body {
   font-weight: bold;
   border-bottom: 2px solid variables.$window-frame;
   pointer-events: auto;
-  cursor: grab;
-}
-
-.window98 .title-bar:active {
-  cursor: grabbing;
 }
 
 .window98 .title-bar-text {
@@ -390,16 +385,16 @@ body {
   @apply py-0 w-full;
 }
 
-.dragging * {
+/* Temporarily disabled to test drag functionality
+.dragging .window98:not(.currently-dragging) {
   pointer-events: none;
 }
 
 .dragging .window98.currently-dragging,
-.dragging .window98.currently-dragging *,
-.dragging body,
-.dragging html {
+.dragging .window98.currently-dragging * {
   pointer-events: auto;
 }
+*/
 
 .hp-custom-breadcrumbs li {
   position: relative;

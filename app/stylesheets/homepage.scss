@@ -85,7 +85,7 @@
   position: relative;
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.8);
   }
 }
 
@@ -137,7 +137,7 @@
   z-index: 1;
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.8);
   }
 }
 
@@ -194,7 +194,7 @@
   }
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.8);
     box-shadow: variables.$medium-box-shadow;
     background-color: variables.$accent;
   }
@@ -221,7 +221,7 @@
   }
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.8);
   }
 }
 
@@ -287,7 +287,7 @@
   flex-shrink: 0;
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.8);
     @apply bg-white/30;
     text-decoration: none;
   }
