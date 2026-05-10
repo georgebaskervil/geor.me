@@ -70,7 +70,7 @@
     cursor: not-allowed;
   }
 
-  &:hover:not(:disabled) {
+  &:active:not(:disabled) {
     background-color: #d1a0a7;
   }
 }
@@ -119,7 +119,7 @@
 .pop-btn {
   background-color: #8c373a;
 
-  &:hover:not(:disabled) {
+  &:active:not(:disabled) {
     background-color: #aa4448;
   }
 }
@@ -181,10 +181,10 @@
     border: 2px dashed variables.$accent;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
 
-    &:hover {
+    &:active {
       background-color: rgb(195 147 153 / 30%);
+      transform: scale(0.98);
     }
   }
 
@@ -221,7 +221,7 @@
   background-color: #41454f;
   color: variables.$text;
 
-  &:hover:not(:disabled) {
+  &:active:not(:disabled) {
     background-color: #565b69;
   }
 }
@@ -379,17 +379,9 @@
   line-height: 1;
   transition: background-color 0.2s ease;
 
-  &:hover {
+  &:active {
     background-color: rgb(170 68 72 / 70%);
-    transform: scale(1.05);
-
-    /* Enable optimization during hover */
-    will-change: transform, background-color;
-  }
-
-  &:not(:hover) {
-    /* Remove optimization when not hovering */
-    will-change: auto;
+    transform: scale(0.98);
   }
 }
 

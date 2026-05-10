@@ -12,11 +12,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        neutral: "#2D2A2A",
-        text: "#c6c2c7",
-        accent: "#c39399",
+        neutral: "#3C3F47",
+        text: "#F5F5F5",
+        accent: "#B0A2C6",
         mamba: "#898296",
-        background: "#161820",
+        background: "#2C2A2F",
       },
     },
   },

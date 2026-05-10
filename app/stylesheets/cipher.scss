@@ -18,10 +18,6 @@
   transition: all 0.3s ease;
 
   @apply rounded-lg;
-
-  &:hover {
-    box-shadow: variables.$box-shadow;
-  }
 }
 
 .cipher-output {
@@ -41,10 +37,6 @@
   user-select: text;
   pointer-events: all;
   opacity: 0.8;
-
-  &:hover {
-    box-shadow: none;
-  }
 }
 
 .cipher-grid {
@@ -73,17 +65,9 @@
     border-color: variables.$accent;
   }
 
-  &:hover {
-    transform: rotate(5deg) scale(1.2);
+  &:active {
+    transform: scale(0.98);
     color: variables.$accent;
-
-    /* Enable optimization only during hover */
-    will-change: transform, color;
-  }
-
-  &:not(:hover) {
-    /* Remove optimization when not hovering */
-    will-change: auto;
   }
 }
 
@@ -99,17 +83,9 @@
     padding: 0.5rem 1rem;
     transition: all 0.3s ease;
 
-    &:hover {
+    &:active {
       color: variables.$accent;
-      transform: scale(1.1);
-
-      /* Enable optimization during hover */
-      will-change: transform, color;
-    }
-
-    &:not(:hover) {
-      /* Remove optimization when not hovering */
-      will-change: auto;
+      transform: scale(0.98);
     }
   }
 }
@@ -124,17 +100,9 @@
 
   @apply rounded-lg;
 
-  &:hover {
+  &:active {
     color: variables.$accent;
-    transform: scale(1.1);
-
-    /* Enable optimization during hover */
-    will-change: transform, color;
-  }
-
-  &:not(:hover) {
-    /* Remove optimization when not hovering */
-    will-change: auto;
+    transform: scale(0.98);
   }
 }
 

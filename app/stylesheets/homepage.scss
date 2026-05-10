@@ -83,6 +83,10 @@
 .hp-picture {
   @apply border-neutral;
   position: relative;
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 .hp-picture img {
@@ -132,23 +136,8 @@
   opacity: 1;
   z-index: 1;
 
-  &:hover {
-    transform: rotate(5deg) scale(1.2); /* Adjusted scale to match your design */
-    z-index: 2;
-    opacity: 1;
-    box-shadow: variables.$box-shadow; /* Assuming $box-shadow is defined elsewhere */
-
-    /* Enable optimization only during hover */
-    will-change: transform, box-shadow;
-  }
-
-  &:not(:hover) {
-    transform: rotate(0deg) scale(1);
-    z-index: 1;
-    opacity: 1;
-
-    /* Remove optimization when not hovering */
-    will-change: auto;
+  &:active {
+    transform: scale(0.98);
   }
 }
 
@@ -196,7 +185,7 @@
 .carousel-btn {
   @apply w-12 h-12 rounded-full bg-accent/80 text-text border-none cursor-pointer;
   @apply flex items-center justify-center text-2xl font-bold;
-  @apply transition-all duration-200 hover:scale-110 hover:shadow-md hover:bg-accent;
+  @apply transition-all duration-200;
   @apply absolute top-1/2 transform -translate-y-1/2 z-20;
   @apply backdrop-blur-sm;
 
@@ -204,14 +193,10 @@
     @apply opacity-50 cursor-not-allowed;
   }
 
-  &:not(:hover) {
-    /* Remove optimization when not hovering */
-    will-change: auto;
-  }
-
-  &:hover:not(:disabled) {
-    /* Enable optimization during hover animation */
-    will-change: transform, box-shadow, background-color;
+  &:active {
+    transform: scale(0.98);
+    box-shadow: variables.$medium-box-shadow;
+    background-color: variables.$accent;
   }
 }
 
@@ -235,16 +220,8 @@
     @apply bg-accent;
   }
 
-  &:hover {
-    @apply scale-110;
-
-    /* Enable optimization during hover */
-    will-change: transform;
-  }
-
-  &:not(:hover) {
-    /* Remove optimization when not hovering */
-    will-change: auto;
+  &:active {
+    transform: scale(0.98);
   }
 }
 
@@ -301,7 +278,7 @@
 
 .project-link-btn {
   @apply text-white text-2xl no-underline;
-  @apply transition-all duration-200 hover:scale-110;
+  @apply transition-all duration-200;
   @apply flex items-center justify-center;
   @apply w-12 h-12 rounded-full;
   @apply bg-white/20 backdrop-blur-sm;
@@ -309,18 +286,10 @@
 
   flex-shrink: 0;
 
-  &:hover {
-    @apply bg-white/30 scale-110;
-
+  &:active {
+    transform: scale(0.98);
+    @apply bg-white/30;
     text-decoration: none;
-
-    /* Enable optimization during hover */
-    will-change: transform, background-color;
-  }
-
-  &:not(:hover) {
-    /* Remove optimization when not hovering */
-    will-change: auto;
   }
 }
 

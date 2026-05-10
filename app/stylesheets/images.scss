@@ -31,23 +31,7 @@
   opacity: 1;
   z-index: 1;
 
-  &:hover {
-    transform: rotate(5deg) scale(1.2);
-    z-index: 2;
-    opacity: 1; /* Explicitly set to ensure it stays fully visible */
-    box-shadow: variables.$strong-box-shadow;
-
-    /* Enable optimization only during hover */
-    will-change: transform, box-shadow;
-  }
-
-  /* Transition back when mouse leaves */
-  &:not(:hover) {
-    transform: rotate(0deg) scale(1); /* Reset transform */
-    z-index: 1; /* Reset z-index */
-    opacity: 1; /* Reset opacity */
-
-    /* Remove optimization when not hovering */
-    will-change: auto;
+  &:active {
+    transform: scale(0.98);
   }
 }

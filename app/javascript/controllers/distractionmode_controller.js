@@ -19,11 +19,18 @@ export default class extends Controller {
   }
 
   connect() {
+    console.log("Distractionmode controller connected");
+    console.log("Found window targets:", this.windowTargets.length);
+    console.log("Found floating windows:", this.floatingWindows.length);
+
     // Set initial z-index and wire up click handlers.
     for (const [index, w] of this.windowTargets.entries()) {
       w.style.zIndex = index + 1;
       this.highestZIndex = Math.max(this.highestZIndex, index + 1);
-      w.addEventListener("mousedown", () => this.bringToFront(w));
+      w.addEventListener("mousedown", () => {
+        this.highestZIndex++;
+        w.style.zIndex = this.highestZIndex;
+      });
     }
 
     // Configure floating windows for transitions and dragging.
@@ -32,11 +39,17 @@ export default class extends Controller {
         "transform 0.3s cubic-bezier(0.34,1.56,0.64,1), left 0.3s cubic-bezier(0.34,1.56,0.64,1), top 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease-in-out";
       fw.style.opacity = "0";
       const dragHandle = fw.querySelector(".title-bar");
-      dragHandle.addEventListener("mousedown", this.onDragStart);
+      if (dragHandle) {
+        dragHandle.addEventListener("mousedown", this.onDragStart);
+        console.log("Drag handler attached to:", dragHandle);
+      } else {
+        console.warn("No drag handle found for window:", fw);
+      }
     }
 
     // Watch window size changes to keep windows in view.
-    window.addEventListener("resize", this.adjustWindowPositions);
+    this.adjustWindowPositionsHandler = this.adjustWindowPositions.bind(this);
+    window.addEventListener("resize", this.adjustWindowPositionsHandler);
   }
 
   // Toggle showing/hiding all windows and playing/pausing videos.
@@ -63,7 +76,9 @@ export default class extends Controller {
       if (this.areWindowsVisible) {
         video
           .play()
-          .catch((error) => console.warn("Play request interrupted:", error));
+          .catch(() => {
+            // Suppress play request interruption errors (browser autoplay policy)
+          });
       } else {
         video.pause();
       }
@@ -88,6 +103,12 @@ export default class extends Controller {
 
   // Handle mouse down on a title bar.
   onDragStart = (event) => {
+    // Prevent multiple simultaneous drags
+    if (this.currentlyDragging) {
+      console.log("Already dragging, ignoring new drag start");
+      return;
+    }
+
     const fw = event.currentTarget.closest(".window98");
     document.body.classList.add("dragging");
     fw.classList.add("currently-dragging");
@@ -97,10 +118,15 @@ export default class extends Controller {
     this.offsetY = event.clientY - rect.top;
     this.lastMouseX = event.clientX;
     this.lastMouseY = event.clientY;
-    this.bringToFront(fw);
-    document.addEventListener("mousemove", this.onMouseMove);
-    document.addEventListener("mouseup", this.onMouseUp);
-    event.preventDefault();
+    this.highestZIndex++;
+    fw.style.zIndex = this.highestZIndex;
+    // Disable transitions during drag for immediate response
+    fw.style.transition = "none";
+    window.addEventListener("mousemove", this.onMouseMove);
+    window.addEventListener("mouseup", this.onMouseUp);
+    console.log("Drag started for:", fw);
+    console.log("Event listeners added to window");
+    event.stopPropagation();
   };
 
   // Track mouse movement but delay position update with requestAnimationFrame.
@@ -110,6 +136,7 @@ export default class extends Controller {
       if (!this.animationFrameId) {
         this.animationFrameId = requestAnimationFrame(this.updatePosition);
       }
+      console.log("Mouse move detected:", event.clientX, event.clientY);
     }
   };
 
@@ -141,6 +168,7 @@ export default class extends Controller {
       this.lastMouseY = clientY;
       this.pendingMove = undefined;
       this.animationFrameId = undefined;
+      console.log("Updated position to:", newLeft, newTop);
     }
   };
 
@@ -150,6 +178,9 @@ export default class extends Controller {
       document.body.classList.remove("dragging");
       this.currentlyDragging.classList.remove("currently-dragging");
       this.currentlyDragging.style.transform = "rotate(0deg)";
+      // Re-enable transitions after drag
+      this.currentlyDragging.style.transition =
+        "transform 0.3s cubic-bezier(0.34,1.56,0.64,1), left 0.3s cubic-bezier(0.34,1.56,0.64,1), top 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease-in-out";
       this.currentlyDragging = undefined;
       if (this.animationFrameId) {
         cancelAnimationFrame(this.animationFrameId);
@@ -157,8 +188,8 @@ export default class extends Controller {
       }
       this.pendingMove = undefined;
     }
-    document.removeEventListener("mousemove", this.onMouseMove);
-    document.removeEventListener("mouseup", this.onMouseUp);
+    window.removeEventListener("mousemove", this.onMouseMove);
+    window.removeEventListener("mouseup", this.onMouseUp);
   };
 
   // Ensure windows stay within the viewport when resized.
@@ -173,6 +204,21 @@ export default class extends Controller {
       if (currentTop > maxTop) fw.style.top = `${maxTop}px`;
     }
   };
+
+  disconnect() {
+    // Clean up event listeners to prevent memory leaks
+    if (this.adjustWindowPositionsHandler) {
+      window.removeEventListener("resize", this.adjustWindowPositionsHandler);
+    }
+    window.removeEventListener("mousemove", this.onMouseMove);
+    window.removeEventListener("mouseup", this.onMouseUp);
+    for (const fw of this.floatingWindows) {
+      const dragHandle = fw.querySelector(".title-bar");
+      if (dragHandle) {
+        dragHandle.removeEventListener("mousedown", this.onDragStart);
+      }
+    }
+  }
 
   bringToFront = (fw) => {
     this.highestZIndex++;

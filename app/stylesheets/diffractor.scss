@@ -53,7 +53,7 @@
   color: variables.$text;
   border: 1px solid variables.$neutral;
 
-  &:hover {
+  &:active {
     background-color: variables.$accent;
   }
 }

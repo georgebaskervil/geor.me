@@ -339,6 +339,12 @@ body {
   user-select: none;
   font-weight: bold;
   border-bottom: 2px solid variables.$window-frame;
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.window98 .title-bar:active {
+  cursor: grabbing;
 }
 
 .window98 .title-bar-text {
@@ -388,7 +394,10 @@ body {
   pointer-events: none;
 }
 
-.dragging .window98.currently-dragging {
+.dragging .window98.currently-dragging,
+.dragging .window98.currently-dragging *,
+.dragging body,
+.dragging html {
   pointer-events: auto;
 }
 

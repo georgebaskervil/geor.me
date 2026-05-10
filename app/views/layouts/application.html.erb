@@ -254,7 +254,6 @@
             <%= render 'layouts/shortcutswrapper' do %>
               <%= render 'layouts/distractionmodewrapper' do %>
                 <%= render 'layouts/locomotivescrollwrapper' do %>
-                  <%= render "layouts/noscript" %>
                   <div class="layout-main">
                     <header class="layout-header">
                       <a href="/" class="layout-home-link" rel="noopener">George Baskerville</a>
@@ -312,7 +311,6 @@
                   </div>
                 <% end %>
                 <%= render "layouts/floatingwindows" %>
-                <%= render "layouts/drawer" %>
               <% end %>
             <% end %>
           </div>
@@ -356,12 +354,16 @@
       );
       barrel.setAttribute("href", dataUrl);
       function updateScale() {
-        var base_size = size;
-        var base_scale = 64;
-        var strength = 0.95;
-        var current_scale =
-          base_scale * (window.innerWidth / base_size) * strength;
-        displacement.setAttribute("scale", current_scale);
+        try {
+          var base_size = size;
+          var base_scale = 64;
+          var strength = 0.95;
+          var current_scale =
+            base_scale * (window.innerWidth / base_size) * strength;
+          displacement.setAttribute("scale", current_scale);
+        } catch (e) {
+          // Element not found, ignore error
+        }
       }
       updateScale();
       window.addEventListener("resize", updateScale);
