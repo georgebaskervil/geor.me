@@ -17,7 +17,7 @@ Rails.application.configure do
       policy.connect_src(*policy.connect_src, "ws://#{ViteRuby.config.host_with_port}", "http://localhost:42423", "ws://localhost:42423")
     end
 
-    policy.frame_src  :self, :https
+    policy.frame_src  :self, :https, :blob
     policy.media_src  :self, :blob
   end
 

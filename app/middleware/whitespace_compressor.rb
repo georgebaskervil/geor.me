@@ -17,6 +17,7 @@ class WhitespaceCompressor
   def call(env)
     status, headers, body = @app.call(env)
     return [ status, headers, body ] unless headers["Content-Type"]&.include?("text/html")
+    return [ status, headers, body ] if env["PATH_INFO"] == "/robustext-embed.html"
 
     # Step 1: Assemble HTML efficiently
     chunks = []

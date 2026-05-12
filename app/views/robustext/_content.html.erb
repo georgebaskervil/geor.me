@@ -1,0 +1,26 @@
+<div class="robustext-embed">
+  <iframe
+    data-embed-src="/robustext-embed.html"
+    title="Robustext"
+    loading="lazy"
+    allowfullscreen
+  ></iframe>
+</div>
+<script>
+  (function () {
+    var iframe = document.currentScript.previousElementSibling.querySelector('iframe[data-embed-src]');
+    if (!iframe) return;
+    function load() {
+      if (iframe.src) return;
+      iframe.src = iframe.dataset.embedSrc;
+    }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { load(); io.disconnect(); } });
+      });
+      io.observe(iframe);
+    } else {
+      load();
+    }
+  })();
+</script>

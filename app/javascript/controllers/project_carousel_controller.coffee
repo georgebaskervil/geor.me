@@ -3,10 +3,8 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller
   @targets: [
     "slides"
-    "slide" 
+    "slide"
     "indicator"
-    "prevButton"
-    "nextButton"
     "video"
   ]
 
@@ -39,12 +37,10 @@ export default class extends Controller
   setupEventListeners: ->
     @slidesTarget.addEventListener 'touchstart', @handleTouchStart.bind(@), { passive: true }
     @slidesTarget.addEventListener 'touchend', @handleTouchEnd.bind(@), { passive: true }
-    document.addEventListener 'keydown', @handleKeydown.bind(@)
 
   removeEventListeners: ->
     @slidesTarget.removeEventListener 'touchstart', @handleTouchStart.bind(@), { passive: true }
     @slidesTarget.removeEventListener 'touchend', @handleTouchEnd.bind(@), { passive: true }
-    document.removeEventListener 'keydown', @handleKeydown.bind(@)
 
   showSlide: (index) ->
     @pauseAllVideos()
@@ -117,13 +113,6 @@ export default class extends Controller
         @nextSlide()
       else
         @previousSlide()
-
-  handleKeydown: (event) ->
-    switch event.key
-      when 'ArrowLeft'
-        @previousSlide()
-      when 'ArrowRight'
-        @nextSlide()
 
   startAutoAdvance: ->
     @autoAdvanceTimer = setInterval =>

@@ -323,29 +323,30 @@
       var canvas = document.getElementById("crt-canvas");
       var barrel = document.getElementById("filter-image");
       var displacement = document.querySelector("fedisplacementmap");
-      var size = 1024;
+      var size = 512;
       canvas.width = size;
       canvas.height = size;
       var c = size / 2;
       var ctx = canvas.getContext("2d");
+      var imageData = ctx.createImageData(size, size);
+      var data = imageData.data;
       for (var y = 0; y < size; y++) {
         for (var x = 0; x < size; x++) {
           var dx = x - c;
           var dy = y - c;
           var l = Math.sqrt(dx * dx + dy * dy);
-          var norm_l = l / c;
-          var factor = Math.pow(Math.min(norm_l, 1), 2) * 0.35;
-          var delta_x = dx * factor;
-          var delta_y = dy * factor;
-          var r = 128 + delta_x;
-          var g = 128 + delta_y;
-          r = Math.max(0, Math.min(255, r));
-          g = Math.max(0, Math.min(255, g));
-          var o = 1;
-          ctx.fillStyle = `rgba(${Math.floor(r)},${Math.floor(g)},0,${o})`;
-          ctx.fillRect(x, y, 1, 1);
+          var t = Math.min(l / c, 1);
+          var factor = t * t * 0.7;
+          var r = 128 + dx * factor;
+          var g = 128 + dy * factor;
+          var idx = (y * size + x) << 2;
+          data[idx] = r < 0 ? 0 : r > 255 ? 255 : r | 0;
+          data[idx + 1] = g < 0 ? 0 : g > 255 ? 255 : g | 0;
+          data[idx + 2] = 0;
+          data[idx + 3] = 255;
         }
       }
+      ctx.putImageData(imageData, 0, 0);
       var dataUrl = canvas.toDataURL();
       barrel.setAttributeNS(
         "http://www.w3.org/1999/xlink",
@@ -353,20 +354,26 @@
         dataUrl,
       );
       barrel.setAttribute("href", dataUrl);
+      var resizeTimer;
       function updateScale() {
         try {
-          var base_size = size;
-          var base_scale = 64;
+          var base_scale = 80;
           var strength = 0.95;
           var current_scale =
-            base_scale * (window.innerWidth / base_size) * strength;
+            base_scale * (window.innerWidth / 1024) * strength;
           displacement.setAttribute("scale", current_scale);
         } catch (e) {
           // Element not found, ignore error
         }
       }
       updateScale();
-      window.addEventListener("resize", updateScale);
+      window.addEventListener("resize", function() {
+        if (resizeTimer) return;
+        resizeTimer = requestAnimationFrame(function() {
+          resizeTimer = null;
+          updateScale();
+        });
+      });
     </script>
   </body>
 </html>

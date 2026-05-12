@@ -12,7 +12,7 @@ class EmojiReplacer
   def call(env)
     status, headers, body = @app.call(env)
 
-    if headers["Content-Type"]&.include?("text/html")
+    if headers["Content-Type"]&.include?("text/html") && env["PATH_INFO"] != "/robustext-embed.html"
 
       new_body = +"" # unfrozen string
       body.each do |part|

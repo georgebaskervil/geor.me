@@ -36,33 +36,10 @@ html {
     rgba(0, 0, 0, 0.15) 1px,
     rgba(0, 0, 0, 0.15) 2px
   );
+  contain: strict;
+  will-change: transform;
 }
 
-#crt-content {
-  animation-direction: alternate;
-  animation-duration: 0.01s;
-  animation-iteration-count: infinite;
-  animation-name: textflicker;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #crt-content {
-    animation: none !important;
-  }
-}
-
-@keyframes textflicker {
-  0% {
-    text-shadow:
-      1px 0 0 #ea36af,
-      -2px 0 0 #75fa69;
-  }
-  to {
-    text-shadow:
-      2px 0.5px 2px #ea36af,
-      -1px -0.5px 2px #75fa69;
-  }
-}
 
 img {
   user-select: none;
@@ -462,7 +439,9 @@ body {
   }
 }
 
-// Hint GPU that the smooth-scroll container will be transformed continuously.
+// Inside the SVG filter pipeline, layer promotion via will-change is
+// counterproductive — the filter must re-process composited layers regardless.
+// Native compositing benefits do not apply within SVG filter input.
 [data-scroll-container] {
-  will-change: transform;
+  contain: content;
 }

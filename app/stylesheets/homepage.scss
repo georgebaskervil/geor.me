@@ -167,7 +167,7 @@
 }
 
 .carousel-container {
-  @apply border border-neutral rounded-lg overflow-hidden shadow-lg;
+  @apply border border-neutral rounded-lg overflow-hidden shadow-lg bg-background;
 }
 
 .carousel-header {
@@ -302,7 +302,8 @@
 }
 
 .video-container {
-  @apply w-full h-full bg-neutral relative;
+  @apply w-full h-full relative;
+  background: #000;
 }
 
 .carousel-video {
@@ -315,6 +316,67 @@
   @apply w-full h-full border-0;
 
   background: #000;
+}
+
+.carousel-embed-container {
+  @apply w-full h-full relative overflow-hidden;
+
+  /* Scale down embedded content to create sympathetic spacing */
+  > * {
+    @apply absolute;
+    width: 92%;
+    height: 92%;
+    top: 4%;
+    left: 4%;
+  }
+
+  /* Override min-h-screen from embedded React/Vue apps */
+  .min-h-screen {
+    min-height: 100% !important;
+  }
+
+  /* SpaceShooter: full height, centered horizontally */
+  #game-wrapper {
+    position: absolute !important;
+    width: auto !important;
+    height: 100% !important;
+    top: 0 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+
+    #game {
+      width: 100% !important;
+      height: 100% !important;
+    }
+  }
+
+  /* Ensure RobusText iframe fills the container */
+  .robustext-embed {
+    position: absolute;
+    max-width: 100%;
+    aspect-ratio: auto;
+    width: 92%;
+    height: 92%;
+    top: 4%;
+    left: 4%;
+  }
+
+  /* Georlist preview - full slide content display */
+  .georlist-content {
+    @apply w-full h-full p-4 overflow-auto;
+    background: #2C2A2F;
+    color: #F5F5F5;
+    font-family: monospace;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-all;
+
+    /* Make content non-interactive - prevent clicking links */
+    user-select: none;
+    pointer-events: none;
+  }
 }
 
 .repo-section-title {
