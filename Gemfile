@@ -2,6 +2,10 @@
 
 source "https://rubygems.org"
 
+# Security: Enforce 1-week minimum age for all gems
+# Install with: bundle plugin install bundler-age_gate --path plugins/bundler-age_gate
+plugin 'bundler-age_gate', path: 'plugins/bundler-age_gate'
+
 ruby "3.3.7"
 
 gem "better_html"

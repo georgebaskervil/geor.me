@@ -285,6 +285,12 @@
   @apply text-sm opacity-90 leading-relaxed;
 }
 
+.project-nav-btns {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
 .project-link-btn {
   @apply text-white text-2xl no-underline;
   @apply transition-all duration-200;
@@ -374,8 +380,8 @@
   /* Georlist preview - full slide content display */
   .georlist-content {
     @apply w-full h-full p-4 overflow-auto;
-    background: #2C2A2F;
-    color: #F5F5F5;
+    background: #161820;
+    color: #c6c2c7;
     font-family: monospace;
     font-size: 0.75rem;
     line-height: 1.4;
@@ -386,6 +392,16 @@
     user-select: none;
     pointer-events: none;
   }
+
+  /* Restore old dark indigo/pink colour scheme for embedded content */
+  .bg-background { background-color: #161820 !important; }
+  .bg-accent { background-color: #c39399 !important; }
+  .bg-accent\/80 { background-color: rgb(195 147 153 / 80%) !important; }
+  .text-text { color: #c6c2c7 !important; }
+  .text-accent { color: #c39399 !important; }
+  .border-neutral { border-color: #2d2a2a !important; }
+  .border-accent { border-color: #c39399 !important; }
+  .outline-accent { outline-color: #c39399 !important; }
 }
 
 .repo-section-title {

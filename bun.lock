@@ -69,7 +69,7 @@
         "vite-plugin-bundle-obfuscator": "^1.11.0",
         "vite-plugin-compression": "^0.5.1",
         "vite-plugin-full-reload": "^1.2.0",
-        "vite-plugin-legacy-swc": "^2.0.2",
+        "vite-plugin-legacy-swc": "2.0.1",
         "vite-plugin-ruby": "^5.2.0",
         "vite-plugin-static-copy": "^4.1.0",
         "vite-plugin-stimulus-hmr": "^3.0.0",
@@ -1961,7 +1961,7 @@
 
     "vite-plugin-full-reload": ["vite-plugin-full-reload@1.2.0", "", { "dependencies": { "picocolors": "^1.0.0", "picomatch": "^2.3.1" } }, "sha512-kz18NW79x0IHbxRSHm0jttP4zoO9P9gXh+n6UTwlNKnviTTEpOlum6oS9SmecrTtSr+muHEn5TUuC75UovQzcA=="],
 
-    "vite-plugin-legacy-swc": ["vite-plugin-legacy-swc@2.0.2", "", { "dependencies": { "@swc/core": "^1.10.1", "browserslist": "^4.24.3", "browserslist-to-esbuild": "^2.1.1", "core-js": "^3.39.0", "magic-string": "^0.30.17", "regenerator-runtime": "^0.14.1", "systemjs": "^6.15.1" }, "peerDependencies": { "vite": ">=4.0.0" } }, "sha512-0V+qeVv9EfUZ1UwUJp4nJgtysDSKz94+8kI4tTDpAS+0QgmsDIUQRzTZB25jQ67xmT2dYrZPSu8a8iOrAVB39Q=="],
+    "vite-plugin-legacy-swc": ["vite-plugin-legacy-swc@2.0.1", "", { "dependencies": { "@swc/core": "^1.10.1", "browserslist": "^4.24.3", "browserslist-to-esbuild": "^2.1.1", "core-js": "^3.39.0", "magic-string": "^0.30.17", "regenerator-runtime": "^0.14.1", "systemjs": "^6.15.1" }, "peerDependencies": { "vite": ">=4.0.0" } }, "sha512-aWGg3wrTSqPzvX+Z/OojzqS89rk/Sv31PSZQMtp8p2AflcMvelP6/pN1znQktXmB74gOybso9PXjrcI96EN8bw=="],
 
     "vite-plugin-ruby": ["vite-plugin-ruby@5.2.2", "", { "dependencies": { "obug": "^2.0", "tinyglobby": "^0.2.12" }, "peerDependencies": { "vite": ">=5.0.0" } }, "sha512-q4UY9Bu0pngcbSmrsJBWbzz35Wzx4vAGMPaOIwZLo6TQ6I2n5/x0BL64GXmOxZ4SeDz+t+nDANKTBpp7CFF9AA=="],
 

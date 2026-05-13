@@ -155,13 +155,22 @@
                   <h5 class="project-title"><%= project[:title] %></h5>
                   <p class="project-description"><%= project[:description] %></p>
                 </div>
-                <button
-                  class="project-link-btn"
-                  data-action="click->project-carousel#next"
-                  aria-label="Next project"
-                >
-                  →
-                </button>
+                <div class="project-nav-btns">
+                  <button
+                    class="project-link-btn"
+                    data-action="click->project-carousel#previous"
+                    aria-label="Previous project"
+                  >
+                    ←
+                  </button>
+                  <button
+                    class="project-link-btn"
+                    data-action="click->project-carousel#next"
+                    aria-label="Next project"
+                  >
+                    →
+                  </button>
+                </div>
               </div>
               <% if project[:partial] %>
                 <div class="carousel-embed-container">
