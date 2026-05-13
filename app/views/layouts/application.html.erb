@@ -207,6 +207,7 @@
         width: 100%;
         height: 100%;
         z-index: 1;
+        contain: strict;
       "
     >
       <defs>
@@ -255,7 +256,7 @@
               <%= render 'layouts/distractionmodewrapper' do %>
                 <%= render 'layouts/locomotivescrollwrapper' do %>
                   <div class="layout-main">
-                    <header class="layout-header">
+                    <header class="layout-header" data-scroll-section>
                       <a href="/" class="layout-home-link" rel="noopener">George Baskerville</a>
                       <% nav_items = [
                         { title: "Posts", path: "/posts", external: false },
@@ -300,7 +301,7 @@
                         </ul>
                       </nav>
                     </header>
-                    <div class="flex-grow">
+                    <div class="flex-grow" data-scroll-section>
                       <main>
                         <div class="main">
                           <%= yield %>

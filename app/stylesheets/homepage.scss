@@ -103,6 +103,9 @@
 
 .hp-spacing {
   @apply mb-5;
+
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
 }
 
 .hp-header {
@@ -125,6 +128,9 @@
 
 .hp-section {
   @apply grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
+
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
 }
 
 .hp-proj-div {
@@ -159,6 +165,9 @@
 
 .hp-image-grid-container {
   @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
+
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
 }
 
 /* Project Carousel Styles */
