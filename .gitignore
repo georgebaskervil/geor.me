@@ -39,6 +39,12 @@
 
 /node_modules
 
+# Firefox profile dumps and their pickle caches
+/input.json
+/input.json.pkl
+/*.profile.json
+/*.profile.json.pkl
+
 **.DS_Store
 
 # Vite Ruby
