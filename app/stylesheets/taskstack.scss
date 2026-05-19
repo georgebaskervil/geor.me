@@ -239,7 +239,6 @@
     opacity 0.2s ease;
   touch-action: none;
   user-select: none;
-  will-change: transform, opacity, margin;
 
   &.is-dragging {
     opacity: 0.5;
@@ -418,7 +417,6 @@
   cursor: grab;
   user-select: none;
   z-index: 1;
-  will-change: transform, opacity, box-shadow;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;

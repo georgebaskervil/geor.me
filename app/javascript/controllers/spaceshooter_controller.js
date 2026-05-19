@@ -1,17 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
+import Phaser from "phaser";
 
-// Loads Phaser from CDN and runs the game inside the connected element
 export default class extends Controller {
   connect() {
-    // create a small loader for Phaser if not available globally
-    if (typeof Phaser === 'undefined') {
-      const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.min.js';
-      script.onload = () => this.startGame();
-      document.head.appendChild(script);
-    } else {
-      this.startGame();
-    }
+    this.startGame();
   }
 
   disconnect() {

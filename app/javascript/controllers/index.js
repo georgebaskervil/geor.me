@@ -16,9 +16,6 @@ application.register("cipher", CipherController);
 import ColoursquareController from "./coloursquare_controller";
 application.register("coloursquare", ColoursquareController);
 
-import CursorController from "./cursor_controller";
-application.register("cursor", CursorController);
-
 import DeepseekChatController from "./deepseek_chat_controller";
 application.register("deepseek-chat", DeepseekChatController);
 

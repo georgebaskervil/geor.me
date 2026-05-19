@@ -97,13 +97,6 @@ export class LiveUpdater {
       for (const element of this.elements) {
         if (element.textContent !== transformedData.toString()) {
           element.textContent = transformedData;
-
-          // Add a subtle flash animation to indicate update
-          element.style.transition = "color 0.3s ease";
-          element.style.color = "#10b981"; // green flash
-          setTimeout(() => {
-            element.style.color = "";
-          }, 300);
         }
       }
 
@@ -139,14 +132,6 @@ export class LiveUpdater {
 
 // Auto-initialize common live updaters when DOM is loaded
 document.addEventListener("DOMContentLoaded", () => {
-  // Request counter updater
-  new LiveUpdater({
-    endpoint: "/api/v1/stats/request_count",
-    selector: "[data-live-request-count]",
-    interval: 5000, // Update every 5 seconds
-    transform: (data) => data.count.toLocaleString(),
-  });
-
   // Time since counter updater
   new LiveUpdater({
     endpoint: "/api/v1/stats/time_since",

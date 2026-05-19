@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class VideosController < ApplicationController
-  skip_before_action :increment_request_counter
-
   def gta_optimised
     respond_to do |format|
       format.m3u8 { render content_type: "application/x-mpegURL" }

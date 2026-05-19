@@ -8,7 +8,6 @@ require "date" # Added to handle Date parsing
 require "feedjira"
 
 class ApplicationController < ActionController::Base
-  before_action :increment_request_counter
   before_action :set_custom_headers
   before_action :load_images
   before_action :load_articles
@@ -24,17 +23,6 @@ class ApplicationController < ActionController::Base
   end
 
   private
-
-  def increment_request_counter
-    # Only increment counter for HTML requests that are not API calls
-    return unless request.format.html? || request.accepts.include?("text/html")
-    return if request.path.start_with?("/api/")
-
-    # Database functionality removed; optionally log or do nothing
-    Rails.logger.info "Request counter incremented (no database)"
-  rescue StandardError => e
-    Rails.logger.error "Failed to increment request counter: #{e.message}"
-  end
 
   def set_custom_headers
     # Skip COEP headers for robustext and data to allow cross-origin iframe embed

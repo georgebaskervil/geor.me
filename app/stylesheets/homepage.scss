@@ -242,9 +242,6 @@
 
 .carousel-slides {
   @apply flex transition-transform duration-500 ease-in-out h-full;
-
-  /* Optimize for transform animations */
-  will-change: transform;
 }
 
 .carousel-slide {
@@ -252,9 +249,6 @@
   @apply opacity-0 pointer-events-none transition-opacity duration-500;
 
   height: 100%;
-
-  /* Optimize for opacity transitions */
-  will-change: opacity;
 
   &.active {
     @apply opacity-100 pointer-events-auto;
@@ -266,7 +260,6 @@
   @apply bg-gradient-to-t from-black/80 to-transparent;
   @apply text-white p-4;
 
-  backdrop-filter: blur(8px);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -296,7 +289,7 @@
   @apply transition-all duration-200;
   @apply flex items-center justify-center;
   @apply w-12 h-12 rounded-full;
-  @apply bg-white/20 backdrop-blur-sm;
+  @apply bg-white/30;
   @apply border border-white/30;
 
   flex-shrink: 0;

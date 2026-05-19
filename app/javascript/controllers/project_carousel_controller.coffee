@@ -22,25 +22,42 @@ export default class extends Controller
     
     return unless @hasSlidesTarget and @slideTargets.length > 0
     
+    @boundHandleTouchStart = @handleTouchStart.bind(@)
+    @boundHandleTouchEnd = @handleTouchEnd.bind(@)
     @initializeCarousel()
     @setupEventListeners()
     @startAutoAdvance()
+    @setupVisibilityObserver()
 
   disconnect: ->
     @pauseAllVideos()
     @stopAutoAdvance()
     @removeEventListeners()
+    @teardownVisibilityObserver()
+
+  setupVisibilityObserver: ->
+    @visibilityObserver = new IntersectionObserver (entries) =>
+      for entry in entries
+        if entry.isIntersecting
+          @startAutoAdvance()
+        else
+          @stopAutoAdvance()
+    , { threshold: 0.1 }
+    @visibilityObserver.observe(@element)
+
+  teardownVisibilityObserver: ->
+    @visibilityObserver?.disconnect()
 
   initializeCarousel: ->
     @showSlide(0)
 
   setupEventListeners: ->
-    @slidesTarget.addEventListener 'touchstart', @handleTouchStart.bind(@), { passive: true }
-    @slidesTarget.addEventListener 'touchend', @handleTouchEnd.bind(@), { passive: true }
+    @slidesTarget.addEventListener 'touchstart', @boundHandleTouchStart, { passive: true }
+    @slidesTarget.addEventListener 'touchend', @boundHandleTouchEnd, { passive: true }
 
   removeEventListeners: ->
-    @slidesTarget.removeEventListener 'touchstart', @handleTouchStart.bind(@), { passive: true }
-    @slidesTarget.removeEventListener 'touchend', @handleTouchEnd.bind(@), { passive: true }
+    @slidesTarget.removeEventListener 'touchstart', @boundHandleTouchStart
+    @slidesTarget.removeEventListener 'touchend', @boundHandleTouchEnd
 
   showSlide: (index) ->
     @pauseAllVideos()
@@ -115,6 +132,7 @@ export default class extends Controller
         @previousSlide()
 
   startAutoAdvance: ->
+    return if @autoAdvanceTimer
     @autoAdvanceTimer = setInterval =>
       @nextSlide()
     , @autoAdvanceIntervalValue
@@ -122,6 +140,7 @@ export default class extends Controller
   stopAutoAdvance: ->
     if @autoAdvanceTimer
       clearInterval(@autoAdvanceTimer)
+      @autoAdvanceTimer = null
 
   pauseAutoAdvance: ->
     @stopAutoAdvance()
