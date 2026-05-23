@@ -15,6 +15,17 @@ require "rails/test_unit/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Memory optimisation: Freeze string/regex literals
+require "freezolite"
+Freezolite.experimental_freeze_constants = true
+Freezolite.setup(
+  patterns: [ File.join(__dir__, "..", "**", "*.rb") ],
+  exclude_patterns: [
+    File.join(__dir__, "..", "vendor", "**"),
+    File.join(Gem.dir, "**")
+  ]
+)
+
 module PersonalWebsiteRailsWebpack
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.

@@ -8,12 +8,15 @@ require "date" # Added to handle Date parsing
 require "feedjira"
 
 class ApplicationController < ActionController::Base
+  include EnhancedCaching
+  
   before_action :set_custom_headers
   before_action :load_images
   before_action :load_articles
   before_action :set_all_posts
   before_action :set_latest_posts
   before_action :set_article, only: [ :show ]
+  after_action :apply_automatic_caching
 
   def show
     return unless @article.nil?
@@ -32,24 +35,19 @@ class ApplicationController < ActionController::Base
     end
     response.set_header("X-UA-Compatible", "IE=edge,chrome=1")
 
-    # Passenger Turbocache compatibility: only cache GET HTML responses in production
-    return unless Rails.env.production? && request.get? && (request.format.html? || request.accepts.include?("text/html"))
-
-      # Use a checksum of articles and images for ETag
-      etag = Digest::SHA256.hexdigest([ articles_checksum, images_checksum ].join(":"))
+    # Set enhanced ETag for content-based caching (used by automatic caching system)
+    if Rails.env.production? && request.get? && (request.format.html? || request.accepts.include?("text/html"))
+      # Use enhanced caching methods for better performance
+      etag_content = Digest::SHA256.hexdigest([ articles_checksum, images_checksum ].join(":"))
       last_modified = [ articles_last_modified, images_last_modified ].max
-      response.set_header("ETag", etag)
-      response.set_header("Last-Modified", last_modified.httpdate) if last_modified
-      # Turbocache maxes at 2 seconds, so set max-age=2 for shared cache
-      response.set_header("Cache-Control", "max-age=2, public")
-      # DO NOT set Vary header
-
-      # Handle conditional GET (304 Not Modified)
-      if request.headers["If-None-Match"] == etag ||
-         (request.headers["If-Modified-Since"] && last_modified &&
-          Time.httpdate(request.headers["If-Modified-Since"]) >= last_modified)
-        head :not_modified
-      end
+      
+      # Use enhanced fresh_when for optimal caching
+      fresh_when_enhanced(
+        etag_content: etag_content,
+        last_modified: last_modified,
+        public: true
+      )
+    end
   end
 
   def load_images
@@ -278,5 +276,107 @@ class ApplicationController < ActionController::Base
     return nil unless Dir.exist?(photos_dir)
 
     Dir.glob(photos_dir.join("**/*.avif")).map { |f| File.mtime(f) }.max
+  end
+
+  # Intelligent automatic caching based on response characteristics
+  def apply_automatic_caching
+    return if Rails.env.development? || Rails.env.test?
+    return if response.headers["Cache-Control"].present? # Skip if already set
+    return if skip_automatic_caching? # Skip if controller opted out
+    return unless Rails.application.config.automatic_caching.enabled
+
+    # Check for paths that should never be cached
+    if Rails.application.config.automatic_caching.no_cache_patterns.any? { |pattern| request.path.match?(pattern) }
+      response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+      response.headers["Pragma"] = "no-cache"
+      response.headers["Expires"] = "0"
+      log_caching_decision("no-cache", "matches no-cache pattern") if should_log_decisions?
+      return
+    end
+
+    # Determine response characteristics
+    response_size = estimate_response_size
+    is_get_request = request.get?
+    has_sensitive_data = sensitive_response_data?
+
+    # Apply caching strategy based on characteristics
+    if !is_get_request
+      # Don't cache non-GET requests
+      response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+      response.headers["Pragma"] = "no-cache"
+      response.headers["Expires"] = "0"
+      log_caching_decision("no-cache", "non-GET request") if should_log_decisions?
+
+    elsif has_sensitive_data
+      # Sensitive data - minimal caching
+      duration = Rails.application.config.automatic_caching.durations.sensitive
+      set_cache_headers(
+        duration: duration,
+        public: false,
+        must_revalidate: true
+      )
+      log_caching_decision("sensitive", "#{duration} private") if should_log_decisions?
+
+    elsif response_size <= Rails.application.config.automatic_caching.turbocache_max_size
+      # Small responses - perfect for turbocache
+      duration = Rails.application.config.automatic_caching.durations.turbocache
+      set_turbocache_headers(duration: duration, must_revalidate: true)
+      log_caching_decision("turbocache", "#{duration} public") if should_log_decisions?
+
+    elsif response_size > Rails.application.config.automatic_caching.large_response_min_size
+      # Large responses - longer cache duration
+      duration = Rails.application.config.automatic_caching.durations.large_public
+      set_cache_headers(
+        duration: duration,
+        public: true,
+        must_revalidate: true,
+        stale_while_revalidate: 300.seconds
+      )
+      log_caching_decision("large", "#{duration} public") if should_log_decisions?
+
+    else
+      # Medium responses - standard caching
+      duration = Rails.application.config.automatic_caching.durations.medium_public
+      set_cache_headers(
+        duration: duration,
+        public: true,
+        must_revalidate: true,
+        stale_while_revalidate: 60.seconds
+      )
+      log_caching_decision("medium", "#{duration} public") if should_log_decisions?
+    end
+  end
+
+  # Estimate response size for caching decisions
+  def estimate_response_size
+    body = response.body
+    return 0 unless body
+
+    # If body is a string, get its size
+    return body.bytesize if body.respond_to?(:bytesize)
+
+    # If body responds to join (like ActionView output), join and measure
+    return body.join.bytesize if body.respond_to?(:join)
+
+    # Default estimate for unknown body types
+    1024 # 1KB default
+  end
+
+  # Check if response contains sensitive data that shouldn't be cached long
+  def sensitive_response_data?
+    # Check configured sensitive patterns
+    Rails.application.config.automatic_caching.sensitive_patterns.any? do |pattern|
+      request.path.match?(pattern)
+    end
+  end
+
+  # Check if caching decisions should be logged
+  def should_log_decisions?
+    Rails.application.config.automatic_caching.log_decisions
+  end
+
+  # Log caching decisions for debugging
+  def log_caching_decision(strategy, details)
+    Rails.logger.info "[AutoCache] #{request.method} #{request.path} -> #{strategy} (#{details})"
   end
 end
