@@ -86,7 +86,7 @@ GEM
       smart_properties
     bigdecimal (4.1.2)
     bindex (0.8.1)
-    bootsnap (1.24.4)
+    bootsnap (1.24.5)
       msgpack (~> 1.2)
     brakeman (8.0.4)
       racc
@@ -179,6 +179,8 @@ GEM
       net-protocol
     nio4r (2.7.5)
     nokogiri (1.18.7-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.18.7-x86_64-linux-gnu)
       racc (~> 1.4)
     oj (3.16.17)
       bigdecimal (>= 3.0)
@@ -352,10 +354,11 @@ GEM
 
 PLATFORMS
   arm64-darwin-24
+  x86_64-linux
 
 DEPENDENCIES
   better_html
-  bootsnap (= 1.24.4)
+  bootsnap (= 1.24.5)
   brakeman
   capybara
   debug

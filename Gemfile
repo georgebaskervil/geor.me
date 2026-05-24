@@ -9,7 +9,7 @@ plugin "bundler-age_gate"
 ruby "3.3.7"
 
 gem "better_html"
-gem "bootsnap", "1.24.4", require: false
+gem "bootsnap", "1.24.5", require: false
 gem "feedjira"
 gem "kramdown"
 gem "nokogiri", "1.18.7"
