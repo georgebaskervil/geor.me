@@ -47,6 +47,7 @@ ENV PATH=/usr/local/bun/bin:$PATH
 RUN curl -fsSL https://bun.sh/install | bash -s -- "bun-v${BUN_VERSION}"
 
 # Install node modules
+COPY scripts/bun-age-gate.mjs scripts/bun-age-gate.mjs
 COPY package.json bun.lock ./
 RUN --mount=type=cache,id=bld-bun-cache,target=/root/.bun \
   bun install --frozen-lockfile
