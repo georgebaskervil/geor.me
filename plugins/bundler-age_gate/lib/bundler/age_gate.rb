@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "age_gate/version"
+require 'bundler/plugin/api'
 
-module Bundler
-  module AgeGate
-    class Error < StandardError; end
-  end
+# Automatic age gate enforcement before bundle install
+Bundler::Plugin::API.hook('before-install-all') do |_dependencies|
+  next if ENV['BUNDLER_AGE_GATE_RAN'] == '1'
+
+  ENV['BUNDLER_AGE_GATE_RAN'] = '1'
+  abort 'Gem age gate failed - bundle install blocked' unless system('ruby', 'scripts/gem-age-gate.rb')
 end

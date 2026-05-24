@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "lib/bundler/age_gate"
 require_relative "lib/bundler/age_gate/command"
 
 class AgeCheck < Bundler::Plugin::API

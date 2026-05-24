@@ -40,8 +40,19 @@ RUN --mount=type=cache,id=dev-apt-cache,sharing=locked,target=/var/cache/apt \
 
 FROM prebuild AS bun
 
+# Install Node.js 22.12+ for Vite compatibility
+RUN --mount=type=cache,id=dev-apt-cache,sharing=locked,target=/var/cache/apt \
+  --mount=type=cache,id=dev-apt-lib,sharing=locked,target=/var/lib/apt \
+  apt-get update -qq \
+  && apt-get install --no-install-recommends -y ca-certificates gnupg \
+  && mkdir -p /etc/apt/keyrings \
+  && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+  && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main" > /etc/apt/sources.list.d/nodesource.list \
+  && apt-get update -qq \
+  && apt-get install --no-install-recommends -y nodejs
+
 # Install Bun
-ARG BUN_VERSION=1.2.2
+ARG BUN_VERSION=1.2.4
 ENV BUN_INSTALL=/usr/local/bun
 ENV PATH=/usr/local/bun/bin:$PATH
 RUN curl -fsSL https://bun.sh/install | bash -s -- "bun-v${BUN_VERSION}"
