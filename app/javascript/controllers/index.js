@@ -76,8 +76,8 @@ application.register("integra", IntegraController);
 import JuliaController from "./julia_controller";
 application.register("julia", JuliaController);
 
-import LocomotiveScrollController from "./locomotive_scroll_controller";
-application.register("locomotive-scroll", LocomotiveScrollController);
+import LenisController from "./lenis_controller";
+application.register("lenis", LenisController);
 
 import MatrixtransformationsController from "./matrixtransformations_controller";
 application.register("matrixtransformations", MatrixtransformationsController);
@@ -150,3 +150,9 @@ application.register("react-mount", ReactMountController);
 
 import SpaceshooterController from "./spaceshooter_controller";
 application.register("spaceshooter", SpaceshooterController);
+
+import OnekoController from "./oneko_controller";
+application.register("oneko", OnekoController);
+
+import CursorController from "./cursor_controller";
+application.register("cursor", CursorController);

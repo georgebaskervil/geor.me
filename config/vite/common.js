@@ -447,7 +447,7 @@ export function createBabelOptions(pathModule) {
                 !id.includes("@hotwired/stimulus") &&
                 !id.includes("@huggingface/jinja") &&
                 !id.includes("onnxruntime-web") &&
-                !id.includes("locomotive-scroll") &&
+                !id.includes("lenis") &&
                 /\.(js|coffee)$/.test(id)
             );
         },

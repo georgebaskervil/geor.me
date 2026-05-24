@@ -4,3 +4,4 @@ export { default as TaskBlock } from "./TaskBlock.vue";
 export { default as TaskCreator } from "./TaskCreator.vue";
 export { default as HomeControlPanel } from "./HomeControlPanel.jsx";
 export { default as DeviceManagement } from "./DeviceManagement.jsx";
+export { default as CursorFxWrapper } from "./CursorFxWrapper.vue";
