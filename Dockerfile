@@ -66,7 +66,7 @@ RUN --mount=type=cache,id=bld-bun-cache,target=/root/.bun \
 FROM prebuild AS build
 
 # Install application gems
-COPY Gemfile Gemfile.lock plugins/ ./
+COPY Gemfile Gemfile.lock plugins ./
 RUN --mount=type=cache,id=bld-gem-cache,sharing=locked,target=/srv/vendor \
   bundle config set app_config .bundle \
   && bundle config set path /srv/vendor \
