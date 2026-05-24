@@ -180,6 +180,8 @@ GEM
     nio4r (2.7.5)
     nokogiri (1.18.7-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.18.7-x86_64-linux-gnu)
+      racc (~> 1.4)
     oj (3.16.17)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
@@ -352,6 +354,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-24
+  x86_64-linux
 
 DEPENDENCIES
   better_html
