@@ -52,7 +52,7 @@ RUN --mount=type=cache,id=dev-apt-cache,sharing=locked,target=/var/cache/apt \
   && apt-get install --no-install-recommends -y nodejs
 
 # Install Bun
-ARG BUN_VERSION=1.2.4
+ARG BUN_VERSION=1.3.14
 ENV BUN_INSTALL=/usr/local/bun
 ENV PATH=/usr/local/bun/bin:$PATH
 RUN curl -fsSL https://bun.sh/install | bash -s -- "bun-v${BUN_VERSION}"
