@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus";
-import Phaser from "phaser";
 
 export default class extends Controller {
   connect() {

@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import Plotly from "plotly.js-dist"
+import * as Plotly from "plotly.js-dist";
 
 export default class extends Controller
   @targets = ["plot", "wavelength", "slitCount", "slitWidth", "slitSpacing"]

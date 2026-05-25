@@ -115,7 +115,6 @@ export function createTerserOptions(isDevelopment) {
             bare_returns: false,
             html5_comments: false,
             shebang: false,
-            ecma: 2020, // Modern parsing
         },
         compress: {
             defaults: true,
@@ -131,7 +130,6 @@ export function createTerserOptions(isDevelopment) {
             directives: true,
             drop_console: true,
             drop_debugger: true,
-            ecma: 2020, // Modern compression
             evaluate: true,
             expression: false,
             global_defs: {},
@@ -206,7 +204,6 @@ export function createTerserOptions(isDevelopment) {
             beautify: false,
             braces: false,
             comments: "some",
-            ecma: 2020,
             indent_level: 0,
             inline_script: true,
             keep_numbers: false,
@@ -227,13 +224,10 @@ export function createTerserOptions(isDevelopment) {
 export function createRollupOutputConfig() {
     return {
         minifyInternalExports: true,
-        inlineDynamicImports: false,
-        compact: true,
+        // Use codeSplitting instead of inlineDynamicImports (deprecated)
+        // codeSplitting: true is the modern way to control dynamic imports
         generatedCode: {
             preset: "es2015",
-            arrowFunctions: true,
-            constBindings: true,
-            objectShorthand: true,
         },
     };
 }
@@ -242,11 +236,20 @@ export function createCommonBuild({ isDevelopment, rollupInput } = {}) {
     const build = {
         cache: isDevelopment,
         rollupOptions: {
+            input: rollupInput,
+            external: (id) => {
+                // Mark problematic large libraries as external to prevent bundling/parsing errors
+                const problematicDeps = [
+                    "three",
+                    "phaser",
+                    "plotly.js-dist",
+                ];
+                return problematicDeps.some(dep => id.includes(dep));
+            },
             output: createRollupOutputConfig(),
             treeshake: {
                 moduleSideEffects: true,
                 propertyReadSideEffects: false,
-                tryCatchDeoptimization: false,
                 unknownGlobalSideEffects: false,
             },
         },
@@ -438,19 +441,13 @@ export const commonLegacyOptions = {
 
 export function createBabelOptions(pathModule) {
     return {
-        filter: (id) => {
-            const base = pathModule.basename(id || "").toLowerCase();
-            if (base === "textcomplete.min.js" || base === "ort-web.min.js") {
-                return false;
-            }
-            return (
-                !id.includes("@hotwired/stimulus") &&
-                !id.includes("@huggingface/jinja") &&
-                !id.includes("onnxruntime-web") &&
-                !id.includes("lenis") &&
-                /\.(js|coffee)$/.test(id)
-            );
-        },
+        // Use include/exclude instead of deprecated filter pattern
+        include: /\.(js|coffee)$/,
+        exclude: [
+            /node_modules\/(@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|plotly\.js-dist|phaser|@vue\/runtime-core)/,
+            /textcomplete\.min\.js$/,
+            /ort-web\.min\.js$/,
+        ],
         babelConfig: {
             babelrc: false,
             configFile: false,

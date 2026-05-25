@@ -16,7 +16,7 @@ import stylehacks from "stylehacks";
 import postcssMqOptimize from "postcss-mq-optimize";
 import autoprefixer from "autoprefixer";
 import nodePolyfills from "rollup-plugin-polyfill-node";
-import legacy from "vite-plugin-legacy-swc";
+// import legacy from "vite-plugin-legacy-swc"; // TODO: Disabled due to Rolldown compatibility issues
 import vitePluginBundleObfuscator from "vite-plugin-bundle-obfuscator";
 import { purgePolyfills } from "unplugin-purge-polyfills";
 import replacements from "./vendor/javascript/unplugin-replacements/lib/vite.js";
@@ -146,7 +146,14 @@ export default defineConfig(({ mode }) => {
         "@sentry/browser",
         "stimulus-use",
       ],
-      exclude: ["@hotwired/turbo", "@wllama/wllama/esm/index.js"],
+      exclude: [
+        "@hotwired/turbo",
+        "@wllama/wllama/esm/index.js",
+        "three", // Problematic parsing with duplicate identifiers
+        "phaser", // Large game library with bundling issues
+        "plotly.js-dist", // Stack overflow issues
+        "@vue/runtime-core", // Babel traversal issues
+      ],
       ...createOptimizeDepsForce(isDevelopment),
     },
 
@@ -160,7 +167,9 @@ export default defineConfig(({ mode }) => {
       nodePolyfills(),
       purgePolyfills.vite(),
       replacements(),
-      legacy(commonLegacyOptions),
+      // TODO: vite-plugin-legacy-swc has compatibility issues with Rolldown
+      // Disabled for now - legacy browser support can be re-enabled with updated plugin
+      // legacy(commonLegacyOptions),
       babel(createBabelOptions(path)),
       rubyPlugin(),
       stimulusHMR(),

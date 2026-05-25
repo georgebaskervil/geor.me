@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import FFT from "fft.js";
-import Plotly from "plotly.js-dist";
+import * as Plotly from "plotly.js-dist";
 
 // Helper function moved to outer scope.
 function writeString(view, offset, string) {

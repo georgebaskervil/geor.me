@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en-GB" dir="ltr">
   <head>
+    <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?flags=gated&unknown=polyfill"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.90.0/phaser.min.js" integrity="sha384-AvQiDMZAVLda3VtAoU5MCfBz8pzXhteb2CiUJeKBmPlWzpXj1uJ96Km11+YuFNu/" crossorigin="anonymous"></script>
+    <% if Rails.env.production? %>
+      <script
+        async
+        defer
+        src="/umami/script.js"
+        data-website-id="77d51e44-cbc3-43da-8dd8-f4e21d38c495"
+      ></script>
+    <% end %>
     <%# Page metadata (using helper methods defined in ApplicationHelper) -%>
     <%- site_name_text = site_name -%>
     <%- specific_page_title = page_specific_title(@article) -%>
@@ -29,12 +39,8 @@
     <%-# Icons -%>
     <%- favicon_path = vite_asset_path("~/images/favicon.jpg") -%>
     <!--Preconnects and DNS prefetches-->
-    <link rel="dns-prefetch" href="<%= domain %>">
-    <link rel="preconnect" href="<%= domain %>">
     <link rel="dns-prefetch" href="r2.<%= domain %>">
     <link rel="preconnect" href="r2.<%= domain %>">
-    <link rel="dns-prefetch" href="cloud.umami.is">
-    <link rel="preconnect" href="cloud.umami.is">
     <%= yield :specifcstylesheets %>
     <%= vite_stylesheet_tag "~/stylesheets/application.scss" %>
     <link
@@ -45,25 +51,13 @@
       crossorigin="anonymous"
     >
     <%= vite_javascript_tag "~/javascript/application.js" %>
-    <% if Rails.env.production? %>
-      <script
-        async
-        defer
-        src="/umami/script.js"
-        data-website-id="77d51e44-cbc3-43da-8dd8-f4e21d38c495"
-      ></script>
-    <% end %>
     <!--Basic HTML metadata-->
     <meta charset="utf-8">
     <meta
       name="viewport"
       content="width=device-width,initial-scale=1,viewport-fit=cover"
     >
-    <meta name="description" content="<%= page_description %>">
-    <meta name="keywords" content="<%= page_keywords %>">
-    <meta name="image" content="<%= preview_image %>">
-    <meta name="theme-color" content="<%= theme_color %>">
-    <meta name="robots" content="all">
+    <meta name="robots" content="noindex, nofollow">
     <meta name="referrer" content="no-referrer-when-downgrade">
     <% if published_date.present? %>
       <meta name="article:published_time" content="<%= published_date %>">
@@ -75,114 +69,8 @@
     <!--Title and icons-->
     <title><%= full_page_title %></title>
     <link rel="canonical" href="<%= current_url %>">
-    <link rel="home" href="<%= homepage %>">
     <link rel="shortcut icon" href="<%= favicon_path %>" type="image/x-icon">
     <link rel="apple-touch-icon" href="<%= favicon_path %>" type="image/x-icon">
-    <!--Schema.org metadata-->
-    <script type="application/ld+json">
-    <%= raw(
-      if content_type == "article"
-        {
-          "@context": "https://schema.org",
-          "@type": "Article",
-          "headline": specific_page_title,
-          "name": specific_page_title,
-          "description": page_description,
-          "image": preview_image,
-          "url": current_url,
-          "inLanguage": locale,
-          "datePublished": published_date,
-          "dateModified": modified_date,
-          "articleSection": section,
-          "keywords": article_tags.join(", "),
-          "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": current_url
-          },
-          "author": {
-            "@type": "Person",
-            "name": author,
-            "url": homepage
-          },
-          "publisher": {
-            "@type": "Person",
-            "name": "George Baskerville",
-            "url": homepage
-          }
-        }.to_json
-      else
-        {
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          "name": site_name_text,
-          "url": base_url,
-          "description": page_description,
-          "image": preview_image,
-          "inLanguage": locale,
-          "author": {
-            "@type": "Person",
-            "name": "George Baskerville",
-            "url": base_url,
-            "sameAs": social_links.map { |link| link[:url] }
-          },
-          "publisher": {
-            "@type": "Person",
-            "name": "George Baskerville",
-            "url": base_url
-          }
-        }.to_json
-      end
-    ) %>
-    </script>
-    <!--Open Graph metadata-->
-    <meta property="og:site_name" content="<%= site_name_text %>">
-    <meta
-      property="og:title"
-      content="<%= specific_page_title.present? ? specific_page_title : site_name_text %>"
-    >
-    <meta property="og:type" content="<%= content_type %>">
-    <meta property="og:url" content="<%= current_url %>">
-    <meta property="og:image" content="<%= preview_image %>">
-    <meta property="og:image:url" content="<%= preview_image %>">
-    <meta property="og:image:secure_url" content="<%= preview_image %>">
-    <meta property="og:image:type" content="<%= preview_image_type %>">
-    <meta property="og:image:width" content="<%= preview_image_width %>">
-    <meta property="og:image:height" content="<%= preview_image_height %>">
-    <meta property="og:image:alt" content="<%= preview_image_alt %>">
-    <meta property="og:description" content="<%= page_description %>">
-    <meta property="og:locale" content="<%= locale %>">
-    <% if published_date.present? %>
-      <meta property="article:published_time" content="<%= published_date %>">
-    <% end %>
-    <% if modified_date.present? %>
-      <meta property="article:modified_time" content="<%= modified_date %>">
-    <% end %>
-    <meta property="article:author" content="<%= author %>">
-    <% if section.present? %>
-      <meta property="article:section" content="<%= section %>">
-    <% end %>
-    <% article_tags.each do |tag| %>
-      <meta property="article:tag" content="<%= tag %>">
-    <% end %>
-    <!--Twitter/X Card metadata-->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:domain" content="<%= domain %>">
-    <meta name="twitter:site" content="<%= twitter_handle %>">
-    <meta name="twitter:creator" content="<%= twitter_handle %>">
-    <meta
-      name="twitter:title"
-      content="<%= specific_page_title.present? ? specific_page_title : site_name_text %>"
-    >
-    <meta name="twitter:description" content="<%= page_description %>">
-    <meta name="twitter:image" content="<%= preview_image %>">
-    <meta name="twitter:image:alt" content="<%= preview_image_alt %>">
-    <meta name="twitter:url" content="<%= current_url %>">
-    <!--Windows Pin metadata-->
-    <meta
-      name="msapplication-tooltip"
-      content="Open George Baskerville's Personal Website"
-    >
-    <meta name="msapplication-starturl" content="/">
     <!--Mobile web app metadata-->
     <meta name="mobile-web-app-capable" content="no">
     <meta name="apple-mobile-web-app-capable" content="no">

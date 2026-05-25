@@ -181,6 +181,16 @@ export default function typehints(options = {}) {
             )
                 return;
 
+            // Skip files known to cause issues with type hints processing
+            const problematicFiles = [
+                "/useDragDrop.js", // Stack overflow with complex Vue composables
+                "plotly.js", // Stack overflow with deep type inference
+                "three.module.js", // Syntax/scope issues
+                "three.core.js", // Duplicate identifier issues
+                "phaser.js", // Large game library
+            ];
+            if (problematicFiles.some(f => cleanId.includes(f))) return;
+
             // Skip very large files to avoid heavy TS inference (configurable via env in the future)
             const MAX_FILE_BYTES = 150_000; // ~150 KB
             if (!processEverything) {
