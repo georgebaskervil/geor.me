@@ -106,14 +106,10 @@ RUN groupadd --system --gid 1000 rails \
   && chown -R 1000:1000 log storage tmp /data
 USER 1000:1000
 
-# Deployment options (production only - YJIT enabled for performance)
-ENV RUBY_YJIT_ENABLE="1"
-
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
-ENV RUBYOPT="--yjit --yjit-exec-mem-size=200 --yjit-mem-size=256 --yjit-call-threshold=20 --yjit-disable"
 EXPOSE 3000
 VOLUME /data
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
