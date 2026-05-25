@@ -36,6 +36,35 @@ import {
 } from "./config/vite/common.js";
 import path from "node:path";
 
+function checkBareSpecifiersPlugin() {
+  const staticImportPattern = /(?:\b(?:import|export)\b[^;]{0,200}?\bfrom\s+['"]([^./][^'"]*)['"])/g;
+  const dynamicImportPattern = /\bimport\(\s*['"]([^./][^'"]*)['"]\)/g;
+
+  return {
+    name: "check-bare-specifiers",
+    apply: "build",
+    writeBundle(_options, bundle) {
+      const errors = [];
+      for (const fileName of Object.keys(bundle)) {
+        const chunk = bundle[fileName];
+        if (chunk.type !== "chunk" || typeof chunk.code !== "string") continue;
+        let match;
+        while ((match = staticImportPattern.exec(chunk.code))) {
+          errors.push(`${fileName}:${match.index} import from ${match[1]}`);
+        }
+        while ((match = dynamicImportPattern.exec(chunk.code))) {
+          errors.push(`${fileName}:${match.index} dynamic import ${match[1]}`);
+        }
+      }
+      if (errors.length > 0) {
+        this.error(
+          `Bare module specifiers found in generated bundles:\n${errors.slice(0, 20).join("\n")}`,
+        );
+      }
+    },
+  };
+}
+
 export default defineConfig(({ mode }) => {
   const isDevelopment = mode === "development";
 
@@ -149,8 +178,6 @@ export default defineConfig(({ mode }) => {
       exclude: [
         "@hotwired/turbo",
         "@wllama/wllama/esm/index.js",
-        "three", // Problematic parsing with duplicate identifiers
-        "phaser", // Large game library with bundling issues
         "plotly.js-dist", // Stack overflow issues
         "@vue/runtime-core", // Babel traversal issues
       ],
@@ -167,6 +194,7 @@ export default defineConfig(({ mode }) => {
       nodePolyfills(),
       purgePolyfills.vite(),
       replacements(),
+      checkBareSpecifiersPlugin(),
       // TODO: vite-plugin-legacy-swc has compatibility issues with Rolldown
       // Disabled for now - legacy browser support can be re-enabled with updated plugin
       // legacy(commonLegacyOptions),

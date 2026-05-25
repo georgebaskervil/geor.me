@@ -240,8 +240,6 @@ export function createCommonBuild({ isDevelopment, rollupInput } = {}) {
             external: (id) => {
                 // Mark problematic large libraries as external to prevent bundling/parsing errors
                 const problematicDeps = [
-                    "three",
-                    "phaser",
                     "plotly.js-dist",
                 ];
                 return problematicDeps.some(dep => id.includes(dep));
@@ -444,7 +442,7 @@ export function createBabelOptions(pathModule) {
         // Use include/exclude instead of deprecated filter pattern
         include: /\.(js|coffee)$/,
         exclude: [
-            /node_modules\/(@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|plotly\.js-dist|phaser|@vue\/runtime-core)/,
+            /node_modules\/(?:@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|plotly\.js-dist|@vue\/runtime-core|three)/,
             /textcomplete\.min\.js$/,
             /ort-web\.min\.js$/,
         ],
