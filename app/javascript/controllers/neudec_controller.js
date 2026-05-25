@@ -1,6 +1,21 @@
 import { Controller } from "@hotwired/stimulus";
 import FFT from "fft.js";
-import * as Plotly from "plotly.js-dist";
+
+// Use CDN-provided Plotly when bundling excludes it
+const Plotly =
+  typeof window !== "undefined" && window.Plotly
+    ? window.Plotly
+    : typeof globalThis.Plotly !== "undefined"
+      ? globalThis.Plotly
+      : null;
+
+function ensurePlotly() {
+  if (Plotly) return true;
+  console.error(
+    "Plotly not loaded — include the CDN script before the app bundle.",
+  );
+  return false;
+}
 
 // Helper function moved to outer scope.
 function writeString(view, offset, string) {
@@ -209,6 +224,7 @@ export default class extends Controller {
           xaxis: { title: "Index" },
           yaxis: { title: "Amplitude" },
         };
+        if (!ensurePlotly()) return;
         console.log("Plotting analysis data.");
         Plotly.newPlot(this.analysisPlotTarget, [trace1, trace2], layout);
       })

@@ -37,7 +37,7 @@ import {
 import path from "node:path";
 
 function checkBareSpecifiersPlugin() {
-  const staticImportPattern = /(?:\b(?:import|export)\b[^;]{0,200}?\bfrom\s+['"]([^./][^'"]*)['"])/g;
+  const staticImportPattern = /(?:\b(?:import|export)\b[^;]{0,200}?\bfrom\s*['"]([^./][^'"]*)['"])/g;
   const dynamicImportPattern = /\bimport\(\s*['"]([^./][^'"]*)['"]\)/g;
 
   return {
