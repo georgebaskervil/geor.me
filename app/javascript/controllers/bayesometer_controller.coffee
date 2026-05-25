@@ -1,5 +1,17 @@
 import { Controller } from "@hotwired/stimulus"
-import * as Plotly from "plotly.js-dist";
+
+# Use CDN-provided Plotly when bundling excludes it
+if typeof window isnt 'undefined' and window.Plotly?
+  Plotly = window.Plotly
+else if typeof Plotly isnt 'undefined'
+  Plotly = Plotly
+else
+  Plotly = null
+
+ensurePlotly = ->
+  return true if Plotly?
+  console.error "Plotly not loaded — include the CDN script before the app bundle."
+  return false
 
 export default class extends Controller
   @targets = [
@@ -118,6 +130,7 @@ export default class extends Controller
     @validResultsTarget.style.display = "block"
 
   updatePlot: (ph, pth, ptnh, pht) ->
+    return unless ensurePlotly()
     n = 100
     xVals = (i / n for i in [0...n])
     yVals = (i / n for i in [0...n])

@@ -1,5 +1,17 @@
 import { Controller } from "@hotwired/stimulus"
-import * as Plotly from "plotly.js-dist";
+
+# Use CDN-provided Plotly when bundling excludes it
+if typeof window isnt 'undefined' and window.Plotly?
+  Plotly = window.Plotly
+else if typeof Plotly isnt 'undefined'
+  Plotly = Plotly
+else
+  Plotly = null
+
+ensurePlotly = ->
+  return true if Plotly?
+  console.error "Plotly not loaded — include the CDN script before the app bundle."
+  return false
 
 export default class extends Controller
   @targets = ["plot", "wavelength", "slitCount", "slitWidth", "slitSpacing"]
@@ -27,6 +39,7 @@ export default class extends Controller
     @maxWidth = 5
 
   update: ->
+    return unless ensurePlotly()
     lambda = @wavelengthValue * 1e-9
     k = 2 * Math.PI / lambda
     w = @slitWidthValue * lambda

@@ -178,7 +178,7 @@ export default defineConfig(({ mode }) => {
       exclude: [
         "@hotwired/turbo",
         "@wllama/wllama/esm/index.js",
-        "plotly.js-dist", // Stack overflow issues
+        "plotly.js-dist", // Terser minification errors
         "@vue/runtime-core", // Babel traversal issues
       ],
       ...createOptimizeDepsForce(isDevelopment),
