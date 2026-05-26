@@ -36,6 +36,42 @@ import {
 } from "./config/vite/common.js";
 import path from "node:path";
 
+/** Inline browserify global detection in emulators (core-js) so it cannot collide with other minified top-level bindings. */
+function fixEmulatorsGlobalShimPlugin() {
+  const inlinedGlobal =
+    '(typeof globalThis!="undefined"?globalThis:typeof self!="undefined"?self:typeof window!="undefined"?window:{})';
+  const patterns = [
+    /\.call\(this,void 0!==\w+\?\w+:"undefined"!=typeof self\?self:"undefined"!=typeof window\?window:\{\}\)/g,
+    /\.call\(this,"undefined"!=typeof global\?global:"undefined"!=typeof self\?self:"undefined"!=typeof window\?window:\{\}\)/g,
+  ];
+
+  const patch = (code) => {
+    let next = code;
+    for (const pattern of patterns) {
+      next = next.replace(pattern, `.call(this,${inlinedGlobal})`);
+    }
+    return next === code ? null : next;
+  };
+
+  return {
+    name: "fix-emulators-global-shim",
+    transform(code, id) {
+      if (!id.includes("node_modules/emulators")) return;
+      const next = patch(code);
+      if (!next) return;
+      return { code: next, map: null };
+    },
+    renderChunk(code, chunk) {
+      if (chunk.type !== "chunk" || !chunk.fileName.includes("vendor-modules")) {
+        return;
+      }
+      const next = patch(code);
+      if (!next) return;
+      return { code: next, map: null };
+    },
+  };
+}
+
 function checkBareSpecifiersPlugin() {
   const staticImportPattern = /(?:\b(?:import|export)\b[^;]{0,200}?\bfrom\s*['"]([^./][^'"]*)['"])/g;
   const dynamicImportPattern = /\bimport\(\s*['"]([^./][^'"]*)['"]\)/g;
@@ -194,6 +230,7 @@ export default defineConfig(({ mode }) => {
       nodePolyfills(),
       purgePolyfills.vite(),
       replacements(),
+      fixEmulatorsGlobalShimPlugin(),
       checkBareSpecifiersPlugin(),
       // TODO: vite-plugin-legacy-swc has compatibility issues with Rolldown
       // Disabled for now - legacy browser support can be re-enabled with updated plugin

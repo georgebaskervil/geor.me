@@ -195,7 +195,7 @@ export function createTerserOptions(isDevelopment) {
             eval: false,
             keep_classnames: false,
             keep_fnames: false,
-            reserved: [],
+            reserved: ["global", "globalThis"],
             toplevel: true,
             safari10: false,
         },
@@ -426,9 +426,11 @@ export function wrapPluginsWithBuildStartTiming(
     });
 }
 
-export const commonDefine = {
-    global: "globalThis",
-};
+// Do not map `global` → `globalThis` here: browserify bundles (emulators/core-js)
+// detect the real global via `typeof global` / window / self. Replacing `global`
+// bakes `globalThis` into the chunk and Terser can mangle it into the same
+// symbol as unrelated code (e.g. React), breaking core-js shared-store init.
+export const commonDefine = {};
 
 export const commonLegacyOptions = {
     targets: ["chrome 142"],
