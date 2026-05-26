@@ -43,6 +43,8 @@ function fixEmulatorsGlobalShimPlugin() {
   const patterns = [
     /\.call\(this,void 0!==\w+\?\w+:"undefined"!=typeof self\?self:"undefined"!=typeof window\?window:\{\}\)/g,
     /\.call\(this,"undefined"!=typeof global\?global:"undefined"!=typeof self\?self:"undefined"!=typeof window\?window:\{\}\)/g,
+    /\}\("undefined"!=typeof global\?global:"undefined"!=typeof self\?self:"undefined"!=typeof window\?window:\{\}\)/g,
+    /\}\("undefined"!=typeof globalThis\?globalThis:"undefined"!=typeof self\?self:"undefined"!=typeof window\?window:\{\}\)/g,
   ];
 
   const patch = (code) => {
@@ -62,7 +64,11 @@ function fixEmulatorsGlobalShimPlugin() {
       return { code: next, map: null };
     },
     renderChunk(code, chunk) {
-      if (chunk.type !== "chunk" || !chunk.fileName.includes("vendor-modules")) {
+      if (
+        chunk.type !== "chunk" ||
+        (!chunk.fileName.includes("vendor-modules") &&
+          !chunk.fileName.includes("emulators"))
+      ) {
         return;
       }
       const next = patch(code);

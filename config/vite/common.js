@@ -229,6 +229,13 @@ export function createRollupOutputConfig() {
         generatedCode: {
             preset: "es2015",
         },
+        manualChunks(id) {
+            // Keep browserify/CJS packages out of the shared vendor chunk so
+            // Terser top-level mangling cannot cross-contaminate module registries.
+            if (id.includes("node_modules/emulators")) {
+                return "emulators";
+            }
+        },
     };
 }
 
@@ -264,7 +271,12 @@ export function createCommonBuild({ isDevelopment, rollupInput } = {}) {
         target: ["esnext"],
         modulePreload: { polyfill: true },
         cssCodeSplit: true,
-        assetsInlineLimit: 500000,
+        // Prebuilt emulator assets must stay as real URLs for <script src> / fetch hijacks.
+        assetsInlineLimit(filePath, content) {
+            if (filePath.includes("node_modules/emulators/")) return false;
+            if (filePath.endsWith(".wasm")) return false;
+            return content.length <= 500000;
+        },
         cssTarget: ["esnext"],
         sourcemap: false,
         chunkSizeWarningLimit: 2147483647,

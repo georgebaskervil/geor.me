@@ -1,7 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import * as THREE from "three";
-/* global emulators */
-import "emulators";
+import { loadEmulators } from "../utils/loadEmulators.js";
 import spaceTexture from "~/images/space.png";
 import doomFiles from "~/libs/doom_shareware.jsdos";
 
@@ -84,6 +83,7 @@ export default class extends Controller {
       const arrayBuffer = await bundle.arrayBuffer();
       const array = new Uint8Array(arrayBuffer);
 
+      const emulators = await loadEmulators();
       this.ci = await emulators.dosWorker(array);
       const rgba = new Uint8ClampedArray(320 * 200 * 4);
 
