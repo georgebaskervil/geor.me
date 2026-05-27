@@ -211,6 +211,23 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Resolve path only if it is a regular file under app/articles (blocks traversal).
+  def safe_articles_file_path(path)
+    return if path.blank?
+
+    articles_root = Rails.root.join("app/articles").expand_path
+    absolute = File.expand_path(path)
+    return unless File.file?(absolute)
+
+    real = File.realpath(absolute)
+    prefix = "#{articles_root}#{File::SEPARATOR}"
+    return real if real == articles_root.to_s || real.start_with?(prefix)
+
+    nil
+  rescue Errno::ENOENT, Errno::ELOOP, Errno::ENOTDIR
+    nil
+  end
+
   def set_latest_posts
     @latest_posts = @all_posts&.first(4) || []
   end

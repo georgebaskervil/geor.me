@@ -56,3 +56,6 @@ node_modules
 
 # Million Lint
 .million
+
+# Cursor hook session state (auto-generated per machine/session)
+.cursor/hooks/state/
