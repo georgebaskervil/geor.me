@@ -184,7 +184,7 @@ export function createTerserOptions(isDevelopment) {
             unsafe_comps: true,
             unsafe_Function: true,
             unsafe_math: true,
-            unsafe_symbols: true,
+            unsafe_symbols: false,
             unsafe_methods: true,
             unsafe_proto: true,
             unsafe_regexp: true,
