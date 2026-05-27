@@ -78,6 +78,29 @@ function fixEmulatorsGlobalShimPlugin() {
   };
 }
 
+/** Fail the build if vendor chunks contain Terser-style `0|ref.get()` corruption. */
+function verifyVendorChunksPlugin() {
+  const corruptPattern = /\b0\|[a-zA-Z_$][\w$]*\.get\(/;
+
+  return {
+    name: "verify-vendor-chunks",
+    apply: "build",
+    writeBundle(_options, bundle) {
+      for (const [fileName, chunk] of Object.entries(bundle)) {
+        if (chunk.type !== "chunk") continue;
+        if (!fileName.includes("vue-vendor") && !fileName.includes("react-vendor")) {
+          continue;
+        }
+        if (corruptPattern.test(chunk.code)) {
+          this.error(
+            `Vendor chunk ${fileName} contains unsafe minifier output (0|ref.get). Use esbuild minify or disable Terser unsafe.* options.`,
+          );
+        }
+      }
+    },
+  };
+}
+
 function checkBareSpecifiersPlugin() {
   const staticImportPattern = /(?:\b(?:import|export)\b[^;]{0,200}?\bfrom\s*['"]([^./][^'"]*)['"])/g;
   const dynamicImportPattern = /\bimport\(\s*['"]([^./][^'"]*)['"]\)/g;
@@ -228,15 +251,18 @@ export default defineConfig(({ mode }) => {
 
     /** Plugins */
     plugins: [
-      MillionLint.vite({
-        enabled: true,
-        optimizeDOM: true,
-      }),
+      isDevelopment
+        ? MillionLint.vite({
+            enabled: true,
+            optimizeDOM: true,
+          })
+        : undefined,
       coffeescript(),
       nodePolyfills(),
       purgePolyfills.vite(),
       replacements(),
       fixEmulatorsGlobalShimPlugin(),
+      isDevelopment ? undefined : verifyVendorChunksPlugin(),
       checkBareSpecifiersPlugin(),
       // TODO: vite-plugin-legacy-swc has compatibility issues with Rolldown
       // Disabled for now - legacy browser support can be re-enabled with updated plugin

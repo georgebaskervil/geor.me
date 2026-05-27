@@ -195,16 +195,17 @@ export function createTerserOptions(isDevelopment) {
             toplevel: false,
             top_retain: null,
             typeofs: true,
-            unsafe: true,
-            unsafe_arrows: true,
-            unsafe_comps: true,
-            unsafe_Function: true,
-            unsafe_math: true,
+            // unsafe:* turns refs/objects into `0|expr` (→ 0), breaking Vue/React at runtime.
+            unsafe: false,
+            unsafe_arrows: false,
+            unsafe_comps: false,
+            unsafe_Function: false,
+            unsafe_math: false,
             unsafe_symbols: false,
-            unsafe_methods: true,
-            unsafe_proto: true,
-            unsafe_regexp: true,
-            unsafe_undefined: true,
+            unsafe_methods: false,
+            unsafe_proto: false,
+            unsafe_regexp: false,
+            unsafe_undefined: false,
             unused: true,
         },
         mangle: {
@@ -310,8 +311,9 @@ export function createCommonBuild({ isDevelopment, rollupInput } = {}) {
         sourcemap: false,
         chunkSizeWarningLimit: 2147483647,
         reportCompressedSize: false,
-        minify: isDevelopment ? false : "terser",
-        terserOptions: createTerserOptions(isDevelopment),
+        // esbuild minify avoids Terser `0|ref` transforms that break Vue/React runtimes.
+        minify: isDevelopment ? false : "esbuild",
+        terserOptions: undefined,
     };
 
     if (rollupInput) build.rollupOptions.input = rollupInput;
