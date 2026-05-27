@@ -80,7 +80,7 @@ body {
   overflow-x: hidden;
 }
 
-// CRT viewport scrolls inside #crt-content; extension Lenis is patched in geor_me_lenis_handoff.js
+// CRT viewport scrolls inside #crt-content; site Lenis sets window._lenisInitialised for the extension userscript
 #crt-content {
   box-sizing: border-box;
   padding-bottom: 3rem;

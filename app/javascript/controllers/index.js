@@ -76,6 +76,9 @@ application.register("integra", IntegraController);
 import JuliaController from "./julia_controller";
 application.register("julia", JuliaController);
 
+import LenisController from "./lenis_controller";
+application.register("lenis", LenisController);
+
 import MatrixtransformationsController from "./matrixtransformations_controller";
 application.register("matrixtransformations", MatrixtransformationsController);
 

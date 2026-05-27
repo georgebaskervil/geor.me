@@ -8,6 +8,8 @@ export const allObfuscatorConfig = {
     excludes: [
         /vendor-modules/,
         /react-vendor/,
+        /vue-vendor/,
+        /vue\.runtime/,
         /rolldown-runtime/,
         /HomeControlPanel/,
         /DeviceManagement/,
@@ -256,6 +258,12 @@ export function createRollupOutputConfig() {
             ) {
                 return "react-vendor";
             }
+            if (
+                id.includes("node_modules/vue/") ||
+                id.includes("node_modules/@vue/")
+            ) {
+                return "vue-vendor";
+            }
         },
     };
 }
@@ -477,7 +485,7 @@ export function createBabelOptions(pathModule) {
         // Use include/exclude instead of deprecated filter pattern
         include: /\.(js|coffee)$/,
         exclude: [
-            /node_modules\/(?:@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|plotly\.js-dist|@vue\/runtime-core|three|react|react-dom|scheduler)/,
+            /node_modules\/(?:@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|plotly\.js-dist|@vue\/|vue\/|three|react|react-dom|scheduler)/,
             /textcomplete\.min\.js$/,
             /ort-web\.min\.js$/,
         ],
