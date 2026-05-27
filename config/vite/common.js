@@ -5,10 +5,24 @@ import fs from "node:fs";
 import path from "node:path";
 
 export const allObfuscatorConfig = {
-    excludes: [],
+    excludes: [
+        /vendor-modules/,
+        /react-vendor/,
+        /rolldown-runtime/,
+        /HomeControlPanel/,
+        /DeviceManagement/,
+        /react_mount_controller/,
+        /turbo_mount_controller/,
+        /TaskStackApp/,
+        /TaskStack/,
+        /TaskBlock/,
+        /TaskCreator/,
+        /CursorFxWrapper/,
+    ],
     enable: true,
     log: true,
-    autoExcludeNodeModules: true,
+    // When true, the plugin replaces manualChunks and only excludes vendor-modules.
+    autoExcludeNodeModules: false,
     threadPool: true,
     options: {
         compact: true,
@@ -176,7 +190,7 @@ export function createTerserOptions(isDevelopment) {
             sequences: true,
             side_effects: true,
             switches: true,
-            toplevel: true,
+            toplevel: false,
             top_retain: null,
             typeofs: true,
             unsafe: true,
@@ -196,7 +210,7 @@ export function createTerserOptions(isDevelopment) {
             keep_classnames: false,
             keep_fnames: false,
             reserved: ["global", "globalThis"],
-            toplevel: true,
+            toplevel: false,
             safari10: false,
         },
         format: {
@@ -234,6 +248,13 @@ export function createRollupOutputConfig() {
             // Terser top-level mangling cannot cross-contaminate module registries.
             if (id.includes("node_modules/emulators")) {
                 return "emulators";
+            }
+            if (
+                id.includes("node_modules/react/") ||
+                id.includes("node_modules/react-dom/") ||
+                id.includes("node_modules/scheduler/")
+            ) {
+                return "react-vendor";
             }
         },
     };
