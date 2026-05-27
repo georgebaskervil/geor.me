@@ -1,3 +1,4 @@
+import "./geor_me_lenis_handoff";
 import * as Sentry from "@sentry/browser";
 import "../stylesheets/application.scss";
 

@@ -18,6 +18,9 @@ export default class extends Controller {
       this.app = undefined;
     }
 
-    document.documentElement.classList.remove("is-cursor-fx-active");
+    document.documentElement.classList.remove(
+      "is-cursor-fx-active",
+      "cursor-fx-ready",
+    );
   }
 }

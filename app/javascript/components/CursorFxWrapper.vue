@@ -211,7 +211,10 @@ export default {
       if (events) this.initEvents();
 
       this.loaded = true;
-      document.documentElement.classList.add("is-cursor-fx-active");
+      document.documentElement.classList.add(
+        "is-cursor-fx-active",
+        "cursor-fx-ready",
+      );
     },
     cancelStartDelay() {
       if (this.timeoutId) {
@@ -221,7 +224,10 @@ export default {
     },
     async destroy(refresh = false) {
       this.cancelStartDelay();
-      document.documentElement.classList.remove("is-cursor-fx-active");
+      document.documentElement.classList.remove(
+        "is-cursor-fx-active",
+        "cursor-fx-ready",
+      );
       this.loaded = false;
       this.removeEvents();
 
@@ -299,8 +305,8 @@ export default {
   border-radius: 0;
 }
 
-.is-cursor-fx-active,
-.is-cursor-fx-active * {
+html.is-cursor-fx-active.cursor-fx-ready,
+html.is-cursor-fx-active.cursor-fx-ready * {
   cursor: none;
 }
 
