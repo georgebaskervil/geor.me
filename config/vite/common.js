@@ -477,7 +477,7 @@ export function createBabelOptions(pathModule) {
         // Use include/exclude instead of deprecated filter pattern
         include: /\.(js|coffee)$/,
         exclude: [
-            /node_modules\/(?:@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|plotly\.js-dist|@vue\/runtime-core|three)/,
+            /node_modules\/(?:@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|plotly\.js-dist|@vue\/runtime-core|three|react|react-dom|scheduler)/,
             /textcomplete\.min\.js$/,
             /ort-web\.min\.js$/,
         ],
