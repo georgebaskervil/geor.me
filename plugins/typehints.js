@@ -137,9 +137,9 @@ function addTypeCoercion(path, typeString) {
 
 export default function typehints(options = {}) {
     const {
-        includeNodeModules = true,
-        enableCoercions = true,
-        processEverything = true,
+        includeNodeModules = false,
+        enableCoercions = false,
+        processEverything = false,
         // Preferred option names (backward compatible mapping applied below)
         variableDocumentation = options.variableDocumentation ??
             options.variableDocs ??
@@ -188,6 +188,11 @@ export default function typehints(options = {}) {
                 "three.module.js", // Syntax/scope issues
                 "three.core.js", // Duplicate identifier issues
                 "phaser.js", // Large game library
+                "/node_modules/react/",
+                "/node_modules/react-dom/",
+                "/node_modules/scheduler/",
+                "/node_modules/vue/",
+                "/node_modules/@vue/",
             ];
             if (problematicFiles.some(f => cleanId.includes(f))) return;
 

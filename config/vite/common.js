@@ -80,8 +80,11 @@ export function createTypehintPlugin(typehintsPluginFactory) {
             variableDocumentation: true,
             objectShapeDocumentation: true,
             maxObjectProperties: 6,
-            enableCoercions: true,
+            // |0 coercions break Vue/React when applied to vendor code (e.g. Array(n)|0 → 0).
+            enableCoercions: false,
             parameterHoistCoercions: false,
+            includeNodeModules: false,
+            processEverything: false,
         }),
     );
 }
@@ -473,7 +476,13 @@ export function wrapPluginsWithBuildStartTiming(
 // detect the real global via `typeof global` / window / self. Replacing `global`
 // bakes `globalThis` into the chunk and Terser can mangle it into the same
 // symbol as unrelated code (e.g. React), breaking core-js shared-store init.
-export const commonDefine = {};
+export const commonDefine = {
+    "process.env.NODE_ENV": JSON.stringify(
+        process.env.NODE_ENV || "production",
+    ),
+    __VUE_OPTIONS_API__: true,
+    __VUE_PROD_DEVTOOLS__: false,
+};
 
 export const commonLegacyOptions = {
     targets: ["chrome 142"],

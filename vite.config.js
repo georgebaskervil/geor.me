@@ -78,9 +78,14 @@ function fixEmulatorsGlobalShimPlugin() {
   };
 }
 
-/** Fail the build if vendor chunks contain Terser-style `0|ref.get()` corruption. */
+/** Fail the build if vendor chunks contain broken `| 0` coercions from typehints/babel. */
 function verifyVendorChunksPlugin() {
-  const corruptPattern = /\b0\|[a-zA-Z_$][\w$]*\.get\(/;
+  const corruptPatterns = [
+    /\b0\|[a-zA-Z_$][\w$]*\.get\(/,
+    /Array\([^)]+\)\|0/,
+    /arguments\.length-\d+\|0/,
+    /\._ioInfo\|0/,
+  ];
 
   return {
     name: "verify-vendor-chunks",
@@ -91,10 +96,12 @@ function verifyVendorChunksPlugin() {
         if (!fileName.includes("vue-vendor") && !fileName.includes("react-vendor")) {
           continue;
         }
-        if (corruptPattern.test(chunk.code)) {
-          this.error(
-            `Vendor chunk ${fileName} contains unsafe minifier output (0|ref.get). Use esbuild minify or disable Terser unsafe.* options.`,
-          );
+        for (const pattern of corruptPatterns) {
+          if (pattern.test(chunk.code)) {
+            this.error(
+              `Vendor chunk ${fileName} matches ${pattern} (unsafe |0 coercion). Disable typehints enableCoercions and exclude node_modules.`,
+            );
+          }
         }
       }
     },
