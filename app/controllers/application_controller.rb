@@ -28,11 +28,11 @@ class ApplicationController < ActionController::Base
   private
 
   def set_custom_headers
-    # Skip COEP headers for robustext and data to allow cross-origin iframe embed
-    unless controller_name == "robustext" || controller_name == "data"
-      response.set_header("Cross-Origin-Embedder-Policy", "credentialless")
-      response.set_header("Cross-Origin-Opener-Policy", "same-origin")
-    end
+    # Keep cross-origin isolation consistently disabled across pages.
+    # This avoids COEP/COOP navigation mismatches in browsers and keeps
+    # third-party embeds (e.g. Umami share) working.
+    response.set_header("Cross-Origin-Embedder-Policy", "unsafe-none")
+    response.set_header("Cross-Origin-Opener-Policy", "unsafe-none")
     response.set_header("X-UA-Compatible", "IE=edge,chrome=1")
 
     # Set enhanced ETag for content-based caching (used by automatic caching system)

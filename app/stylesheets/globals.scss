@@ -80,10 +80,17 @@ body {
   overflow-x: hidden;
 }
 
-// CRT viewport scrolls inside #crt-content; site Lenis sets window._lenisInitialised for the extension userscript
+// CRT viewport: #crt-content is the Lenis wrapper (clip); .crt-scroll-content is transformed.
 #crt-content {
   box-sizing: border-box;
+  overflow: hidden;
+}
+
+.crt-scroll-content {
+  box-sizing: border-box;
+  min-height: 100%;
   padding-bottom: 3rem;
+  will-change: transform;
 }
 
 .geor-me-extension-footer-slot {
@@ -92,10 +99,19 @@ body {
   left: 0;
   right: 0;
   z-index: 10000;
-  pointer-events: auto;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-html.geor-me-extension-footer #crt-content {
+html.lenis-at-end .geor-me-extension-footer-slot {
+  pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+html.geor-me-extension-footer .crt-scroll-content {
   padding-bottom: 3.5rem;
 }
 

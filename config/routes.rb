@@ -68,8 +68,6 @@ Rails.application.routes.draw do
   get "/data", to: "data#index"
   get "/dmca", to: "dmca#index"
 
-  # Proxy routes for analytics and other functionality requiring specific headers
-  get "/umami/script.js", to: "proxy#umami_script"
   get "/proxy/georlist", to: "proxy#georlist"
 
   # Home Control Panel routes
