@@ -484,13 +484,6 @@ export const commonDefine = {
     __VUE_PROD_DEVTOOLS__: false,
 };
 
-export const commonLegacyOptions = {
-    targets: ["chrome 142"],
-    renderLegacyChunks: false,
-    modernTargets: ["chrome 142"],
-    modernPolyfills: true,
-};
-
 export function createBabelOptions(pathModule) {
     return {
         // Use include/exclude instead of deprecated filter pattern

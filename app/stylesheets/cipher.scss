@@ -65,8 +65,7 @@
     border-color: variables.$accent;
   }
 
-  &:active {
-    transform: scale(0.8);
+  @include variables.squish-pressable {
     color: variables.$accent;
   }
 }
@@ -83,9 +82,8 @@
     padding: 0.5rem 1rem;
     transition: all 0.3s ease;
 
-    &:active {
+    @include variables.squish-pressable {
       color: variables.$accent;
-      transform: scale(0.8);
     }
   }
 }
@@ -100,9 +98,8 @@
 
   @apply rounded-lg;
 
-  &:active {
+  @include variables.squish-pressable {
     color: variables.$accent;
-    transform: scale(0.8);
   }
 }
 

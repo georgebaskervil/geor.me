@@ -84,9 +84,7 @@
   @apply border-neutral;
   position: relative;
 
-  &:active {
-    transform: scale(0.8);
-  }
+  @include variables.squish-pressable;
 }
 
 .hp-picture img {
@@ -142,9 +140,7 @@
   opacity: 1;
   z-index: 1;
 
-  &:active {
-    transform: scale(0.8);
-  }
+  @include variables.squish-pressable;
 }
 
 .hp-proj-internals {
@@ -202,8 +198,7 @@
     @apply opacity-50 cursor-not-allowed;
   }
 
-  &:active {
-    transform: scale(0.8);
+  @include variables.squish-pressable(translateY(-50%), $keep-position: true) {
     box-shadow: variables.$medium-box-shadow;
     background-color: variables.$accent;
   }
@@ -229,9 +224,7 @@
     @apply bg-accent;
   }
 
-  &:active {
-    transform: scale(0.8);
-  }
+  @include variables.squish-pressable;
 }
 
 .carousel-wrapper {
@@ -294,8 +287,7 @@
 
   flex-shrink: 0;
 
-  &:active {
-    transform: scale(0.8);
+  @include variables.squish-pressable {
     @apply bg-white/30;
     text-decoration: none;
   }

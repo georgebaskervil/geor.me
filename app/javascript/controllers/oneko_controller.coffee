@@ -1,46 +1,40 @@
 import { Controller } from "@hotwired/stimulus"
 
-export default class extends Controller
-  STORAGE_KEY = 'oneko-state'
+ONEKO_STORAGE_KEY = "oneko-state"
 
+export default class extends Controller
   connect: =>
     @running = false
     @requestId = undefined
     @nekoEl = @element
-    
-    # Bind methods for event listeners
+
     @saveNekoState = @saveNekoState.bind(@)
     @loadNekoState = @loadNekoState.bind(@)
     @handleVisibilityChange = @handleVisibilityChange.bind(@)
-    
-    # Add event listeners for state preservation
-    document.addEventListener('turbo:before-visit', @saveNekoState)
-    document.addEventListener('turbo:load', @loadNekoState)
-    window.addEventListener('beforeunload', @saveNekoState)
-    window.addEventListener('pagehide', @saveNekoState)
-    document.addEventListener('visibilitychange', @handleVisibilityChange)
-    
-    # Load saved state first
+    @onMouseMove = @onMouseMove.bind(@)
+
+    document.addEventListener("turbo:before-visit", @saveNekoState)
+    document.addEventListener("turbo:before-cache", @saveNekoState)
+    window.addEventListener("beforeunload", @saveNekoState)
+    window.addEventListener("pagehide", @saveNekoState)
+    document.addEventListener("visibilitychange", @handleVisibilityChange)
+
     @loadNekoState()
-    
-    # Start oneko automatically (not just in distraction mode)
     @startNeko()
 
   disconnect: =>
-    # Save state before disconnecting
     @saveNekoState()
-    
-    # Clean up event listeners
-    document.removeEventListener('turbo:before-visit', @saveNekoState)
-    document.removeEventListener('turbo:load', @loadNekoState)
-    window.removeEventListener('beforeunload', @saveNekoState)
-    window.removeEventListener('pagehide', @saveNekoState)
-    document.removeEventListener('visibilitychange', @handleVisibilityChange)
-    
-    # Remove click event listener if element exists
-    @nekoEl?.removeEventListener('click', @explodeHearts)
-    
-    # Cancel animation
+    @stopHeartGC()
+
+    document.removeEventListener("turbo:before-visit", @saveNekoState)
+    document.removeEventListener("turbo:before-cache", @saveNekoState)
+    window.removeEventListener("beforeunload", @saveNekoState)
+    window.removeEventListener("pagehide", @saveNekoState)
+    document.removeEventListener("visibilitychange", @handleVisibilityChange)
+    document.removeEventListener("mousemove", @onMouseMove)
+
+    @nekoEl?.removeEventListener("click", @explodeHearts)
+
     cancelAnimationFrame @requestId if @requestId
 
   startNeko: =>
@@ -62,10 +56,9 @@ export default class extends Controller
     if document.visibilityState == 'hidden'
       @saveNekoState()
 
-  # Saves oneko state to localStorage
   saveNekoState: =>
-    return unless @running # Only save if oneko is running
-    
+    return unless @running
+
     nekoState = {
       nekoPosX: @nekoPosX
       nekoPosY: @nekoPosY
@@ -75,45 +68,38 @@ export default class extends Controller
       idleAnimation: @idleAnimation
       idleAnimationFrame: @idleAnimationFrame
       frameCount: @frameCount
+      backgroundPosition: @nekoEl?.style.backgroundPosition
       running: @running
       timestamp: Date.now()
     }
-    
+
     try
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(nekoState))
+      localStorage.setItem(ONEKO_STORAGE_KEY, JSON.stringify(nekoState))
     catch e
       console.error("Failed to save oneko state to localStorage", e)
-    
-  # Loads oneko state from localStorage
+
   loadNekoState: =>
     try
-      savedState = localStorage.getItem(STORAGE_KEY)
+      savedState = localStorage.getItem(ONEKO_STORAGE_KEY)
       return unless savedState
-      
+
       state = JSON.parse(savedState)
-      
-      # Get the timestamp of the saved state
-      timestamp = state.timestamp || 0
-      currentTime = Date.now()
-      timeDifference = currentTime - timestamp
-      
-      # If the saved state is recent (less than 2 seconds old), use it
-      # This likely means we're navigating between pages on the site
-      if timeDifference < 2000 and state.running
-        # Use the saved state
-        @nekoPosX = state.nekoPosX || 32
-        @nekoPosY = state.nekoPosY || 32
-        @mousePosX = state.mousePosX || 0
-        @mousePosY = state.mousePosY || 0
-        @idleTime = state.idleTime || 0
-        @idleAnimation = state.idleAnimation
-        @idleAnimationFrame = state.idleAnimationFrame || 0
-        @frameCount = state.frameCount || 0
-        
-        # Apply position if oneko element exists
-        if @nekoEl
-          @nekoEl.style.left = "#{@nekoPosX - 16}px"
-          @nekoEl.style.top = "#{@nekoPosY - 16}px"
+      return unless state.running
+
+      @nekoPosX = state.nekoPosX ? 32
+      @nekoPosY = state.nekoPosY ? 32
+      @mousePosX = state.mousePosX ? 0
+      @mousePosY = state.mousePosY ? 0
+      @idleTime = state.idleTime ? 0
+      @idleAnimation = state.idleAnimation
+      @idleAnimationFrame = state.idleAnimationFrame ? 0
+      @frameCount = state.frameCount ? 0
+
+      if @nekoEl
+        @nekoEl.style.left = "#{@nekoPosX - 16}px"
+        @nekoEl.style.top = "#{@nekoPosY - 16}px"
+        if state.backgroundPosition
+          @nekoEl.style.backgroundPosition = state.backgroundPosition
     catch e
       console.error("Failed to load oneko state from localStorage", e)
 
@@ -155,12 +141,14 @@ export default class extends Controller
       left: "#{@nekoPosX - 16}px"
       top: "#{@nekoPosY - 16}px"
     
-    # Add click event for heart explosion
     @nekoEl.addEventListener "click", @explodeHearts
-    
-    document.addEventListener "mousemove", (event) =>
-      @mousePosX = event.clientX
-      @mousePosY = event.clientY
+
+    document.removeEventListener "mousemove", @onMouseMove
+    document.addEventListener "mousemove", @onMouseMove
+
+  onMouseMove: (event) =>
+    @mousePosX = event.clientX
+    @mousePosY = event.clientY
 
   loop: (timestamp) =>
     return unless @running
@@ -250,7 +238,7 @@ export default class extends Controller
     for i in [0...20]
       heart = document.createElement('div')
       heart.className = 'heart'
-      # Use custom SVG heart instead of text emoji
+      heart.dataset.createdAt = Date.now()
       heart.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path fill="#aea2c3" d="M35.885 11.833c0-5.45-4.418-9.868-9.867-9.868-3.308 0-6.227 1.633-8.018 4.129-1.791-2.496-4.71-4.129-8.017-4.129-5.45 0-9.868 4.417-9.868 9.868 0 .772.098 1.52.266 2.241C1.751 22.587 11.216 31.568 18 34.034c6.783-2.466 16.249-11.447 17.617-19.959.17-.721.268-1.469.268-2.242z" /></svg>'
       offsetX = (Math.random() - 0.5) * 100
       offsetY = (Math.random() - 0.5) * 100
@@ -269,3 +257,29 @@ export default class extends Controller
 
       # Fallback when animation is reduced or animationend does not fire
       setTimeout removeHeart, 1050
+
+    @startHeartGC()
+
+  startHeartGC: =>
+    return if @heartGCInterval
+    @heartGCInterval = setInterval (=> @collectStrayHearts()), 2000
+
+  stopHeartGC: =>
+    clearInterval @heartGCInterval if @heartGCInterval
+    @heartGCInterval = undefined
+
+  collectStrayHearts: =>
+    parent = @nekoEl?.parentElement
+    return @stopHeartGC() unless parent
+
+    hearts = parent.querySelectorAll('.heart')
+    unless hearts.length
+      @stopHeartGC()
+      return
+
+    now = Date.now()
+    hearts.forEach (heart) =>
+      age = now - parseInt(heart.dataset.createdAt or '0', 10)
+      animations = if heart.getAnimations?() then heart.getAnimations() else []
+      isAnimating = animations.some (a) -> a.playState is 'running'
+      heart.remove() if not isAnimating or age > 1500

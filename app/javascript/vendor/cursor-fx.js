@@ -262,6 +262,65 @@ export default class CursorFx {
     }
   }
 
+  exportState() {
+    if (!this.DOM) return null;
+
+    const copyPoint = (point) => ({
+      x: point?.x ?? 0,
+      y: point?.y ?? 0,
+    });
+
+    return {
+      mousePos: copyPoint(this.mousePos),
+      lastMousePos: {
+        dot: copyPoint(this.lastMousePos.dot),
+        circle: copyPoint(this.lastMousePos.circle),
+        custom: copyPoint(this.lastMousePos.custom),
+      },
+      scale: this.scale,
+      lastScale: this.lastScale,
+      opacity: this.opacity,
+      lastOpacity: this.lastOpacity,
+      visibility: this.DOM.el.style.visibility || "",
+      mixBlendMode: this.DOM.el.style.mixBlendMode || "",
+    };
+  }
+
+  importState(state) {
+    if (!state || !this.DOM) return;
+
+    this.mousePos = { ...state.mousePos };
+    this.lastMousePos = {
+      dot: { ...state.lastMousePos.dot },
+      circle: { ...state.lastMousePos.circle },
+      custom: { ...state.lastMousePos.custom },
+    };
+    this.scale = state.scale ?? this.$options.scale.min;
+    this.lastScale = state.lastScale ?? this.lastScale;
+    this.opacity = state.opacity ?? this.$options.opacity;
+    this.lastOpacity = state.lastOpacity ?? this.lastOpacity;
+
+    if (state.visibility) {
+      this.DOM.el.style.visibility = state.visibility;
+    } else {
+      this.DOM.el.style.visibility = "";
+    }
+
+    this.mixBlendMode(state.mixBlendMode || null);
+
+    if (this.bounds.dot) {
+      this.DOM.dot.style.transform = `translate3d(${this.lastMousePos.dot.x}px, ${this.lastMousePos.dot.y}px, 0)`;
+    }
+
+    if (this.bounds.circle) {
+      this.DOM.circle.style.transform = `translate3d(${this.lastMousePos.circle.x}px, ${this.lastMousePos.circle.y}px, 0) scale(${this.lastScale})`;
+    }
+
+    if (this.bounds.custom) {
+      this.DOM.custom.style.transform = `translate3d(${this.lastMousePos.custom.x}px, ${this.lastMousePos.custom.y}px, 0) scale(${this.lastScale})`;
+    }
+  }
+
   destroy() {
     if (this.$raf) cancelAnimationFrame(this.$raf);
     this.initEvents(false);

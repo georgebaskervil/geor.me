@@ -29,6 +29,7 @@
 import CursorFx from "../vendor/cursor-fx.js";
 
 const ACCENT = "#B0A2C6";
+const CURSOR_STORAGE_KEY = "cursor-fx-state";
 
 export default {
   name: "CursorFxWrapper",
@@ -124,8 +125,20 @@ export default {
     if (this.allowOnMobile || !this.touch) {
       this.start();
     }
+
+    this.onTurboLoad = () => this.rebindPageEvents();
+    this.saveCursorState = () => this.persistCursorState();
+    document.addEventListener("turbo:load", this.onTurboLoad);
+    document.addEventListener("turbo:before-visit", this.saveCursorState);
+    document.addEventListener("turbo:before-cache", this.saveCursorState);
+    window.addEventListener("pagehide", this.saveCursorState);
   },
   beforeUnmount() {
+    this.persistCursorState();
+    document.removeEventListener("turbo:load", this.onTurboLoad);
+    document.removeEventListener("turbo:before-visit", this.saveCursorState);
+    document.removeEventListener("turbo:before-cache", this.saveCursorState);
+    window.removeEventListener("pagehide", this.saveCursorState);
     this.destroy();
   },
   methods: {
@@ -208,6 +221,8 @@ export default {
         },
       );
 
+      this.restoreCursorState();
+
       if (events) this.initEvents();
 
       this.loaded = true;
@@ -252,6 +267,38 @@ export default {
     },
     refresh() {
       this.destroy(true);
+    },
+    rebindPageEvents() {
+      if (!this.cursor || !this.loaded) return;
+
+      this.removeEvents();
+      this.initEvents();
+    },
+    persistCursorState() {
+      if (!this.cursor) return;
+
+      const state = {
+        ...this.cursor.exportState(),
+        hover: this.hover,
+      };
+
+      try {
+        sessionStorage.setItem(CURSOR_STORAGE_KEY, JSON.stringify(state));
+      } catch {
+        // Ignore quota or privacy-mode failures.
+      }
+    },
+    restoreCursorState() {
+      try {
+        const savedState = sessionStorage.getItem(CURSOR_STORAGE_KEY);
+        if (!savedState) return;
+
+        const state = JSON.parse(savedState);
+        this.hover = Boolean(state.hover);
+        this.cursor.importState(state);
+      } catch {
+        // Ignore corrupt saved state.
+      }
     },
   },
 };

@@ -16,7 +16,6 @@ import stylehacks from "stylehacks";
 import postcssMqOptimize from "postcss-mq-optimize";
 import autoprefixer from "autoprefixer";
 import nodePolyfills from "rollup-plugin-polyfill-node";
-// import legacy from "vite-plugin-legacy-swc"; // TODO: Disabled due to Rolldown compatibility issues
 import vitePluginBundleObfuscator from "vite-plugin-bundle-obfuscator";
 import { purgePolyfills } from "unplugin-purge-polyfills";
 import replacements from "./vendor/javascript/unplugin-replacements/lib/vite.js";
@@ -26,7 +25,6 @@ import removePrefix from "./plugins/postcss-remove-prefix.js";
 import {
     allObfuscatorConfig,
     commonDefine,
-    commonLegacyOptions,
     createBabelOptions,
     createCommonBuild,
     createEsbuildConfig,
@@ -194,6 +192,7 @@ export default defineConfig(({ mode }) => {
           removePrefix(),
           tailwindcss(),
           stylehacks({ lint: false }),
+          require('./plugins/postcss-super-hover.js'),
           postcssInlineRtl(),
           postcssUrl([
             {
@@ -271,9 +270,6 @@ export default defineConfig(({ mode }) => {
       fixEmulatorsGlobalShimPlugin(),
       isDevelopment ? undefined : verifyVendorChunksPlugin(),
       checkBareSpecifiersPlugin(),
-      // TODO: vite-plugin-legacy-swc has compatibility issues with Rolldown
-      // Disabled for now - legacy browser support can be re-enabled with updated plugin
-      // legacy(commonLegacyOptions),
       babel(createBabelOptions(path)),
       rubyPlugin(),
       stimulusHMR(),

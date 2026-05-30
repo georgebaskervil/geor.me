@@ -93,3 +93,40 @@ $border-tab:
   inset 1px 1px $button-face,
   inset -2px 0 $button-shadow,
   inset 2px 2px $button-highlight;
+
+$squish-pressable-hover-z: 1000;
+
+// Pressable controls: grow + tilt on hover, shrink on active (:hover → super-hover via PostCSS).
+@mixin squish-pressable(
+  $base-transform: null,
+  $rotate: 2deg,
+  $hover-z: $squish-pressable-hover-z,
+  $keep-position: false
+) {
+  &:hover,
+  &:active {
+    z-index: $hover-z;
+
+    @if not $keep-position {
+      position: relative;
+    }
+  }
+
+  &:hover {
+    @if $base-transform {
+      transform: #{$base-transform} scale(1.05) rotate($rotate);
+    } @else {
+      transform: scale(1.05) rotate($rotate);
+    }
+  }
+
+  &:active {
+    @if $base-transform {
+      transform: #{$base-transform} scale(0.8);
+    } @else {
+      transform: scale(0.8);
+    }
+
+    @content;
+  }
+}

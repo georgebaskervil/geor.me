@@ -59,6 +59,12 @@ if (!import.meta.env.DEV) {
   });
 }
 
+import { createSuperHover } from "./vendor/superhover.js";
+
+if (window.matchMedia('(hover: hover)').matches) {
+  createSuperHover({ selector: '*', moveEventType: false });
+}
+
 // Hijack the XMLHttpRequest primitive to replace the wdosbox.js and wdosbox.wasm URLs
 // Its a hack, but I can't find a way to control what other libraries are doing
 // without going in and modifying them directly
