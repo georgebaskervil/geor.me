@@ -6,6 +6,8 @@ export default class extends Controller
   connect: =>
     @running = false
     @requestId = undefined
+    @staticIdleTimer = undefined
+    @currentSpriteKey = null
     @nekoEl = @element
 
     @saveNekoState = @saveNekoState.bind(@)
@@ -36,6 +38,7 @@ export default class extends Controller
     @nekoEl?.removeEventListener("click", @explodeHearts)
 
     cancelAnimationFrame @requestId if @requestId
+    @stopStaticIdleWatch()
 
   startNeko: =>
     return if @running
@@ -44,13 +47,14 @@ export default class extends Controller
     @running = true
     @nekoEl.classList.remove "oneko-hidden"
     @initNeko()
-    @loop()
+    @scheduleLoop()
 
   stopNeko: =>
     @running = false
     @nekoEl.classList.add "oneko-hidden"
     cancelAnimationFrame @requestId if @requestId
     @requestId = undefined
+    @stopStaticIdleWatch()
 
   handleVisibilityChange: =>
     if document.visibilityState == 'hidden'
@@ -149,16 +153,64 @@ export default class extends Controller
   onMouseMove: (event) =>
     @mousePosX = event.clientX
     @mousePosY = event.clientY
+    @stopStaticIdleWatch()
+    @scheduleLoop()
+
+  scheduleLoop: =>
+    return unless @running
+    return if @requestId?
+    @requestId = globalThis.requestAnimationFrame @loop
+
+  stopLoop: =>
+    cancelAnimationFrame @requestId if @requestId
+    @requestId = undefined
+
+  needsAnimation: =>
+    diffX = @nekoPosX - @mousePosX
+    diffY = @nekoPosY - @mousePosY
+    distance = Math.hypot diffX, diffY
+    return true if distance >= 48
+    return true if @idleAnimation?
+    return true if @idleTime > 1 and @idleTime <= 7
+    return false
+
+  stopStaticIdleWatch: =>
+    clearInterval @staticIdleTimer if @staticIdleTimer
+    @staticIdleTimer = undefined
+
+  startStaticIdleWatch: =>
+    return if @staticIdleTimer
+    @resetToIdlePose()
+    @staticIdleTimer = setInterval (=>
+      return unless @running
+      @idleTime++
+      if @idleTime > 10 and Math.floor(Math.random() * 200) is 0 and not @idleAnimation
+        @pickIdleAnimation()
+        @stopStaticIdleWatch()
+        @scheduleLoop()
+    ), 100
+
+  pickIdleAnimation: =>
+    availableAnims = ["sleeping", "scratchSelf"]
+    availableAnims.push "scratchWallW" if @nekoPosX < 32
+    availableAnims.push "scratchWallN" if @nekoPosY < 32
+    availableAnims.push "scratchWallE" if @nekoPosX > window.innerWidth - 32
+    availableAnims.push "scratchWallS" if @nekoPosY > window.innerHeight - 32
+    @idleAnimation = availableAnims[Math.floor(Math.random() * availableAnims.length)]
+    @idleAnimationFrame = 0
 
   loop: (timestamp) =>
+    @requestId = undefined
     return unless @running
-    # Safety check - stop if neko element is removed from DOM
     return unless @nekoEl.isConnected
     @lastFrameTimestamp = timestamp unless @lastFrameTimestamp
     if timestamp - @lastFrameTimestamp > 100
       @lastFrameTimestamp = timestamp
       @updateNeko()
-    @requestId = globalThis.requestAnimationFrame @loop
+    if @needsAnimation()
+      @scheduleLoop()
+    else
+      @startStaticIdleWatch()
 
   updateNeko: =>
     diffX = @nekoPosX - @mousePosX
@@ -197,12 +249,7 @@ export default class extends Controller
   idle: =>
     @idleTime++
     if @idleTime > 10 and Math.floor(Math.random() * 200) is 0 and not @idleAnimation
-      availableAnims = ["sleeping", "scratchSelf"]
-      availableAnims.push "scratchWallW" if @nekoPosX < 32
-      availableAnims.push "scratchWallN" if @nekoPosY < 32
-      availableAnims.push "scratchWallE" if @nekoPosX > window.innerWidth - 32
-      availableAnims.push "scratchWallS" if @nekoPosY > window.innerHeight - 32
-      @idleAnimation = availableAnims[Math.floor(Math.random() * availableAnims.length)]
+      @pickIdleAnimation()
     switch @idleAnimation
       when "sleeping"
         if @idleAnimationFrame < 8
@@ -219,12 +266,23 @@ export default class extends Controller
     @idleAnimationFrame++
 
   setSprite: (name, frameNumber) =>
+    key = "#{name}-#{frameNumber % @spriteSets[name].length}"
+    return if @currentSpriteKey is key
+    @currentSpriteKey = key
     sprite = @spriteSets[name][frameNumber % @spriteSets[name].length]
     @nekoEl.style.backgroundPosition = "#{sprite[0] * 32}px #{sprite[1] * 32}px"
 
   resetIdleAnimation: =>
     @idleAnimation = undefined
     @idleAnimationFrame = 0
+
+  resetToIdlePose: =>
+    @idleTime = 0
+    @idleAnimation = null
+    @idleAnimationFrame = 0
+    @frameCount = 0
+    @currentSpriteKey = null
+    @setSprite "idle", 0 if @nekoEl?
 
   # Heart explosion effect when neko is clicked
   explodeHearts: =>
@@ -258,6 +316,8 @@ export default class extends Controller
       setTimeout removeHeart, 1050
 
     @startHeartGC()
+    @stopStaticIdleWatch()
+    @scheduleLoop()
 
   startHeartGC: =>
     return if @heartGCInterval

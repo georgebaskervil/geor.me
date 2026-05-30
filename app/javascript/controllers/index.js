@@ -154,6 +154,9 @@ application.register("turbo-mount", TurboMountController);
 import ReactMountController from "./react_mount_controller";
 application.register("react-mount", ReactMountController);
 
+import RobustextEmbedController from "./robustext_embed_controller";
+application.register("robustext-embed", RobustextEmbedController);
+
 import SpaceshooterController from "./spaceshooter_controller";
 application.register("spaceshooter", SpaceshooterController);
 

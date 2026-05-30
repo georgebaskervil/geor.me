@@ -24,23 +24,23 @@ export const allObfuscatorConfig = {
     enable: true,
     log: true,
     // When true, the plugin replaces manualChunks and only excludes vendor-modules.
-    autoExcludeNodeModules: false,
+    autoExcludeNodeModules: true,
     threadPool: true,
     options: {
         compact: true,
         controlFlowFlattening: true,
         controlFlowFlatteningThreshold: 1,
-        deadCodeInjection: false,
-        debugProtection: false,
+        deadCodeInjection: true,
+        debugProtection: true,
         debugProtectionInterval: 0,
-        disableConsoleOutput: false,
+        disableConsoleOutput: true,
         identifierNamesGenerator: "hexadecimal",
         log: false,
         numbersToExpressions: false,
         renameGlobals: false,
         selfDefending: true,
         simplify: true,
-        splitStrings: false,
+        splitStrings: true,
         ignoreImports: true,
         stringArray: true,
         stringArrayCallsTransform: true,
@@ -277,13 +277,6 @@ export function createCommonBuild({ isDevelopment, rollupInput } = {}) {
         cache: isDevelopment,
         rollupOptions: {
             input: rollupInput,
-            external: (id) => {
-                // Mark problematic large libraries as external to prevent bundling/parsing errors
-                const problematicDeps = [
-                    "plotly.js-dist",
-                ];
-                return problematicDeps.some(dep => id.includes(dep));
-            },
             output: createRollupOutputConfig(),
             treeshake: {
                 moduleSideEffects: true,
@@ -489,7 +482,7 @@ export function createBabelOptions(pathModule) {
         // Use include/exclude instead of deprecated filter pattern
         include: /\.(js|coffee)$/,
         exclude: [
-            /node_modules\/(?:@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|plotly\.js-dist|@vue\/|vue\/|three|react|react-dom|scheduler)/,
+            /node_modules\/(?:@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|@vue\/|vue\/|three|react|react-dom|scheduler)/,
             /textcomplete\.min\.js$/,
             /ort-web\.min\.js$/,
         ],

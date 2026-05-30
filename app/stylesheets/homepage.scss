@@ -97,6 +97,9 @@
 
 .hp-article-2 {
   @apply flex flex-col gap-3 mb-5;
+
+  content-visibility: auto;
+  contain-intrinsic-size: auto 640px;
 }
 
 .hp-spacing {
@@ -132,9 +135,11 @@
 }
 
 .hp-proj-div {
-  @apply p-4 rounded-lg border border-neutral shadow-md;
-  @apply transition-all duration-300 ease-in-out;
+  @apply p-4 rounded-lg border border-neutral;
   @apply w-full;
+
+  box-shadow: variables.$shadow-sm;
+  transition: transform 0.3s ease-in-out;
 
   background-color: variables.$background-colour;
   opacity: 1;
@@ -169,10 +174,22 @@
 /* Project Carousel Styles */
 .hp-project-carousel {
   @apply mb-8;
+
+  content-visibility: auto;
+  contain-intrinsic-size: auto 480px;
 }
 
 .carousel-container {
-  @apply border border-neutral rounded-lg overflow-hidden shadow-lg bg-background;
+  @apply border border-neutral rounded-lg overflow-hidden bg-background;
+
+  box-shadow: variables.$shadow-panel;
+
+  &.is-user-scrolling {
+    .carousel-slides,
+    .carousel-slide {
+      transition: none !important;
+    }
+  }
 }
 
 .carousel-header {
@@ -190,7 +207,7 @@
 .carousel-btn {
   @apply w-12 h-12 rounded-full bg-accent/80 text-text border-none cursor-pointer;
   @apply flex items-center justify-center text-2xl font-bold;
-  @apply transition-all duration-200;
+  transition: transform 0.2s ease-in-out;
   @apply absolute top-1/2 transform -translate-y-1/2 z-20;
   @apply backdrop-blur-sm;
 
@@ -218,7 +235,7 @@
 
 .indicator {
   @apply w-3 h-3 rounded-full bg-neutral border-none cursor-pointer;
-  @apply transition-all duration-200;
+  transition: transform 0.2s ease-in-out;
 
   &.active {
     @apply bg-accent;
@@ -279,7 +296,7 @@
 
 .project-link-btn {
   @apply text-white text-2xl no-underline;
-  @apply transition-all duration-200;
+  transition: transform 0.2s ease-in-out;
   @apply flex items-center justify-center;
   @apply w-12 h-12 rounded-full;
   @apply bg-white/30;

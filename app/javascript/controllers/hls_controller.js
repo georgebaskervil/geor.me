@@ -7,27 +7,42 @@ export default class extends Controller {
 
     const videoElement = this.element;
     const container = videoElement.closest(".floating-window");
-    const source = videoElement.dataset.streamUrl; // Get from data attribute
+    const source = videoElement.dataset.streamUrl;
 
     if (!source) {
       console.error("No stream URL found for video element:", videoElement.id);
       return;
     }
 
-    // Check if this is a carousel video (no floating window container)
-    if (!container) {
-      // For carousel videos, initialize immediately
-      this.initializeHLS(videoElement, undefined, source);
+    this.isCarouselVideo = !container;
+
+    // Carousel videos: init/destroy with visibility; DOM unmount also disconnects.
+    if (this.isCarouselVideo) {
+      this.visibilityObserver = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              if (!this.hls && !videoElement.src) {
+                this.initializeHLS(videoElement, undefined, source);
+              } else {
+                videoElement.play().catch(() => {});
+              }
+            } else {
+              this.destroyHLS();
+            }
+          }
+        },
+        { threshold: 0.05 },
+      );
+      this.visibilityObserver.observe(videoElement);
       return;
     }
 
-    // For floating window videos, check visibility
     if (container.style.display !== "none") {
       this.initializeHLS(videoElement, container, source);
       return;
     }
 
-    // Wait for the container to become visible before initializing HLS
     const observer = new MutationObserver((mutations, obs) => {
       if (container.style.display !== "none") {
         this.initializeHLS(videoElement, container, source);
@@ -42,17 +57,17 @@ export default class extends Controller {
   }
 
   initializeHLS(videoElement, container, source) {
-    // Skip visibility check for carousel videos (container is null)
     if (container && container.style.display === "none") return;
+    if (this.hls) return;
 
     if (Hls.isSupported()) {
       const hlsOptions = {
         enableWorker: true,
         progressive: true,
         startLevel: -1,
-        maxBufferLength: 30, // seconds
-        maxBufferSize: 60 * 1000 * 1000, // 60MB
-        maxBufferHole: 0.1, // seconds
+        maxBufferLength: 30,
+        maxBufferSize: 60 * 1000 * 1000,
+        maxBufferHole: 0.1,
         lowLatencyMode: true,
         capLevelToPlayerSize: true,
         autoStartLoad: true,
@@ -78,8 +93,6 @@ export default class extends Controller {
       hls.attachMedia(videoElement);
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        // For carousel videos (no container), always try to play
-        // For floating window videos, check container visibility
         if (!container || container.style.display !== "none") {
           videoElement.play().catch((error) => {
             if (error.name === "NotAllowedError") {
@@ -107,6 +120,7 @@ export default class extends Controller {
             default: {
               console.error("Fatal error, destroying HLS instance:", data);
               hls.destroy();
+              this.hls = undefined;
               break;
             }
           }
@@ -121,10 +135,20 @@ export default class extends Controller {
     }
   }
 
-  disconnect() {
+  destroyHLS() {
+    this.element.pause?.();
     if (this.hls) {
       this.hls.destroy();
       this.hls = undefined;
     }
+    if (this.isCarouselVideo && this.element.src) {
+      this.element.removeAttribute("src");
+      this.element.load();
+    }
+  }
+
+  disconnect() {
+    this.visibilityObserver?.disconnect();
+    this.destroyHLS();
   }
 }

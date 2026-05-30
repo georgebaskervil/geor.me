@@ -15,7 +15,6 @@ gem "kramdown"
 gem "nokogiri", "1.18.7"
 # Use Puma for now - Falcon dependencies don't meet security requirements yet
 gem "puma"
-gem "rack-attack"
 gem "rails", "8.0.1"
 gem "sentry-rails"
 gem "sentry-ruby"
@@ -57,3 +56,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "reactionview", "~> 0.3.0"

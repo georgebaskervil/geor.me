@@ -31,9 +31,10 @@
 }
 
 .posts-card {
-  @apply p-4 rounded-lg border border-neutral shadow-md;
-  @apply transition-all duration-300 ease-in-out; /* Changed for consistent behavior */
+  @apply p-4 rounded-lg border border-neutral;
 
+  box-shadow: variables.$shadow-sm;
+  transition: transform 0.3s ease-in-out;
   background-color: rgb(44 42 47 / 80%);
   opacity: 1;
   z-index: 1;

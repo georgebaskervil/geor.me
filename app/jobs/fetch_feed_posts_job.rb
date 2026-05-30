@@ -28,7 +28,6 @@ class FetchFeedPostsJob < ApplicationJob
           tags: entry.categories || [],
           section: "Blog",
           author: entry.author,
-          preview_image: nil,
           format: :feed,
           external_url: entry.url
         }

@@ -2,36 +2,10 @@
 <html lang="en-GB" dir="ltr">
   <head>
     <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?flags=gated&unknown=polyfill"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.90.0/phaser.min.js" integrity="sha384-AvQiDMZAVLda3VtAoU5MCfBz8pzXhteb2CiUJeKBmPlWzpXj1uJ96Km11+YuFNu/" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@3.5.1/plotly.js" integrity="sha384-V8CRSGT6hfYjmal2R2YxAFKCGRnd9vWyPf7cATUyn77/6UuQ4TXYaNw1kJVGty6q" crossorigin="anonymous"></script>
-    <%# Page metadata (using helper methods defined in ApplicationHelper) -%>
-    <%- site_name_text = site_name -%>
-    <%- specific_page_title = page_specific_title(@article) -%>
-    <%- full_page_title = page_title(specific_page_title) -%>
-    <%- page_description = meta_description(@article) -%>
-    <%- page_keywords = meta_keywords(@article) -%>
-    <%- content_type = page_type(@article) -%>
-    <%- current_url = canonical_url(@article) -%>
-
-    <%-# Image metadata -%>
-    <%- preview_image = meta_image -%>
-    <%- preview_image_type = "image/png" -%>
-    <%- preview_image_width = "1435" -%>
-    <%- preview_image_height = "780" -%>
-    <%- preview_image_alt =
-      "A preview of #{specific_page_title.present? ? specific_page_title : site_name_text}" -%>
-
-    <%-# Article metadata -%>
-    <%- metadata = article_metadata(@article) -%>
-    <%- published_date = metadata[:published_date] -%>
-    <%- modified_date = metadata[:modified_date] -%>
-    <%- author = metadata[:author] -%>
-    <%- section = metadata[:section] -%>
-    <%- article_tags = metadata[:tags] || [] -%>
-
-    <%-# Icons -%>
+    <script src="/vendor/phaser.min.js"></script>
+    <script src="/vendor/plotly.js"></script>
+    <%- full_page_title = page_title(page_specific_title(@article)) -%>
     <%- favicon_path = vite_asset_path("~/images/favicon.jpg") -%>
-    <!--Preconnects and DNS prefetches-->
     <link rel="dns-prefetch" href="r2.<%= domain %>">
     <link rel="preconnect" href="r2.<%= domain %>">
     <%= yield :specifcstylesheets %>
@@ -48,7 +22,6 @@
       window._lenisInitialised = true;
     </script>
     <%= vite_javascript_tag "~/javascript/application.js" %>
-    <!--Basic HTML metadata-->
     <meta charset="utf-8">
     <meta
       name="viewport"
@@ -56,27 +29,15 @@
     >
     <meta name="robots" content="noindex, nofollow">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <% if published_date.present? %>
-      <meta name="article:published_time" content="<%= published_date %>">
-    <% end %>
-    <% if modified_date.present? %>
-      <meta name="article:modified_time" content="<%= modified_date %>">
-    <% end %>
-    <meta name="author" content="<%= author %>">
-    <!--Title and icons-->
     <title><%= full_page_title %></title>
-    <link rel="canonical" href="<%= current_url %>">
     <link rel="shortcut icon" href="<%= favicon_path %>" type="image/x-icon">
     <link rel="apple-touch-icon" href="<%= favicon_path %>" type="image/x-icon">
-    <!--Mobile web app metadata-->
     <meta name="mobile-web-app-capable" content="no">
     <meta name="apple-mobile-web-app-capable" content="no">
-    <meta name="apple-mobile-web-app-title" content="<%= site_name_text %>">
+    <meta name="apple-mobile-web-app-title" content="<%= site_name %>">
     <meta name="apple-mobile-web-app-status-bar-style" content="<%= theme_color %>">
-    <!--Security headers-->
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <!--Development only-->
     <%= vite_client_tag %>
   </head>
   <body>
@@ -108,6 +69,7 @@
           color-interpolation-filters="sRGB"
         >
           <feimage
+            id="crt-displacement-image"
             href="<%= crt_displacement_map %>"
             xlink:href="<%= crt_displacement_map %>"
             x="-50%"
@@ -117,15 +79,10 @@
             preserveAspectRatio="none"
             result="barrelImage"
           />
-          <fegaussianblur
-            in="barrelImage"
-            stdDeviation="0.35"
-            result="barrel"
-          />
           <fedisplacementmap
             id="crt-displacement"
             in="SourceGraphic"
-            in2="barrel"
+            in2="barrelImage"
             scale="50"
             xChannelSelector="R"
             yChannelSelector="G"

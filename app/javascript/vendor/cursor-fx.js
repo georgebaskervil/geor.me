@@ -1,5 +1,7 @@
 const SCALE_MIN = 0.5;
 const SCALE_MAX = 1;
+const CONVERGE_PX = 0.5;
+const CONVERGE_SCALE = 0.01;
 
 const lerp = (a, b, n) => (1 - n) * a + n * b;
 
@@ -94,12 +96,66 @@ export default class CursorFx {
     };
 
     this.initEvents();
+    this.scheduleRender();
+  }
+
+  scheduleRender() {
+    if (this.$raf) return;
     this.$raf = requestAnimationFrame(() => this.render());
+  }
+
+  stopRender() {
+    if (!this.$raf) return;
+    cancelAnimationFrame(this.$raf);
+    this.$raf = null;
+  }
+
+  hasPendingAnimation() {
+    const { x, y } = this.mousePos;
+
+    if (this.bounds.dot) {
+      const tx = x - this.bounds.dot.width / 2;
+      const ty = y - this.bounds.dot.height / 2;
+      if (
+        Math.abs(this.lastMousePos.dot.x - tx) > CONVERGE_PX ||
+        Math.abs(this.lastMousePos.dot.y - ty) > CONVERGE_PX
+      ) {
+        return true;
+      }
+    }
+
+    if (this.bounds.circle) {
+      const tx = x - this.bounds.circle.width / 2;
+      const ty = y - this.bounds.circle.height / 2;
+      if (
+        Math.abs(this.lastMousePos.circle.x - tx) > CONVERGE_PX ||
+        Math.abs(this.lastMousePos.circle.y - ty) > CONVERGE_PX
+      ) {
+        return true;
+      }
+    }
+
+    if (this.bounds.custom) {
+      const tx = x - this.bounds.custom.width / 2;
+      const ty = y - this.bounds.custom.height / 2;
+      if (
+        Math.abs(this.lastMousePos.custom.x - tx) > CONVERGE_PX ||
+        Math.abs(this.lastMousePos.custom.y - ty) > CONVERGE_PX
+      ) {
+        return true;
+      }
+    }
+
+    if (Math.abs(this.lastScale - this.scale) > CONVERGE_SCALE) return true;
+    if (Math.abs(this.lastOpacity - this.opacity) > CONVERGE_SCALE) return true;
+
+    return false;
   }
 
   initEvents(add = true) {
     this._mouseMove = (ev, iframe = null) => {
       this.mousePos = getMousePos(ev, iframe);
+      this.scheduleRender();
     };
 
     window.removeEventListener("mousemove", this._mouseMove, false);
@@ -208,7 +264,7 @@ export default class CursorFx {
   }
 
   render() {
-    this.$raf = requestAnimationFrame(() => this.render());
+    this.$raf = null;
 
     const {
       lerps: { dot, circle, custom },
@@ -259,6 +315,10 @@ export default class CursorFx {
         custom,
       );
       this.DOM.custom.style.transform = `translate3d(${this.lastMousePos.custom.x}px, ${this.lastMousePos.custom.y}px, 0) scale(${this.lastScale})`;
+    }
+
+    if (this.hasPendingAnimation()) {
+      this.scheduleRender();
     }
   }
 
@@ -322,22 +382,25 @@ export default class CursorFx {
   }
 
   destroy() {
-    if (this.$raf) cancelAnimationFrame(this.$raf);
+    this.stopRender();
     this.initEvents(false);
     this.DOM = null;
   }
 
   enter(scale = this.$options.scale.max) {
     this.scale = scale;
+    this.scheduleRender();
   }
 
   leave(scale = this.$options.scale.min) {
     this.scale = scale;
+    this.scheduleRender();
   }
 
   click(scale = this.$options.scale.min, opacity = 0) {
     this.lastScale = scale;
     this.lastOpacity = opacity;
+    this.scheduleRender();
   }
 
   enterHidden() {

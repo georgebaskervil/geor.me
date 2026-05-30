@@ -4,7 +4,7 @@
   overflow: hidden;
   border-radius: 10px;
 
-  @apply transition-all duration-300 ease-in-out; /* Changed for consistent behavior */
+  transition: transform 0.3s ease-in-out;
 
   opacity: 1;
   z-index: 1;

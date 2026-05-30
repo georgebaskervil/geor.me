@@ -10,6 +10,8 @@ export default class extends Controller {
 
   connect() {
     this.displacement = document.querySelector("#crt-displacement");
+    this.displacementImage = document.querySelector("#crt-displacement-image");
+    this.preloadDisplacementMap();
     this.updateScale();
     this.onResize = () => {
       if (this.resizeFrame) return;
@@ -26,6 +28,31 @@ export default class extends Controller {
     if (this.resizeFrame) {
       cancelAnimationFrame(this.resizeFrame);
       this.resizeFrame = undefined;
+    }
+    if (this.displacementObjectUrl) {
+      URL.revokeObjectURL(this.displacementObjectUrl);
+      this.displacementObjectUrl = undefined;
+    }
+  }
+
+  async preloadDisplacementMap() {
+    const image = this.displacementImage;
+    if (!image) return;
+
+    const href =
+      image.getAttribute("href") || image.getAttributeNS("http://www.w3.org/1999/xlink", "href");
+    if (!href || href.startsWith("blob:")) return;
+
+    try {
+      const response = await fetch(href);
+      if (!response.ok) return;
+      const blob = await response.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      this.displacementObjectUrl = objectUrl;
+      image.setAttribute("href", objectUrl);
+      image.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", objectUrl);
+    } catch {
+      // Keep original href if preload fails.
     }
   }
 

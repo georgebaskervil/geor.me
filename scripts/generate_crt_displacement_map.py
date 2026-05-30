@@ -109,8 +109,8 @@ def main() -> None:
     out = Path(__file__).resolve().parent.parent / "app" / "images" / "crt-displacement-map.png"
     out.parent.mkdir(parents=True, exist_ok=True)
     raw = build_raw_map()
-    # Blur is applied in SVG via feGaussianBlur (must match stdDeviation there).
-    write_png(out, raw)
+    # Blur baked into PNG (matches former feGaussianBlur stdDeviation 0.35).
+    write_png(out, blur_pixels(raw))
     print(f"Wrote {out} ({out.stat().st_size} bytes)")
 
 

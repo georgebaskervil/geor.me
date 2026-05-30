@@ -57,16 +57,27 @@ export function createSuperHover(options = {}) {
   const scopeDoc = getScopeDocument(root);
   const scopeWin = scopeDoc.defaultView ?? window;
   const allowedPointerTypes = new Set(options.pointerTypes ?? [...DEFAULT_POINTER_TYPES]);
+  const checkIntervalMs = options.checkIntervalMs ?? 50;
+  const suspendWhenPointerIdle = options.suspendWhenPointerIdle ?? true;
+  const pointerIdleMs = options.pointerIdleMs ?? 120;
 
   let running = options.enabled ?? true;
   let destroyed = false;
   let lastX = 0, lastY = 0;
   let hasPointer = false;
   let current = null;
-  let rafId = 0, pending = false;
+  let pending = false;
+  let checkTimer = 0;
+  let lastCheckAt = 0;
+  let pointerIdle = false;
+  let pointerIdleTimer = 0;
 
-  function cancelPendingFrame() {
-    if (rafId !== 0) { scopeWin.cancelAnimationFrame(rafId); rafId = 0; pending = false; }
+  function cancelPendingCheck() {
+    if (checkTimer !== 0) {
+      clearTimeout(checkTimer);
+      checkTimer = 0;
+    }
+    pending = false;
   }
 
   function deactivate(prev, next) {
@@ -107,11 +118,13 @@ export function createSuperHover(options = {}) {
     }
   }
 
-  function schedule() {
+  function runCheck() {
     if (destroyed || pending) return;
     pending = true;
-    rafId = scopeWin.requestAnimationFrame(() => {
-      rafId = 0; pending = false;
+    lastCheckAt = Date.now();
+    checkTimer = 0;
+    scopeWin.requestAnimationFrame(() => {
+      pending = false;
       if (destroyed) return;
       if (!running || !hasPointer) { clearActive(); return; }
       apply();
@@ -124,10 +137,41 @@ export function createSuperHover(options = {}) {
     });
   }
 
+  function schedule() {
+    if (destroyed || pending || checkTimer !== 0) return;
+    const elapsed = Date.now() - lastCheckAt;
+    if (elapsed >= checkIntervalMs) {
+      runCheck();
+    } else {
+      checkTimer = setTimeout(runCheck, checkIntervalMs - elapsed);
+    }
+  }
+
+  function resetPointerIdleTimer() {
+    if (!suspendWhenPointerIdle) return;
+    pointerIdle = false;
+    clearTimeout(pointerIdleTimer);
+    pointerIdleTimer = setTimeout(() => {
+      pointerIdle = true;
+      cancelPendingCheck();
+    }, pointerIdleMs);
+  }
+
+  function shouldProcessPointerMove() {
+    return !(suspendWhenPointerIdle && pointerIdle);
+  }
+
   function onPointerMove(e) {
     if (destroyed || !allowedPointerTypes.has(e.pointerType)) return;
     lastX = e.clientX; lastY = e.clientY; hasPointer = true;
+    resetPointerIdleTimer();
+    if (!shouldProcessPointerMove()) return;
     if (running) schedule();
+  }
+
+  function onScroll() {
+    if (destroyed || pointerIdle) return;
+    schedule();
   }
 
   function onPointerLeaveDocument() { hasPointer = false; schedule(); }
@@ -137,7 +181,7 @@ export function createSuperHover(options = {}) {
   }
 
   scopeWin.addEventListener("pointermove", onPointerMove, { passive: true });
-  scopeDoc.addEventListener("scroll", schedule, { capture: true, passive: true });
+  scopeDoc.addEventListener("scroll", onScroll, { capture: true, passive: true });
   scopeWin.addEventListener("resize", schedule, { passive: true });
   scopeWin.addEventListener("blur", onPointerLeaveDocument);
   scopeDoc.addEventListener("pointerleave", onPointerLeaveDocument);
@@ -148,21 +192,23 @@ export function createSuperHover(options = {}) {
   schedule();
 
   return {
-    pause()   { if (!destroyed) { running = false; cancelPendingFrame(); clearActive(); } },
+    pause()   { if (!destroyed) { running = false; cancelPendingCheck(); clearActive(); } },
     resume()  { if (!destroyed) { running = true; schedule(); } },
     refresh() { if (!destroyed) schedule(); },
     destroy() {
       if (destroyed) return;
       destroyed = true;
+      clearTimeout(pointerIdleTimer);
+      cancelPendingCheck();
       scopeWin.removeEventListener("pointermove", onPointerMove);
-      scopeDoc.removeEventListener("scroll", schedule, { capture: true });
+      scopeDoc.removeEventListener("scroll", onScroll, { capture: true });
       scopeWin.removeEventListener("resize", schedule);
       scopeWin.removeEventListener("blur", onPointerLeaveDocument);
       scopeDoc.removeEventListener("pointerleave", onPointerLeaveDocument);
       scopeDoc.removeEventListener("pointercancel", onPointerLeaveDocument);
       scopeDoc.removeEventListener("pointerout", onPointerOut);
       scopeDoc.removeEventListener("visibilitychange", onVisibilityChange);
-      cancelPendingFrame(); hasPointer = false; clearActive();
+      hasPointer = false; clearActive();
     },
   };
 }

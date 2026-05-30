@@ -44,18 +44,17 @@
         </ul>
       </div>
     </div>
-    <picture class="hp-image-container hp-picture">
-      <source srcset="<%= vite_asset_path('~/images/me.avif') %>" type="image/avif">
+    <div class="hp-image-container hp-picture">
       <%= image_tag(
         vite_asset_path("~/images/me.avif"),
         alt: "A picture of me",
         loading: "eager",
         width: "654",
         height: "654",
-        decoding: "sync",
+        decoding: "async",
         fetchpriority: "high",
       ) %>
-    </picture>
+    </div>
   </div>
 </article>
 <article class="hp-article-2">
@@ -221,14 +220,12 @@
           href="<%= vite_asset_path("~/losslessphotos/#{jpg_name}") %>"
           target="_self"
         >
-          <picture>
-            <%= image_tag(
-              vite_asset_path("~/photos/AVIFs/#{avif_name}"),
-              loading: "lazy",
-              decoding: "async",
-              fetchpriority: "low",
-            ) %>
-          </picture>
+          <%= image_tag(
+            vite_asset_path("~/photos/AVIFs/#{avif_name}"),
+            loading: "lazy",
+            decoding: "async",
+            fetchpriority: "low",
+          ) %>
         </a>
       </div>
     <% end %>

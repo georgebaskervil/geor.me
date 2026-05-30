@@ -20,14 +20,12 @@
           href="<%= vite_asset_path("~/losslessphotos/#{jpg_name}") %>"
           target="_self"
         >
-          <picture>
-            <%= image_tag(
-              vite_asset_path("~/photos/AVIFs/#{avif_name}"),
-              loading: "lazy",
-              decoding: "async",
-              fetchpriority: "low",
-            ) %>
-          </picture>
+          <%= image_tag(
+            vite_asset_path("~/photos/AVIFs/#{avif_name}"),
+            loading: "lazy",
+            decoding: "async",
+            fetchpriority: "low",
+          ) %>
         </a>
       </div>
     <% end %>

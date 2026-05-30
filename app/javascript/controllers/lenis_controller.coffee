@@ -1,6 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
 import Lenis from "lenis"
 
+VELOCITY_EPSILON = 0.01
+SCROLL_EPSILON = 0.5
+
 export default class extends Controller
   connect: ->
     window._lenisInitialised = true
@@ -12,17 +15,24 @@ export default class extends Controller
       @_init() unless @lenis
       @lenis?.resize()
       @_updateFooterVisibility()
+      @_kickLenisRaf()
 
     @_onResize = =>
       @lenis?.resize()
       @_updateFooterVisibility()
-    @_onLenisScroll = => @_updateFooterVisibility()
+      @_kickLenisRaf()
+    @_onLenisScroll = =>
+      @_updateFooterVisibility()
+      @_kickLenisRaf()
     @_onWrapperScroll = => @_updateFooterVisibility()
+    @_onWrapperWheel = => @_kickLenisRaf()
 
     document.addEventListener "turbo:before-cache", @_onBeforeCache
     document.addEventListener "turbo:load", @_onLoad
     window.addEventListener "resize", @_onResize
     @_wrapperEl?.addEventListener "scroll", @_onWrapperScroll, { passive: true }
+    @_wrapperEl?.addEventListener "wheel", @_onWrapperWheel, { passive: true }
+    @_wrapperEl?.addEventListener "touchstart", @_onWrapperWheel, { passive: true }
 
   disconnect: ->
     @_destroy()
@@ -30,6 +40,8 @@ export default class extends Controller
     document.removeEventListener "turbo:load", @_onLoad
     window.removeEventListener "resize", @_onResize
     @_wrapperEl?.removeEventListener "scroll", @_onWrapperScroll
+    @_wrapperEl?.removeEventListener "wheel", @_onWrapperWheel
+    @_wrapperEl?.removeEventListener "touchstart", @_onWrapperWheel
 
   _wrapper: ->
     document.getElementById("crt-content")
@@ -46,8 +58,8 @@ export default class extends Controller
       wrapper: wrapper
       content: content
       eventsTarget: wrapper
-      autoRaf: true
-      lerp: 0.1
+      autoRaf: false
+      lerp: 0.15
       easing: (t) -> Math.min(1, 1.001 - Math.pow(2, -10 * t))
       orientation: "vertical"
       gestureOrientation: "vertical"
@@ -62,6 +74,30 @@ export default class extends Controller
     @_updateFooterVisibility()
     @lenis.resize()
     @lenis.scrollTo(savedScroll, { immediate: true }) if savedScroll > 0
+    @_kickLenisRaf()
+
+  _kickLenisRaf: ->
+    return if @lenisRafId?
+    @lenisRafId = requestAnimationFrame @_runLenisRaf
+
+  _stopLenisRaf: ->
+    return unless @lenisRafId?
+    cancelAnimationFrame @lenisRafId
+    @lenisRafId = null
+
+  _runLenisRaf: (time) =>
+    @lenisRafId = null
+    return unless @lenis?
+    @lenis.raf(time)
+    @_kickLenisRaf() if @_lenisNeedsRaf()
+
+  _lenisNeedsRaf: ->
+    return false unless @lenis?
+    return true if @lenis.animate?.isRunning
+    return true if @lenis.isScrolling is "smooth"
+    return true if Math.abs(@lenis.velocity) > VELOCITY_EPSILON
+    return true if Math.abs(@lenis.targetScroll - @lenis.animatedScroll) > SCROLL_EPSILON
+    false
 
   _preventSmoothScroll: (node) ->
     return true if node.closest?("[data-lenis-prevent]")
@@ -70,6 +106,7 @@ export default class extends Controller
     false
 
   _destroy: ->
+    @_stopLenisRaf()
     if @lenis
       @lenis.off?("scroll", @_onLenisScroll)
       @lenis.destroy()

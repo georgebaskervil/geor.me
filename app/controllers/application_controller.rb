@@ -118,9 +118,6 @@ class ApplicationController < ActionController::Base
               # Handle the updated_at date
               updated_at = metadata["updatedAt"] || metadata["publishedAt"]
 
-              # Handle the preview image
-              preview_image = metadata["previewImage"]
-
               {
                 title: metadata["title"],
                 description: metadata["description"],
@@ -139,7 +136,6 @@ class ApplicationController < ActionController::Base
                 tags: tags,
                 section: section,
                 author: metadata["author"] || "George Baskerville",
-                preview_image: preview_image,
                 format: :markdown
               }
             rescue StandardError => e
@@ -179,7 +175,6 @@ class ApplicationController < ActionController::Base
           section = metadata["section"] || "Blog"
           published_at = metadata["publishedAt"] || File.mtime(file).to_date
           updated_at = metadata["updatedAt"] || published_at
-          preview_image = metadata["previewImage"]
 
           {
             title: metadata["title"] || raw_base_name.tr("-_,", "   ").split.map(&:capitalize).join(" "),
@@ -192,7 +187,6 @@ class ApplicationController < ActionController::Base
             tags: tags,
             section: section,
             author: metadata["author"] || "George Baskerville",
-            preview_image: preview_image,
             format: :pdf
           }
         end
@@ -273,11 +267,6 @@ class ApplicationController < ActionController::Base
         files.sort.map { |f| "#{f}:#{File.mtime(f).to_i}" }.join("|")
       )
     end
-  end
-
-  def meta_image
-    # Use a fixed default image since preview images will be generated programmatically in the future
-    vite_asset_path("~/images/site-screenshot.png")
   end
 
   # Helper methods for cache keys

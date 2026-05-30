@@ -21,7 +21,7 @@
 
 .image-container {
   @apply relative flex justify-center items-center overflow-hidden;
-  @apply transition-all duration-300 ease-in-out; /* Changed from transition-transform to transition-all */
+  transition: transform 0.3s ease-in-out;
   @apply w-full;
 
   aspect-ratio: 3 / 2;

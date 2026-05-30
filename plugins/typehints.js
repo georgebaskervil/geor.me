@@ -184,10 +184,8 @@ export default function typehints(options = {}) {
             // Skip files known to cause issues with type hints processing
             const problematicFiles = [
                 "/useDragDrop.js", // Stack overflow with complex Vue composables
-                "plotly.js", // Stack overflow with deep type inference
                 "three.module.js", // Syntax/scope issues
                 "three.core.js", // Duplicate identifier issues
-                "phaser.js", // Large game library
                 "/node_modules/react/",
                 "/node_modules/react-dom/",
                 "/node_modules/scheduler/",
