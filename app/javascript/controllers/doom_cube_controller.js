@@ -9,11 +9,17 @@ export default class extends Controller {
   static targets = ["root", "canvas"];
 
   connect() {
-    // Only set up event listener initially
+    this.hiddenByVisibility = false;
     document.addEventListener(
       "distractionmode:toggle",
       this.handleDistractionMode.bind(this),
     );
+    this.visibilityObserver = new IntersectionObserver(
+      (entries) =>
+        this.onVisibilityChange(entries.some((entry) => entry.isIntersecting)),
+      { threshold: 0.05 },
+    );
+    this.visibilityObserver.observe(this.element);
   }
 
   handleDistractionMode(event) {
@@ -24,7 +30,23 @@ export default class extends Controller {
         this.initializeDoomCube();
       }
     } else {
+      this.hiddenByVisibility = false;
       this.pauseEmulator();
+    }
+  }
+
+  onVisibilityChange(visible) {
+    if (!this.initialized) return;
+    if (!visible) {
+      if (this.isAnimating) {
+        this.pauseEmulator();
+        this.hiddenByVisibility = true;
+      }
+      return;
+    }
+    if (this.hiddenByVisibility) {
+      this.resumeEmulator();
+      this.hiddenByVisibility = false;
     }
   }
 
@@ -140,6 +162,7 @@ export default class extends Controller {
   }
 
   disconnect() {
+    this.visibilityObserver?.disconnect();
     this.pauseEmulator();
     if (this.ci && this.ci.destroy) {
       this.ci.destroy(); // Clean up emulator instance

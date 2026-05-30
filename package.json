@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "preinstall": "bun scripts/bun-age-gate.mjs || exit 1",
-    "build": "vite build --outDir public"
+    "build": "vite build --outDir public",
+    "generate:crt-map": "python3 scripts/generate_crt_displacement_map.py"
   },
   "dependencies": {
     "@coffeelint/cli": "^5.2.11",

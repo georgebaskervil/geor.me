@@ -230,10 +230,9 @@ export default class extends Controller
   explodeHearts: =>
     parent = @nekoEl.parentElement
     rect = @nekoEl.getBoundingClientRect()
-    scrollLeft = window.scrollX || document.documentElement.scrollLeft
-    scrollTop = window.scrollY || document.documentElement.scrollTop
-    centerX = rect.left + rect.width / 2 + scrollLeft
-    centerY = rect.top + rect.height / 2 + scrollTop
+    # Viewport coords — hearts live inside .crt-shell (not document scroll).
+    centerX = rect.left + rect.width / 2
+    centerY = rect.top + rect.height / 2
 
     for i in [0...20]
       heart = document.createElement('div')

@@ -6,6 +6,11 @@
   text-shadow: 1px 1px 2px rgb(0 0 0 / 50%); /* Subtle text shadow */
 }
 
+html,
+body {
+  height: 100%;
+}
+
 html {
   font-family: SpaceMono-Regular-subset, monospace;
   background-color: #2C2A2F;
@@ -78,6 +83,14 @@ img {
 
 body {
   overflow-x: hidden;
+}
+
+// CRT shell holds Lenis clip + overlay effects (cursor, oneko) inside the SVG filter.
+.crt-shell {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
 }
 
 // CRT viewport: #crt-content is the Lenis wrapper (clip); .crt-scroll-content is transformed.

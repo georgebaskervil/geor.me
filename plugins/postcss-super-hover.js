@@ -1,31 +1,28 @@
-// postcss-super-hover.js
-const selectorParser = require('postcss-selector-parser');
+import selectorParser from "postcss-selector-parser";
 
-module.exports = (opts = {}) => {
-  const attribute = opts.attribute ?? 'data-super-hover-active';
+export default function postcssSuperHover(opts = {}) {
+  const attribute = opts.attribute ?? "data-super-hover-active";
 
   return {
-    postcssPlugin: 'postcss-super-hover',
+    postcssPlugin: "postcss-super-hover",
     Rule(rule) {
-      if (!rule.selector.includes(':hover')) return;
+      if (!rule.selector.includes(":hover")) return;
 
       const extraSelectors = [];
 
-      const transform = selectorParser(selectors => {
-        selectors.each(selector => {
-          // Check if this particular selector has a :hover pseudo
+      const transform = selectorParser((selectors) => {
+        selectors.each((selector) => {
           let hasHover = false;
-          selector.walk(node => {
-            if (node.type === 'pseudo' && node.value === ':hover') hasHover = true;
+          selector.walk((node) => {
+            if (node.type === "pseudo" && node.value === ":hover") hasHover = true;
           });
           if (!hasHover) return;
 
-          // Clone and replace :hover with [data-super-hover-active]
           const cloned = selector.clone();
-          cloned.walk(node => {
-            if (node.type === 'pseudo' && node.value === ':hover') {
+          cloned.walk((node) => {
+            if (node.type === "pseudo" && node.value === ":hover") {
               node.replaceWith(
-                selectorParser.attribute({ attribute, insensitive: false })
+                selectorParser.attribute({ attribute, insensitive: false }),
               );
             }
           });
@@ -36,10 +33,10 @@ module.exports = (opts = {}) => {
       transform.processSync(rule.selector);
 
       if (extraSelectors.length) {
-        rule.selector = rule.selector + ',\n' + extraSelectors.join(',\n');
+        rule.selector = `${rule.selector},\n${extraSelectors.join(",\n")}`;
       }
-    }
+    },
   };
-};
+}
 
-module.exports.postcss = true;
+postcssSuperHover.postcss = true;

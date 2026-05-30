@@ -16,6 +16,12 @@ application.register("cipher", CipherController);
 import ColoursquareController from "./coloursquare_controller";
 application.register("coloursquare", ColoursquareController);
 
+import CrtController from "./crt_controller";
+application.register("crt", CrtController);
+
+import AnimationVisibilityController from "./animation_visibility_controller";
+application.register("animation-visibility", AnimationVisibilityController);
+
 import DeepseekChatController from "./deepseek_chat_controller";
 application.register("deepseek-chat", DeepseekChatController);
 

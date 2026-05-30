@@ -22,6 +22,7 @@ import replacements from "./vendor/javascript/unplugin-replacements/lib/vite.js"
 import coffeescript from "./plugins/coffeescript.js";
 import typehints from "./plugins/typehints.js";
 import removePrefix from "./plugins/postcss-remove-prefix.js";
+import postcssSuperHover from "./plugins/postcss-super-hover.js";
 import {
     allObfuscatorConfig,
     commonDefine,
@@ -192,7 +193,7 @@ export default defineConfig(({ mode }) => {
           removePrefix(),
           tailwindcss(),
           stylehacks({ lint: false }),
-          require('./plugins/postcss-super-hover.js'),
+          postcssSuperHover(),
           postcssInlineRtl(),
           postcssUrl([
             {

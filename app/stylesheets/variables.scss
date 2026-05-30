@@ -114,17 +114,17 @@ $squish-pressable-hover-z: 1000;
 
   &:hover {
     @if $base-transform {
-      transform: #{$base-transform} scale(1.05) rotate($rotate);
+      transform: #{$base-transform} scale(0.95) rotate($rotate);
     } @else {
-      transform: scale(1.05) rotate($rotate);
+      transform: scale(0.95) rotate($rotate);
     }
   }
 
   &:active {
     @if $base-transform {
-      transform: #{$base-transform} scale(0.8);
+      transform: #{$base-transform} scale(0.8) rotate($rotate);
     } @else {
-      transform: scale(0.8);
+      transform: scale(0.8) rotate($rotate);
     }
 
     @content;

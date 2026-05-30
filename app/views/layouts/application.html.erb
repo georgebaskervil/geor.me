@@ -80,6 +80,7 @@
     <%= vite_client_tag %>
   </head>
   <body>
+    <% crt_displacement_map = vite_asset_path("~/images/crt-displacement-map.png") %>
     <div class="scanlines"></div>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +108,8 @@
           color-interpolation-filters="sRGB"
         >
           <feimage
-            id="filter-image"
+            href="<%= crt_displacement_map %>"
+            xlink:href="<%= crt_displacement_map %>"
             x="-50%"
             y="-50%"
             width="200%"
@@ -121,6 +123,7 @@
             result="barrel"
           />
           <fedisplacementmap
+            id="crt-displacement"
             in="SourceGraphic"
             in2="barrel"
             scale="50"
@@ -136,75 +139,80 @@
       </defs>
       <g filter="url(#barrel)">
         <foreignobject x="0" y="0" width="100%" height="100%">
-          <div id="crt-content" xmlns="http://www.w3.org/1999/xhtml">
-            <%= render 'layouts/shortcutswrapper' do %>
-              <%= render 'layouts/distractionmodewrapper' do %>
-                <%= render 'layouts/leniswrapper' do %>
-                  <div class="layout-main">
-                    <header class="layout-header">
-                      <a href="/" class="layout-home-link" rel="noopener">George Baskerville</a>
-                      <% nav_items = [
-                        { title: "Posts", path: "/posts", external: false },
-                        { title: "Images", path: "/images", external: false },
-                        { title: "Miscellaneous", path: "/miscellaneous", external: false },
-                        { title: "Legal", path: "/legal", external: false },
-                      ] %>
+          <div class="crt-shell" xmlns="http://www.w3.org/1999/xhtml">
+          <div
+            id="crt-content"
+            data-controller="crt animation-visibility"
+          >
+      <%= render 'layouts/shortcutswrapper' do %>
+        <%= render 'layouts/distractionmodewrapper' do %>
+          <%= render 'layouts/leniswrapper' do %>
+            <div class="layout-main">
+              <header class="layout-header">
+                <a href="/" class="layout-home-link" rel="noopener">George Baskerville</a>
+                <% nav_items = [
+                  { title: "Posts", path: "/posts", external: false },
+                  { title: "Images", path: "/images", external: false },
+                  { title: "Miscellaneous", path: "/miscellaneous", external: false },
+                  { title: "Legal", path: "/legal", external: false },
+                ] %>
 
-                      <nav class="layout-nav" data-controller="heading-highlight">
-                        <ul>
-                          <% nav_items.each do |item| %>
-                            <li>
-                              <% if item[:external] %>
-                                <a
-                                  href="<%= item[:path] %>"
-                                  target="_self"
-                                  rel="noopener"
-                                  class="<%= 'text-accent' if !item[:external] && request.path == item[:path] %>"
-                                >
-                                  <%= item[:title] %>
-                                </a>
-                              <% else %>
-                                <a
-                                  href="<%= item[:path] %>"
-                                  class="<%= 'text-accent' if request.path == item[:path] %>"
-                                >
-                                  <%= item[:title] %>
-                                </a>
-                              <% end %>
-                            </li>
-                          <% end %>
-                          <li>
-                            <button
-                              class="distraction-button"
-                              data-action="
-                                click->distractionmode#toggleDistractionMode
-                              "
-                            >
-                              ✨Distraction Mode✨
-                            </button>
-                          </li>
-                        </ul>
-                      </nav>
-                    </header>
-                    <div class="flex-grow">
-                      <main>
-                        <div class="main">
-                          <%= yield %>
-                          <%= render "layouts/footer" %>
-                        </div>
-                      </main>
-                    </div>
+                <nav class="layout-nav" data-controller="heading-highlight">
+                  <ul>
+                    <% nav_items.each do |item| %>
+                      <li>
+                        <% if item[:external] %>
+                          <a
+                            href="<%= item[:path] %>"
+                            target="_self"
+                            rel="noopener"
+                            class="<%= 'text-accent' if !item[:external] && request.path == item[:path] %>"
+                          >
+                            <%= item[:title] %>
+                          </a>
+                        <% else %>
+                          <a
+                            href="<%= item[:path] %>"
+                            class="<%= 'text-accent' if request.path == item[:path] %>"
+                          >
+                            <%= item[:title] %>
+                          </a>
+                        <% end %>
+                      </li>
+                    <% end %>
+                    <li>
+                      <button
+                        class="distraction-button"
+                        data-action="
+                          click->distractionmode#toggleDistractionMode
+                        "
+                      >
+                        ✨Distraction Mode✨
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
+              </header>
+              <div class="flex-grow">
+                <main>
+                  <div class="main">
+                    <%= yield %>
+                    <%= render "layouts/footer" %>
                   </div>
-                  <%= render "layouts/floatingwindows" %>
-                <% end %>
-              <% end %>
-            <% end %>
+                </main>
+              </div>
+            </div>
+            <%= render "layouts/floatingwindows" %>
+          <% end %>
+        <% end %>
+      <% end %>
+          </div>
+          <%= render "layouts/cursor" %>
+          <%= render "layouts/oneko" %>
           </div>
         </foreignobject>
       </g>
     </svg>
-    <%= render "layouts/cursor" %>
-    <%= render "layouts/oneko" %>
     <div id="geor-me-extension-footer-slot" class="geor-me-extension-footer-slot" aria-hidden="true">
       <div style="width:98%;background:#1a1a1a;box-sizing:border-box;border-top-right-radius: 10px;border-top-left-radius: 10px;">
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 16px;">
@@ -219,63 +227,5 @@
         </div>
       </div>
     </div>
-    <canvas id="crt-canvas" style="display: none"></canvas>
-    <script>
-      "use strict";
-      var canvas = document.getElementById("crt-canvas");
-      var barrel = document.getElementById("filter-image");
-      var displacement = document.querySelector("fedisplacementmap");
-      var size = 512;
-      canvas.width = size;
-      canvas.height = size;
-      var c = size / 2;
-      var ctx = canvas.getContext("2d");
-      var imageData = ctx.createImageData(size, size);
-      var data = imageData.data;
-      for (var y = 0; y < size; y++) {
-        for (var x = 0; x < size; x++) {
-          var dx = x - c;
-          var dy = y - c;
-          var l = Math.sqrt(dx * dx + dy * dy);
-          var t = Math.min(l / c, 1);
-          var factor = t * t * 0.7;
-          var r = 128 + dx * factor;
-          var g = 128 + dy * factor;
-          var idx = (y * size + x) << 2;
-          data[idx] = r < 0 ? 0 : r > 255 ? 255 : r | 0;
-          data[idx + 1] = g < 0 ? 0 : g > 255 ? 255 : g | 0;
-          data[idx + 2] = 0;
-          data[idx + 3] = 255;
-        }
-      }
-      ctx.putImageData(imageData, 0, 0);
-      var dataUrl = canvas.toDataURL();
-      barrel.setAttributeNS(
-        "http://www.w3.org/1999/xlink",
-        "xlink:href",
-        dataUrl,
-      );
-      barrel.setAttribute("href", dataUrl);
-      var resizeTimer;
-      function updateScale() {
-        try {
-          var base_scale = 80;
-          var strength = 0.95;
-          var current_scale =
-            base_scale * (window.innerWidth / 1024) * strength;
-          displacement.setAttribute("scale", current_scale);
-        } catch (e) {
-          // Element not found, ignore error
-        }
-      }
-      updateScale();
-      window.addEventListener("resize", function() {
-        if (resizeTimer) return;
-        resizeTimer = requestAnimationFrame(function() {
-          resizeTimer = null;
-          updateScale();
-        });
-      });
-    </script>
   </body>
 </html>
