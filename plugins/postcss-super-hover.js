@@ -1,7 +1,7 @@
 import selectorParser from "postcss-selector-parser";
 
-export default function postcssSuperHover(opts = {}) {
-  const attribute = opts.attribute ?? "data-super-hover-active";
+export default function postcssSuperHover(options = {}) {
+  const attribute = options.attribute ?? "data-super-hover-active";
 
   return {
     postcssPlugin: "postcss-super-hover",
@@ -14,7 +14,8 @@ export default function postcssSuperHover(opts = {}) {
         selectors.each((selector) => {
           let hasHover = false;
           selector.walk((node) => {
-            if (node.type === "pseudo" && node.value === ":hover") hasHover = true;
+            if (node.type === "pseudo" && node.value === ":hover")
+              hasHover = true;
           });
           if (!hasHover) return;
 
@@ -32,7 +33,7 @@ export default function postcssSuperHover(opts = {}) {
 
       transform.processSync(rule.selector);
 
-      if (extraSelectors.length) {
+      if (extraSelectors.length > 0) {
         rule.selector = `${rule.selector},\n${extraSelectors.join(",\n")}`;
       }
     },

@@ -24,12 +24,12 @@ export default class extends Controller {
     // Configure floating windows for transitions and set fixed positions.
     // Positions are arranged to not overlap and keep top-right clear for the distraction mode button
     const fixedPositions = [
-      { left: 20, top: 100 },   // Window 1: top-left
-      { left: 20, top: 460 },   // Window 2: middle-left (taller window)
-      { left: 340, top: 100 },  // Window 3: top-middle
-      { left: 340, top: 460 },  // Window 4: middle-middle
-      { left: 660, top: 180 },  // Window 5: right side, below header
-      { left: 660, top: 520 },  // Window 6: bottom-right (wide window)
+      { left: 20, top: 100 }, // Window 1: top-left
+      { left: 20, top: 460 }, // Window 2: middle-left (taller window)
+      { left: 340, top: 100 }, // Window 3: top-middle
+      { left: 340, top: 460 }, // Window 4: middle-middle
+      { left: 660, top: 180 }, // Window 5: right side, below header
+      { left: 660, top: 520 }, // Window 6: bottom-right (wide window)
     ];
     for (const [index, fw] of this.floatingWindows.entries()) {
       fw.style.transition =
@@ -40,7 +40,6 @@ export default class extends Controller {
       fw.style.left = `${pos.left}px`;
       fw.style.top = `${pos.top}px`;
     }
-
   }
 
   // Toggle showing/hiding all windows and playing/pausing videos.
@@ -63,11 +62,9 @@ export default class extends Controller {
 
     for (const video of this.videoTargets) {
       if (this.areWindowsVisible) {
-        video
-          .play()
-          .catch(() => {
-            // Suppress play request interruption errors (browser autoplay policy)
-          });
+        video.play().catch(() => {
+          // Suppress play request interruption errors (browser autoplay policy)
+        });
       } else {
         video.pause();
       }
@@ -80,5 +77,4 @@ export default class extends Controller {
       }),
     );
   };
-
 }

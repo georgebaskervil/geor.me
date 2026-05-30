@@ -17,9 +17,7 @@ class PostsController < ApplicationController
 
   def file
     identifier = params[:id].to_s
-    unless safe_post_identifier?(identifier)
-      return render plain: "File not found", status: :not_found
-    end
+    return render plain: "File not found", status: :not_found unless safe_post_identifier?(identifier)
 
     article = @articles.find { |a| a[:slug] == identifier }
     return render plain: "File not found", status: :not_found unless article

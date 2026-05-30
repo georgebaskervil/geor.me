@@ -9,10 +9,7 @@ export default defineConfig([
       eslint: eslintjs,
       typescript: tseslint
     },
-    extends: [
-      tseslint.configs.strict,
-      eslintjs.configs.recommended
-    ],
+    extends: [tseslint.configs.strict, eslintjs.configs.recommended],
     rules: {
       '@typescript-eslint/no-non-null-assertion': 'off'
     }

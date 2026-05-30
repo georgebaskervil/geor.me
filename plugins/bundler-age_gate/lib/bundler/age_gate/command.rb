@@ -18,7 +18,7 @@ module Bundler
         @excepted_violations = []
         @audit_logger = AuditLogger.new(@config.audit_log_path)
         @checked_gems_count = 0
-        @source_map = {}  # gem_name => source_url
+        @source_map = {} # gem_name => source_url
 
         # Thread-safety primitives for parallel processing
         @cache_mutex = Mutex.new          # Protect @cache hash
@@ -31,27 +31,27 @@ module Bundler
         config_path = File.join(Dir.pwd, ".bundler-age-gate.yml")
 
         unless File.exist?(config_path)
-          puts "ℹ️  No .bundler-age-gate.yml found in current directory"
+          Rails.logger.debug "ℹ️  No .bundler-age-gate.yml found in current directory"
           exit 0
         end
 
         lockfile_path = File.join(Dir.pwd, "Gemfile.lock")
         unless File.exist?(lockfile_path)
-          puts "❌ Gemfile.lock not found in current directory"
+          Rails.logger.debug "❌ Gemfile.lock not found in current directory"
           exit 1
         end
 
         # Load config
-        config_data = YAML.safe_load_file(config_path, permitted_classes: [Date, Time]) || {}
+        config_data = YAML.safe_load_file(config_path, permitted_classes: [ Date, Time ]) || {}
         exceptions = config_data["exceptions"] || []
 
         if exceptions.empty?
-          puts "ℹ️  No exceptions found in .bundler-age-gate.yml"
+          Rails.logger.debug "ℹ️  No exceptions found in .bundler-age-gate.yml"
           exit 0
         end
 
-        puts "🔍 Checking #{exceptions.size} exception(s) for cleanup..."
-        puts ""
+        Rails.logger.debug "🔍 Checking #{exceptions.size} exception(s) for cleanup..."
+        Rails.logger.debug ""
 
         # Parse lockfile
         lockfile = Bundler::LockfileParser.new(Bundler.read_file(lockfile_path))
@@ -71,7 +71,7 @@ module Bundler
           end
 
           unless gem_spec
-            puts "⚠️  #{gem_name}#{gem_version ? " (#{gem_version})" : ""} - Not in Gemfile.lock (keeping exception)"
+            Rails.logger.debug "⚠️  #{gem_name}#{gem_version ? " (#{gem_version})" : ''} - Not in Gemfile.lock (keeping exception)"
             kept_exceptions << exception
             next
           end
@@ -80,33 +80,33 @@ module Bundler
           gem_source_url = @source_map[gem_name] || "https://rubygems.org"
           source_config = @config.source_for_url(gem_source_url)
           min_age_days = @cli_override_days || source_config.minimum_age_days
-          cutoff_date = Time.now - (min_age_days * 24 * 60 * 60)
+          cutoff_date = Time.zone.now - (min_age_days * 24 * 60 * 60)
 
           release_date = fetch_gem_release_date(gem_name, gem_spec.version.to_s, source_config)
 
           if release_date.nil?
-            puts "⚠️  #{gem_name} (#{gem_spec.version}) - Could not determine release date (keeping exception)"
+            Rails.logger.debug "⚠️  #{gem_name} (#{gem_spec.version}) - Could not determine release date (keeping exception)"
             kept_exceptions << exception
             next
           end
 
-          age_days = ((Time.now - release_date) / (24 * 60 * 60)).round
+          age_days = ((Time.zone.now - release_date) / (24 * 60 * 60)).round
 
           if release_date <= cutoff_date
             # Gem is now old enough - exception can be removed
-            puts "✅ #{gem_name} (#{gem_spec.version}) - Released #{age_days} days ago (#{min_age_days} days required) - Removing"
+            Rails.logger.debug "✅ #{gem_name} (#{gem_spec.version}) - Released #{age_days} days ago (#{min_age_days} days required) - Removing"
             removable_exceptions << exception
           else
             # Still too new - keep exception
-            puts "⏳ #{gem_name} (#{gem_spec.version}) - Released #{age_days} days ago (#{min_age_days} days required) - Keeping"
+            Rails.logger.debug "⏳ #{gem_name} (#{gem_spec.version}) - Released #{age_days} days ago (#{min_age_days} days required) - Keeping"
             kept_exceptions << exception
           end
         end
 
-        puts ""
+        Rails.logger.debug ""
 
         if removable_exceptions.empty?
-          puts "ℹ️  No exceptions can be removed at this time"
+          Rails.logger.debug "ℹ️  No exceptions can be removed at this time"
           exit 0
         end
 
@@ -114,8 +114,8 @@ module Bundler
         config_data["exceptions"] = kept_exceptions
         File.write(config_path, YAML.dump(config_data))
 
-        puts "✅ Removed #{removable_exceptions.size} exception(s) from .bundler-age-gate.yml"
-        puts "📝 #{kept_exceptions.size} exception(s) remaining"
+        Rails.logger.debug "✅ Removed #{removable_exceptions.size} exception(s) from .bundler-age-gate.yml"
+        Rails.logger.debug "📝 #{kept_exceptions.size} exception(s) remaining"
         exit 0
       end
 
@@ -123,7 +123,7 @@ module Bundler
         lockfile_path = File.join(Dir.pwd, "Gemfile.lock")
 
         unless File.exist?(lockfile_path)
-          puts "❌ Gemfile.lock not found in current directory"
+          Rails.logger.debug "❌ Gemfile.lock not found in current directory"
           exit 1
         end
 
@@ -135,22 +135,22 @@ module Bundler
 
         # Display configuration
         if @cli_override_days
-          puts "🔍 Checking gem ages (CLI override: #{@cli_override_days} days for all sources)..."
-          puts "📅 Cutoff date: #{Time.now - (@cli_override_days * 24 * 60 * 60)}"
+          Rails.logger.debug "🔍 Checking gem ages (CLI override: #{@cli_override_days} days for all sources)..."
+          Rails.logger.debug "📅 Cutoff date: #{Time.zone.now - (@cli_override_days * 24 * 60 * 60)}"
         else
-          puts "🔍 Checking gem ages (per-source configuration)..."
+          Rails.logger.debug "🔍 Checking gem ages (per-source configuration)..."
           @config.sources.each do |source|
-            puts "  📦 #{source.name}: #{source.minimum_age_days} days"
+            Rails.logger.debug "  📦 #{source.name}: #{source.minimum_age_days} days"
           end
         end
-        puts ""
+        Rails.logger.debug ""
 
-        puts "Checking #{gems.size} gems..."
-        print "Progress: "
+        Rails.logger.debug "Checking #{gems.size} gems..."
+        Rails.logger.debug "Progress: "
 
         # Determine worker count
         max_workers = @config.max_workers || 8
-        worker_count = [[max_workers, gems.size].min, 1].max
+        worker_count = [ [ max_workers, gems.size ].min, 1 ].max
 
         # Parallel or sequential
         if worker_count > 1
@@ -159,7 +159,7 @@ module Bundler
           check_gems_sequential(gems)
         end
 
-        puts "\n\n"
+        Rails.logger.debug "\n\n"
         display_results
       end
 
@@ -173,7 +173,11 @@ module Bundler
         workers = Array.new(worker_count) do
           Thread.new do
             loop do
-              spec = work_queue.pop(true) rescue break  # Non-blocking pop
+              spec = begin
+                       work_queue.pop(true)
+              rescue StandardError
+                       break
+              end
               check_gem_thread_safe(spec)
             end
           end
@@ -190,7 +194,7 @@ module Bundler
       def check_gems_sequential(gems)
         gems.each do |spec|
           check_gem(spec)
-          print "."
+          Rails.logger.debug "."
         end
       end
 
@@ -210,7 +214,7 @@ module Bundler
         gem_source_url = @source_map[gem_name] || "https://rubygems.org"
         source_config = @config.source_for_url(gem_source_url)
         min_age_days = @cli_override_days || source_config.minimum_age_days
-        cutoff_date = Time.now - (min_age_days * 24 * 60 * 60)
+        cutoff_date = Time.zone.now - (min_age_days * 24 * 60 * 60)
 
         # HTTP I/O happens here (NO LOCK - this gets parallelized!)
         release_date = fetch_gem_release_date(gem_name, gem_version, source_config)
@@ -225,7 +229,7 @@ module Bundler
 
         # Check violation
         if release_date > cutoff_date
-          age_days = ((Time.now - release_date) / (24 * 60 * 60)).round
+          age_days = ((Time.zone.now - release_date) / (24 * 60 * 60)).round
           violation = {
             name: gem_name,
             version: gem_version,
@@ -245,22 +249,22 @@ module Bundler
         end
 
         print_progress_dot
-      rescue StandardError => e
+      rescue StandardError
         @cache_mutex.synchronize { @cache[cache_key] = :error }
         print_progress_dot
       end
 
       def print_progress_dot
-        @progress_mutex.synchronize { print "." }
+        @progress_mutex.synchronize { Rails.logger.debug "." }
       end
 
-      def build_source_map(lockfile)
+      def build_source_map(_lockfile)
         # Parse REMOTE sections from lockfile to map gems to sources
         lockfile_content = File.read(File.join(Dir.pwd, "Gemfile.lock"))
         current_source = nil
 
         lockfile_content.each_line do |line|
-          if line.match(/^\s*remote: (.+)$/)
+          if /^\s*remote: (.+)$/.match?(line)
             current_source = line.match(/^\s*remote: (.+)$/)[1].strip
           elsif line.match(/^\s{4}(\S+)/) && current_source
             gem_name_with_version = line.strip
@@ -284,7 +288,7 @@ module Bundler
         gem_source_url = @source_map[gem_name] || "https://rubygems.org"
         source_config = @config.source_for_url(gem_source_url)
         min_age_days = @cli_override_days || source_config.minimum_age_days
-        cutoff_date = Time.now - (min_age_days * 24 * 60 * 60)
+        cutoff_date = Time.zone.now - (min_age_days * 24 * 60 * 60)
 
         release_date = fetch_gem_release_date(gem_name, gem_version, source_config)
 
@@ -297,7 +301,7 @@ module Bundler
         @cache[cache_key] = release_date
 
         if release_date > cutoff_date
-          age_days = ((Time.now - release_date) / (24 * 60 * 60)).round
+          age_days = ((Time.zone.now - release_date) / (24 * 60 * 60)).round
           violation = {
             name: gem_name,
             version: gem_version,
@@ -316,7 +320,7 @@ module Bundler
             @violations << violation
           end
         end
-      rescue StandardError => e
+      rescue StandardError
         # Silently handle errors for individual gems
         @cache[cache_key] = :error
       end
@@ -328,23 +332,19 @@ module Bundler
           request = Net::HTTP::Get.new(uri.path)
 
           # Add authentication header if configured
-          if source_config.auth_token
-            request["Authorization"] = "Bearer #{source_config.auth_token}"
-          end
+          request["Authorization"] = "Bearer #{source_config.auth_token}" if source_config.auth_token
 
           http.request(request)
         end
 
-        unless response.is_a?(Net::HTTPSuccess)
-          return nil
-        end
+        return nil unless response.is_a?(Net::HTTPSuccess)
 
         versions_data = JSON.parse(response.body)
         version_info = versions_data.find { |v| v["number"] == gem_version }
 
         return nil unless version_info && version_info["created_at"]
 
-        Time.parse(version_info["created_at"])
+        Time.zone.parse(version_info["created_at"])
       rescue StandardError
         nil
       end
@@ -352,13 +352,13 @@ module Bundler
       def display_results
         # Show excepted violations first (if any)
         unless @excepted_violations.empty?
-          puts "ℹ️  #{@excepted_violations.size} gem(s) have approved exceptions:\n\n"
+          Rails.logger.debug "ℹ️  #{@excepted_violations.size} gem(s) have approved exceptions:\n\n"
 
           @excepted_violations.sort_by { |v| v[:age_days] }.each do |violation|
-            puts "  ⚠️  #{violation[:name]} (#{violation[:version]}) [#{violation[:source]}]"
-            puts "     Released: #{violation[:release_date].strftime('%Y-%m-%d')} (#{violation[:age_days]} days ago, requires #{violation[:required_age]} days)"
-            puts "     Exception: #{violation[:exception_reason]}"
-            puts ""
+            Rails.logger.debug "  ⚠️  #{violation[:name]} (#{violation[:version]}) [#{violation[:source]}]"
+            Rails.logger.debug "     Released: #{violation[:release_date].strftime('%Y-%m-%d')} (#{violation[:age_days]} days ago, requires #{violation[:required_age]} days)"
+            Rails.logger.debug "     Exception: #{violation[:exception_reason]}"
+            Rails.logger.debug ""
           end
         end
 
@@ -374,20 +374,20 @@ module Bundler
 
         # Display final result
         if @violations.empty?
-          puts "✅ All gems meet their source-specific age requirements"
-          puts "🎉 Safe to proceed!"
+          Rails.logger.debug "✅ All gems meet their source-specific age requirements"
+          Rails.logger.debug "🎉 Safe to proceed!"
           exit 0
         else
-          puts "⚠️  Found #{@violations.size} gem(s) that don't meet age requirements:\n\n"
+          Rails.logger.debug "⚠️  Found #{@violations.size} gem(s) that don't meet age requirements:\n\n"
 
           @violations.sort_by { |v| v[:age_days] }.each do |violation|
-            puts "  ❌ #{violation[:name]} (#{violation[:version]}) [#{violation[:source]}]"
-            puts "     Released: #{violation[:release_date].strftime('%Y-%m-%d')} (#{violation[:age_days]} days ago, requires #{violation[:required_age]} days)"
-            puts ""
+            Rails.logger.debug "  ❌ #{violation[:name]} (#{violation[:version]}) [#{violation[:source]}]"
+            Rails.logger.debug "     Released: #{violation[:release_date].strftime('%Y-%m-%d')} (#{violation[:age_days]} days ago, requires #{violation[:required_age]} days)"
+            Rails.logger.debug ""
           end
 
-          puts "⛔ Age gate check FAILED"
-          puts "\n💡 To add an exception, create .bundler-age-gate.yml with approved exceptions"
+          Rails.logger.debug "⛔ Age gate check FAILED"
+          Rails.logger.debug "\n💡 To add an exception, create .bundler-age-gate.yml with approved exceptions"
           exit 1
         end
       end

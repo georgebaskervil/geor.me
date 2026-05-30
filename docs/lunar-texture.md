@@ -34,10 +34,10 @@ Regenerate after changing filter parameters in the script.
 
 ## Technical assets and AVIF
 
-| Asset | Format | Why |
-| --- | --- | --- |
-| `lunar-texture.avif` | Lossless AVIF | CSS `background-image` — AVIF is fine |
-| `crt-displacement-map.png` | PNG | SVG `feImage` input; AVIF is not reliably decoded in filter pipelines |
-| `favicon.jpg` | JPEG | Favicon / touch-icon — no AVIF support |
+| Asset                      | Format        | Why                                                                   |
+| -------------------------- | ------------- | --------------------------------------------------------------------- |
+| `lunar-texture.avif`       | Lossless AVIF | CSS `background-image` — AVIF is fine                                 |
+| `crt-displacement-map.png` | PNG           | SVG `feImage` input; AVIF is not reliably decoded in filter pipelines |
+| `favicon.jpg`              | JPEG          | Favicon / touch-icon — no AVIF support                                |
 
 Other lossless AVIF candidates (e.g. doom cube `space.png`) can use `bun scripts/encode_lossless_avif.mjs` when the consumer is CSS or a normal `<img>` / fetch decode path.

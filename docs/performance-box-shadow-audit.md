@@ -4,13 +4,13 @@ Firefox profiles on the homepage CRT stack showed **~15–25% of samples** under
 
 ## Findings
 
-| Source | Issue | Action taken |
-|--------|--------|--------------|
-| Tailwind `shadow-md` / `shadow-lg` | Two-layer blurred shadows (large paint cost) | Replaced with single-layer `$shadow-*` tokens in `variables.scss` |
+| Source                                     | Issue                                                                   | Action taken                                                                               |
+| ------------------------------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Tailwind `shadow-md` / `shadow-lg`         | Two-layer blurred shadows (large paint cost)                            | Replaced with single-layer `$shadow-*` tokens in `variables.scss`                          |
 | `transition-all` on squish-pressable cards | Interpolates every property on hover, including accidental shadow churn | Narrowed to `transition: transform …` on homepage/posts/images cards and carousel controls |
-| `.drawer` | `0 4px 30px` blur + animated `box-shadow` on expand | Static single shadow; height-only transition (drawer still in codebase for other branches) |
-| `.carousel-btn` `:active` | Box-shadow only on press via squish `@content` | Left unchanged (carousel blurs kept per product request) |
-| `.floating-window` | Small `2px 2px 5px` shadow | Acceptable; page-specific chrome |
+| `.drawer`                                  | `0 4px 30px` blur + animated `box-shadow` on expand                     | Static single shadow; height-only transition (drawer still in codebase for other branches) |
+| `.carousel-btn` `:active`                  | Box-shadow only on press via squish `@content`                          | Left unchanged (carousel blurs kept per product request)                                   |
+| `.floating-window`                         | Small `2px 2px 5px` shadow                                              | Acceptable; page-specific chrome                                                           |
 
 ## Shadow tokens
 

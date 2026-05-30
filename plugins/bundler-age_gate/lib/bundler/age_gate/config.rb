@@ -18,7 +18,7 @@ module Bundler
         "minimum_age_days" => 7,
         "exceptions" => [],
         "audit_log_path" => ".bundler-age-gate.log",
-        "sources" => [DEFAULT_RUBYGEMS_SOURCE],
+        "sources" => [ DEFAULT_RUBYGEMS_SOURCE ],
         "max_workers" => 8
       }.freeze
 
@@ -28,7 +28,7 @@ module Bundler
         @minimum_age_days = @config["minimum_age_days"]
         @exceptions = @config["exceptions"] || []
         @audit_log_path = @config["audit_log_path"]
-        @sources = (@config["sources"] || [DEFAULT_RUBYGEMS_SOURCE]).map { |s| SourceConfig.new(s, @minimum_age_days) }
+        @sources = (@config["sources"] || [ DEFAULT_RUBYGEMS_SOURCE ]).map { |s| SourceConfig.new(s, @minimum_age_days) }
         @max_workers = parse_max_workers(@config["max_workers"])
       end
 
@@ -38,7 +38,7 @@ module Bundler
 
         @sources.find do |source|
           normalise_source_url(source.url) == normalised_url
-        end || @sources.first # Default to first source (usually rubygems)
+        end || @sources.first
       end
 
       def gem_excepted?(gem_name, gem_version)
@@ -73,7 +73,7 @@ module Bundler
 
       def load_config
         if File.exist?(@config_path)
-          user_config = YAML.safe_load_file(@config_path, permitted_classes: [Date, Time])
+          user_config = YAML.safe_load_file(@config_path, permitted_classes: [ Date, Time ])
           DEFAULT_CONFIG.merge(user_config || {})
         else
           DEFAULT_CONFIG
@@ -93,11 +93,11 @@ module Bundler
         return false unless exception["expires"]
 
         expiry_date = parse_date(exception["expires"])
-        expiry_date && Time.now > expiry_date
+        expiry_date && Time.zone.now > expiry_date
       end
 
       def parse_date(date_string)
-        Time.parse(date_string.to_s)
+        Time.zone.parse(date_string.to_s)
       rescue ArgumentError
         nil
       end

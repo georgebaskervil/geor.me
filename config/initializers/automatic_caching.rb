@@ -9,7 +9,7 @@ Rails.application.configure do
 
   # Size thresholds for different caching strategies (in bytes)
   config.automatic_caching.turbocache_max_size = 32.kilobytes
-  config.automatic_caching.large_response_min_size = 100.kilobytes  # Smaller than Libreverse since this is a personal site
+  config.automatic_caching.large_response_min_size = 100.kilobytes # Smaller than Libreverse since this is a personal site
 
   # Cache durations for different scenarios
   config.automatic_caching.durations = ActiveSupport::OrderedOptions.new

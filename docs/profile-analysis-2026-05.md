@@ -17,26 +17,26 @@ Run any of them with `python3 scripts/<name>.py input.json`.
 
 The user-content main thread (pid 14423) ran **34.8 s of samples**. Of that:
 
-| Cause | Self-time | Notes |
-|---|--:|---|
-| **Native idle / event loop wait** (`fun_5ac9494 ← XRE_InitChildProcess`) | **14.05 s (40 %)** | The process was simply waiting for tasks. Real CPU work ≈ 20 s. |
-| **CSS box-shadow painting** (`nsDisplayBoxShadowOuter::Paint` and friends) | **~5.5 s (16 %)** | The single biggest *real* cost, dominated by `text-shadow` on `*`. |
-| **Text-shadow painting** (`nsTextFrame::PaintOneShadow`) | **~2.1 s (6 %)** | Caused by the universal `*` selector in `globals.scss`. |
-| **Major GC + Cycle Collector** | **~5.0 s** | 3 × `GCMajor` (longest 1.97 s, all `CC_FINISHED`) + 2 × `CC` (longest 1.59 s). |
-| **DevTools server actors** (`onNewScript`, `_addSource`, …) | **~4.2 s** | Profiling overhead — *not* a production cost. |
-| **Long tasks** | **14.4 s** across **124 tasks**, median 111 ms, p90 171 ms, max 214 ms | The page is unresponsive a large fraction of the time. |
+| Cause                                                                      |                                                              Self-time | Notes                                                                          |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------------------: | ------------------------------------------------------------------------------ |
+| **Native idle / event loop wait** (`fun_5ac9494 ← XRE_InitChildProcess`)   |                                                     **14.05 s (40 %)** | The process was simply waiting for tasks. Real CPU work ≈ 20 s.                |
+| **CSS box-shadow painting** (`nsDisplayBoxShadowOuter::Paint` and friends) |                                                      **~5.5 s (16 %)** | The single biggest _real_ cost, dominated by `text-shadow` on `*`.             |
+| **Text-shadow painting** (`nsTextFrame::PaintOneShadow`)                   |                                                       **~2.1 s (6 %)** | Caused by the universal `*` selector in `globals.scss`.                        |
+| **Major GC + Cycle Collector**                                             |                                                             **~5.0 s** | 3 × `GCMajor` (longest 1.97 s, all `CC_FINISHED`) + 2 × `CC` (longest 1.59 s). |
+| **DevTools server actors** (`onNewScript`, `_addSource`, …)                |                                                             **~4.2 s** | Profiling overhead — _not_ a production cost.                                  |
+| **Long tasks**                                                             | **14.4 s** across **124 tasks**, median 111 ms, p90 171 ms, max 214 ms | The page is unresponsive a large fraction of the time.                         |
 
 INP-like input latencies (from `DOMEvent` markers):
 
-| Event | Count | Median latency | Max latency |
-|---|--:|--:|--:|
-| `wheel` | 338 | 22.9 ms | **141 ms** |
-| `MozMousePixelScroll` | 424 | 16.1 ms | **141 ms** |
-| `click` | 46 | 64.7 ms | **266 ms** |
-| `mouseup` | 46 | 60.4 ms | **266 ms** |
-| `mousedown` | 46 | 41.0 ms | **150 ms** |
-| `transitioncancel` | 28 | 195 ms | 254 ms |
-| `contentvisibilityautostatechange` | 14 | 196 ms | **342 ms** |
+| Event                              | Count | Median latency | Max latency |
+| ---------------------------------- | ----: | -------------: | ----------: |
+| `wheel`                            |   338 |        22.9 ms |  **141 ms** |
+| `MozMousePixelScroll`              |   424 |        16.1 ms |  **141 ms** |
+| `click`                            |    46 |        64.7 ms |  **266 ms** |
+| `mouseup`                          |    46 |        60.4 ms |  **266 ms** |
+| `mousedown`                        |    46 |        41.0 ms |  **150 ms** |
+| `transitioncancel`                 |    28 |         195 ms |      254 ms |
+| `contentvisibilityautostatechange` |    14 |         196 ms |  **342 ms** |
 
 Network: only 23 markers, but two HTML documents took **2.92 s** and **1.31 s** to load (`STATUS_STOP text/html`); image/avif requests came in batches of ~620 ms each, suggesting parallel fetch of large images.
 
@@ -54,7 +54,7 @@ In `@/Users/george/geor.me/app/stylesheets/globals.scss:3-7`:
 }
 ```
 
-Every text frame on the page is painted **twice** (shadow + text), and the shadow uses a 2 px Gaussian blur. The profile shows ~2.1 s in `nsTextFrame::PaintOneShadow` — i.e. the *single line above* costs ~6 % of the entire profile.
+Every text frame on the page is painted **twice** (shadow + text), and the shadow uses a 2 px Gaussian blur. The profile shows ~2.1 s in `nsTextFrame::PaintOneShadow` — i.e. the _single line above_ costs ~6 % of the entire profile.
 
 Combined with `text-rendering: geometricprecision` (which disables some font-rasterisation fast paths), this is the most expensive line of CSS in the codebase.
 
@@ -62,7 +62,11 @@ Combined with `text-rendering: geometricprecision` (which disables some font-ras
 
 ```scss
 /* Apply only to elements that genuinely need it */
-h1, h2, h3, .hero-title { /* …or a single class like .text-glow */
+h1,
+h2,
+h3,
+.hero-title {
+  /* …or a single class like .text-glow */
   text-shadow: 1px 1px 2px rgb(0 0 0 / 50%);
 }
 
@@ -119,7 +123,7 @@ All three `GCMajor` cycles were triggered by `CC_FINISHED` (cycle-collector chai
 
 Likely contributors visible in the profile:
 
-- **`onNewScript` / `_addSource` from `resource://devtools/server/actors/thread.js`** — 2.2 s + 2 s = 4.2 s. *Profile-only cost; ignore for production.*
+- **`onNewScript` / `_addSource` from `resource://devtools/server/actors/thread.js`** — 2.2 s + 2 s = 4.2 s. _Profile-only cost; ignore for production._
 - **`signalWorker ← postMessage ← call/<`** appears in the parent process — Web Worker traffic. wllama uses workers; large messages between worker and main thread put pressure on the CC because each worker reference is a CC root.
 - **`Map.prototype.set ← manage ← createSourceActor`** (devtools).
 - **`fetch` chains under `RobusTextModule/kf<`** — every iframe load of `/robustext-embed.html` (the Emscripten WASM) constructs a new `Module` instance.
@@ -129,7 +133,7 @@ Likely contributors visible in the profile:
 1. **Stop the inline data-URI WASM in `public/robustext-embed.html`.** The base64 `data:application/wasm;base64,…` URI is loaded into the JS heap as a string before being decoded — that is a massive single-string allocation per page-load. Serve it as a real `.wasm` file with `application/wasm` mime.
 2. **Lazy-load the RobusText iframe** until the carousel actually reaches that slide. Right now `<iframe loading="lazy">` helps with offscreen, but if the carousel auto-advances to slide 2 within 16 s it will load anyway. Change to load on first user-initiated navigation to that slide.
 3. **Reuse worker instances** in `@wllama/wllama` if you instantiate it more than once.
-4. **Audit closure leaks** in long-lived Stimulus controllers (especially `cursor_controller`, `locomotive_scroll_controller`, `project_carousel_controller`) — the `disconnect()` of `project_carousel_controller` re-binds with `.bind(@)` and then tries to remove the listener using a *different* bound function — see #6 below.
+4. **Audit closure leaks** in long-lived Stimulus controllers (especially `cursor_controller`, `locomotive_scroll_controller`, `project_carousel_controller`) — the `disconnect()` of `project_carousel_controller` re-binds with `.bind(@)` and then tries to remove the listener using a _different_ bound function — see #6 below.
 
 ---
 
@@ -221,7 +225,7 @@ The image/avif batch all completing in ~620 ms suggests they are served correctl
 
 ## #8 — `will-change` overuse
 
-`will-change` is used **15+ times** across stylesheets (`globals.scss`, `homepage.scss`, `taskstack.scss`, `useDragDrop.js`). Each promotes the element to its own compositor layer, costing GPU memory and slowing layer tree management. From the MDN docs: *"set `will-change` on a small number of elements that genuinely need it, and remove it when they are no longer changing."*
+`will-change` is used **15+ times** across stylesheets (`globals.scss`, `homepage.scss`, `taskstack.scss`, `useDragDrop.js`). Each promotes the element to its own compositor layer, costing GPU memory and slowing layer tree management. From the MDN docs: _"set `will-change` on a small number of elements that genuinely need it, and remove it when they are no longer changing."_
 
 The codebase already has a great `@/Users/george/geor.me/app/javascript/utils/performance.js` helper (`temporarilyEnableWillChange`) — but most of the stylesheet uses are **permanent**, e.g.:
 
@@ -243,23 +247,23 @@ The codebase already has a great `@/Users/george/geor.me/app/javascript/utils/pe
 - **Drop `text-rendering: geometricprecision`** on `*` (already covered in #1). It disables glyph caching.
 - **`Update Blocked` UserTimings appear 199 times** with totals of 975 ms / 480 ms / 422 ms — these are your own `performance.measure()` calls. Search the codebase for the producer (we found none in the repo, so it's likely in a Vue/React component compiled to JS) and reduce its scope.
 - **Devtools were open during the capture.** Around 6-8 % of the profile time is `resource://devtools/...` actors. For a clean production-representative trace, capture again with DevTools closed (the Firefox Profiler add-on doesn't require them).
-- **Symbolication is incomplete** for XUL — the unresolved `fun_<hex>` names are JIT'd JS-engine helpers (most prominent: `fun_5ac9494` = the native event-loop idle wait, `fun_176a3dc`/`fun_8b0304` etc. are inside the box-shadow blur kernel). To resolve them you'd need a Firefox build with full debug symbols — for our analysis the *call paths* (nsDisplayBoxShadowOuter::Paint, etc.) are sufficient.
+- **Symbolication is incomplete** for XUL — the unresolved `fun_<hex>` names are JIT'd JS-engine helpers (most prominent: `fun_5ac9494` = the native event-loop idle wait, `fun_176a3dc`/`fun_8b0304` etc. are inside the box-shadow blur kernel). To resolve them you'd need a Firefox build with full debug symbols — for our analysis the _call paths_ (nsDisplayBoxShadowOuter::Paint, etc.) are sufficient.
 
 ---
 
 ## Suggested order of work (rough impact estimate)
 
-| # | Change | Difficulty | Expected impact |
-|---|---|---|--:|
-| 1 | Remove `text-shadow` from `*` selector | trivial | **~6 % of total CPU**, large drop in paint time per frame |
-| 2 | Drop `background-attachment: fixed` on `html` | trivial | massive scroll-paint reduction |
-| 3 | Replace `backdrop-filter` on `.project-info` with a solid translucent gradient | small | removes per-frame compositor cost |
-| 4 | Pause `animate-ping` and carousel `setInterval` when offscreen | small | stops continuous repaint when idle |
-| 5 | Fix bound-listener leak in `project_carousel_controller` | trivial | reduces CC pressure & GC pauses |
-| 6 | Stop the `cursor_controller` rAF loop when idle | small | frees a frame budget tick |
-| 7 | Re-evaluate Locomotive Scroll vs native `scroll-behavior: smooth` | medium | halves wheel-event latency |
-| 8 | Move RobusText WASM out of inline `data:` URI; lazy-mount the iframe | medium | reduces GC/CC and string-allocation pressure |
-| 9 | Audit per-element `will-change` declarations | small | smaller GPU memory, faster layer tree |
-| 10 | Re-profile **with DevTools closed** for an accurate baseline | trivial | clearer signal next iteration |
+| #   | Change                                                                         | Difficulty |                                           Expected impact |
+| --- | ------------------------------------------------------------------------------ | ---------- | --------------------------------------------------------: |
+| 1   | Remove `text-shadow` from `*` selector                                         | trivial    | **~6 % of total CPU**, large drop in paint time per frame |
+| 2   | Drop `background-attachment: fixed` on `html`                                  | trivial    |                            massive scroll-paint reduction |
+| 3   | Replace `backdrop-filter` on `.project-info` with a solid translucent gradient | small      |                         removes per-frame compositor cost |
+| 4   | Pause `animate-ping` and carousel `setInterval` when offscreen                 | small      |                        stops continuous repaint when idle |
+| 5   | Fix bound-listener leak in `project_carousel_controller`                       | trivial    |                           reduces CC pressure & GC pauses |
+| 6   | Stop the `cursor_controller` rAF loop when idle                                | small      |                                 frees a frame budget tick |
+| 7   | Re-evaluate Locomotive Scroll vs native `scroll-behavior: smooth`              | medium     |                                halves wheel-event latency |
+| 8   | Move RobusText WASM out of inline `data:` URI; lazy-mount the iframe           | medium     |              reduces GC/CC and string-allocation pressure |
+| 9   | Audit per-element `will-change` declarations                                   | small      |                     smaller GPU memory, faster layer tree |
+| 10  | Re-profile **with DevTools closed** for an accurate baseline                   | trivial    |                             clearer signal next iteration |
 
 After 1 + 2 + 3 alone the longest GC pauses should also shrink (less paint allocation pressure), and median `wheel`/`mousedown` latencies should fall well under 16 ms.

@@ -4,7 +4,7 @@ import CursorFxWrapper from "../components/CursorFxWrapper.vue";
 
 export default class extends Controller {
   connect() {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       return;
     }
 

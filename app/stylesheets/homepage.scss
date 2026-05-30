@@ -82,6 +82,7 @@
 
 .hp-picture {
   @apply border-neutral;
+
   position: relative;
 
   @include variables.squish-pressable;
@@ -140,7 +141,6 @@
 
   box-shadow: variables.$shadow-sm;
   transition: transform 0.3s ease-in-out;
-
   background-color: variables.$background-colour;
   opacity: 1;
   z-index: 1;
@@ -207,7 +207,9 @@
 .carousel-btn {
   @apply w-12 h-12 rounded-full bg-accent/80 text-text border-none cursor-pointer;
   @apply flex items-center justify-center text-2xl font-bold;
+
   transition: transform 0.2s ease-in-out;
+
   @apply absolute top-1/2 transform -translate-y-1/2 z-20;
   @apply backdrop-blur-sm;
 
@@ -235,6 +237,7 @@
 
 .indicator {
   @apply w-3 h-3 rounded-full bg-neutral border-none cursor-pointer;
+
   transition: transform 0.2s ease-in-out;
 
   &.active {
@@ -296,7 +299,9 @@
 
 .project-link-btn {
   @apply text-white text-2xl no-underline;
+
   transition: transform 0.2s ease-in-out;
+
   @apply flex items-center justify-center;
   @apply w-12 h-12 rounded-full;
   @apply bg-white/30;
@@ -306,6 +311,7 @@
 
   @include variables.squish-pressable {
     @apply bg-white/30;
+
     text-decoration: none;
   }
 }
@@ -320,6 +326,7 @@
 
 .video-container {
   @apply w-full h-full relative;
+
   background: #000;
 }
 
@@ -341,6 +348,7 @@
   /* Scale down embedded content to create sympathetic spacing */
   > * {
     @apply absolute;
+
     width: 92%;
     height: 92%;
     top: 4%;
@@ -382,6 +390,7 @@
   /* Georlist preview - full slide content display */
   .georlist-content {
     @apply w-full h-full p-4 overflow-auto;
+
     background: #161820;
     color: #c6c2c7;
     font-family: monospace;
@@ -396,14 +405,30 @@
   }
 
   /* Restore old dark indigo/pink colour scheme for embedded content */
-  .bg-background { background-color: #161820 !important; }
-  .bg-accent { background-color: #c39399 !important; }
-  .bg-accent\/80 { background-color: rgb(195 147 153 / 80%) !important; }
-  .text-text { color: #c6c2c7 !important; }
-  .text-accent { color: #c39399 !important; }
-  .border-neutral { border-color: #2d2a2a !important; }
-  .border-accent { border-color: #c39399 !important; }
-  .outline-accent { outline-color: #c39399 !important; }
+  .bg-background {
+    background-color: #161820 !important;
+  }
+  .bg-accent {
+    background-color: #c39399 !important;
+  }
+  .bg-accent\/80 {
+    background-color: rgb(195 147 153 / 80%) !important;
+  }
+  .text-text {
+    color: #c6c2c7 !important;
+  }
+  .text-accent {
+    color: #c39399 !important;
+  }
+  .border-neutral {
+    border-color: #2d2a2a !important;
+  }
+  .border-accent {
+    border-color: #c39399 !important;
+  }
+  .outline-accent {
+    outline-color: #c39399 !important;
+  }
 }
 
 .repo-section-title {

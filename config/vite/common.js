@@ -5,97 +5,97 @@ import fs from "node:fs";
 import path from "node:path";
 
 export const allObfuscatorConfig = {
-    excludes: [
-        /vendor-modules/,
-        /react-vendor/,
-        /vue-vendor/,
-        /vue\.runtime/,
-        /rolldown-runtime/,
-        /HomeControlPanel/,
-        /DeviceManagement/,
-        /react_mount_controller/,
-        /turbo_mount_controller/,
-        /TaskStackApp/,
-        /TaskStack/,
-        /TaskBlock/,
-        /TaskCreator/,
-        /CursorFxWrapper/,
-    ],
-    enable: true,
-    log: true,
-    // When true, the plugin replaces manualChunks and only excludes vendor-modules.
-    autoExcludeNodeModules: true,
-    threadPool: true,
-    options: {
-        compact: true,
-        controlFlowFlattening: true,
-        controlFlowFlatteningThreshold: 1,
-        deadCodeInjection: true,
-        debugProtection: true,
-        debugProtectionInterval: 0,
-        disableConsoleOutput: true,
-        identifierNamesGenerator: "hexadecimal",
-        log: false,
-        numbersToExpressions: false,
-        renameGlobals: false,
-        selfDefending: true,
-        simplify: true,
-        splitStrings: true,
-        ignoreImports: true,
-        stringArray: true,
-        stringArrayCallsTransform: true,
-        stringArrayCallsTransformThreshold: 0.5,
-        stringArrayEncoding: [],
-        stringArrayIndexShift: true,
-        stringArrayRotate: true,
-        stringArrayShuffle: true,
-        stringArrayWrappersCount: 1,
-        stringArrayWrappersChainedCalls: true,
-        stringArrayWrappersParametersMaxCount: 2,
-        stringArrayWrappersType: "variable",
-        stringArrayThreshold: 0.75,
-        unicodeEscapeSequence: false,
-    },
+  excludes: [
+    /vendor-modules/,
+    /react-vendor/,
+    /vue-vendor/,
+    /vue\.runtime/,
+    /rolldown-runtime/,
+    /HomeControlPanel/,
+    /DeviceManagement/,
+    /react_mount_controller/,
+    /turbo_mount_controller/,
+    /TaskStackApp/,
+    /TaskStack/,
+    /TaskBlock/,
+    /TaskCreator/,
+    /CursorFxWrapper/,
+  ],
+  enable: true,
+  log: true,
+  // When true, the plugin replaces manualChunks and only excludes vendor-modules.
+  autoExcludeNodeModules: true,
+  threadPool: true,
+  options: {
+    compact: true,
+    controlFlowFlattening: true,
+    controlFlowFlatteningThreshold: 1,
+    deadCodeInjection: true,
+    debugProtection: true,
+    debugProtectionInterval: 0,
+    disableConsoleOutput: true,
+    identifierNamesGenerator: "hexadecimal",
+    log: false,
+    numbersToExpressions: false,
+    renameGlobals: false,
+    selfDefending: true,
+    simplify: true,
+    splitStrings: true,
+    ignoreImports: true,
+    stringArray: true,
+    stringArrayCallsTransform: true,
+    stringArrayCallsTransformThreshold: 0.5,
+    stringArrayEncoding: [],
+    stringArrayIndexShift: true,
+    stringArrayRotate: true,
+    stringArrayShuffle: true,
+    stringArrayWrappersCount: 1,
+    stringArrayWrappersChainedCalls: true,
+    stringArrayWrappersParametersMaxCount: 2,
+    stringArrayWrappersType: "variable",
+    stringArrayThreshold: 0.75,
+    unicodeEscapeSequence: false,
+  },
 };
 
 export function withInstrumentation(p) {
-    let modified = 0;
-    return {
-        ...p,
-        async transform(code, id) {
-            const out = await p.transform.call(this, code, id);
-            if (out && out.code && out.code !== code) modified += 1;
-            return out;
-        },
-        buildEnd() {
-            this.info(`[typehints] Files modified: ${modified}`);
-            if (p.buildEnd) return p.buildEnd.call(this);
-        },
-    };
+  let modified = 0;
+  return {
+    ...p,
+    async transform(code, id) {
+      const out = await p.transform.call(this, code, id);
+      if (out && out.code && out.code !== code) modified += 1;
+      return out;
+    },
+    buildEnd() {
+      this.info(`[typehints] Files modified: ${modified}`);
+      if (p.buildEnd) return p.buildEnd.call(this);
+    },
+  };
 }
 
 export function createTypehintPlugin(typehintsPluginFactory) {
-    return withInstrumentation(
-        typehintsPluginFactory({
-            variableDocumentation: true,
-            objectShapeDocumentation: true,
-            maxObjectProperties: 6,
-            // |0 coercions break Vue/React when applied to vendor code (e.g. Array(n)|0 → 0).
-            enableCoercions: false,
-            parameterHoistCoercions: false,
-            includeNodeModules: false,
-            processEverything: false,
-        }),
-    );
+  return withInstrumentation(
+    typehintsPluginFactory({
+      variableDocumentation: true,
+      objectShapeDocumentation: true,
+      maxObjectProperties: 6,
+      // |0 coercions break Vue/React when applied to vendor code (e.g. Array(n)|0 → 0).
+      enableCoercions: false,
+      parameterHoistCoercions: false,
+      includeNodeModules: false,
+      processEverything: false,
+    }),
+  );
 }
 
 export function createEsbuildConfig(isDevelopment) {
-    return {
-        target: "esnext", // Allow latest syntax (class fields/private names)
-        keepNames: false,
-        treeShaking: isDevelopment ? false : true, // Disable tree shaking in development for faster builds
-        legalComments: isDevelopment ? "none" : "inline", // Skip legal comments in development
-    };
+  return {
+    target: "esnext", // Allow latest syntax (class fields/private names)
+    keepNames: false,
+    treeShaking: isDevelopment ? false : true, // Disable tree shaking in development for faster builds
+    legalComments: isDevelopment ? "none" : "inline", // Skip legal comments in development
+  };
 }
 
 // Shared development headers for Vite dev servers.
@@ -104,365 +104,357 @@ export function createEsbuildConfig(isDevelopment) {
 // other local origins (different port), which can otherwise cause CORP/COEP
 // blocking in Chromium/Electron.
 export function devViteSecurityHeaders() {
-    const headers = {
-        "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
-        // Dev-only convenience; production builds should use stricter policies.
-        // This allows the Vite renderer (https://localhost:5173) to embed the Rails
-        // UI (https://localhost:3000) without CORP/COEP confusion.
-        "Cross-Origin-Resource-Policy": "cross-origin",
-    };
+  const headers = {
+    "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+    // Dev-only convenience; production builds should use stricter policies.
+    // This allows the Vite renderer (https://localhost:5173) to embed the Rails
+    // UI (https://localhost:3000) without CORP/COEP confusion.
+    "Cross-Origin-Resource-Policy": "cross-origin",
+  };
 
-    // COEP makes the document cross-origin isolated and forces CORP/CORS rules
-    // on embedded resources (including iframes). This is useful for features
-    // like SharedArrayBuffer, but it can break the Electron dev shell when the
-    // Rails UI is embedded from another origin/port.
-    //
-    // Enable explicitly when needed:
-    //   VITE_ENABLE_COEP=1
-    if (process.env.VITE_ENABLE_COEP === "1") {
-        headers["Cross-Origin-Embedder-Policy"] = "credentialless";
-    }
+  // COEP makes the document cross-origin isolated and forces CORP/CORS rules
+  // on embedded resources (including iframes). This is useful for features
+  // like SharedArrayBuffer, but it can break the Electron dev shell when the
+  // Rails UI is embedded from another origin/port.
+  //
+  // Enable explicitly when needed:
+  //   VITE_ENABLE_COEP=1
+  if (process.env.VITE_ENABLE_COEP === "1") {
+    headers["Cross-Origin-Embedder-Policy"] = "credentialless";
+  }
 
-    return headers;
+  return headers;
 }
 
 export function createTerserOptions(isDevelopment) {
-    if (isDevelopment) return undefined;
+  if (isDevelopment) return;
 
-    return {
-        parse: {
-            bare_returns: false,
-            html5_comments: false,
-            shebang: false,
-        },
-        compress: {
-            defaults: true,
-            arrows: true, // Keep arrow functions
-            arguments: true,
-            booleans: true,
-            booleans_as_integers: false,
-            collapse_vars: true,
-            comparisons: true,
-            computed_props: true,
-            conditionals: true,
-            dead_code: true,
-            directives: true,
-            drop_console: true,
-            drop_debugger: true,
-            evaluate: true,
-            expression: false,
-            global_defs: {},
-            hoist_funs: true,
-            hoist_props: true,
-            hoist_vars: true,
-            if_return: true,
-            inline: true,
-            join_vars: true,
-            keep_classnames: false,
-            keep_fargs: true,
-            keep_fnames: false,
-            keep_infinity: false,
-            loops: true,
-            negate_iife: true,
-            passes: 10,
-            properties: true,
-            pure_getters: "strict",
-            pure_funcs: [
-                "console.log",
-                "console.info",
-                "console.debug",
-                "console.warn",
-                "console.error",
-                "console.trace",
-                "console.dir",
-                "console.dirxml",
-                "console.group",
-                "console.groupCollapsed",
-                "console.groupEnd",
-                "console.time",
-                "console.timeEnd",
-                "console.timeLog",
-                "console.assert",
-                "console.count",
-                "console.countReset",
-                "console.profile",
-                "console.profileEnd",
-                "console.table",
-                "console.clear",
-            ],
-            reduce_vars: true,
-            reduce_funcs: true,
-            sequences: true,
-            side_effects: true,
-            switches: true,
-            toplevel: false,
-            top_retain: null,
-            typeofs: true,
-            // unsafe:* turns refs/objects into `0|expr` (→ 0), breaking Vue/React at runtime.
-            unsafe: false,
-            unsafe_arrows: false,
-            unsafe_comps: false,
-            unsafe_Function: false,
-            unsafe_math: false,
-            unsafe_symbols: false,
-            unsafe_methods: false,
-            unsafe_proto: false,
-            unsafe_regexp: false,
-            unsafe_undefined: false,
-            unused: true,
-        },
-        mangle: {
-            eval: false,
-            keep_classnames: false,
-            keep_fnames: false,
-            reserved: ["global", "globalThis"],
-            toplevel: false,
-            safari10: false,
-        },
-        format: {
-            ascii_only: false,
-            beautify: false,
-            braces: false,
-            comments: "some",
-            indent_level: 0,
-            inline_script: true,
-            keep_numbers: false,
-            keep_quoted_props: false,
-            max_line_len: 0,
-            quote_keys: false,
-            preserve_annotations: false,
-            safari10: false,
-            semicolons: true,
-            shebang: false,
-            webkit: false,
-            wrap_iife: false,
-            wrap_func_args: false,
-        },
-    };
+  return {
+    parse: {
+      bare_returns: false,
+      html5_comments: false,
+      shebang: false,
+    },
+    compress: {
+      defaults: true,
+      arrows: true, // Keep arrow functions
+      arguments: true,
+      booleans: true,
+      booleans_as_integers: false,
+      collapse_vars: true,
+      comparisons: true,
+      computed_props: true,
+      conditionals: true,
+      dead_code: true,
+      directives: true,
+      drop_console: true,
+      drop_debugger: true,
+      evaluate: true,
+      expression: false,
+      global_defs: {},
+      hoist_funs: true,
+      hoist_props: true,
+      hoist_vars: true,
+      if_return: true,
+      inline: true,
+      join_vars: true,
+      keep_classnames: false,
+      keep_fargs: true,
+      keep_fnames: false,
+      keep_infinity: false,
+      loops: true,
+      negate_iife: true,
+      passes: 10,
+      properties: true,
+      pure_getters: "strict",
+      pure_funcs: [
+        "console.log",
+        "console.info",
+        "console.debug",
+        "console.warn",
+        "console.error",
+        "console.trace",
+        "console.dir",
+        "console.dirxml",
+        "console.group",
+        "console.groupCollapsed",
+        "console.groupEnd",
+        "console.time",
+        "console.timeEnd",
+        "console.timeLog",
+        "console.assert",
+        "console.count",
+        "console.countReset",
+        "console.profile",
+        "console.profileEnd",
+        "console.table",
+        "console.clear",
+      ],
+      reduce_vars: true,
+      reduce_funcs: true,
+      sequences: true,
+      side_effects: true,
+      switches: true,
+      toplevel: false,
+      top_retain: null,
+      typeofs: true,
+      // unsafe:* turns refs/objects into `0|expr` (→ 0), breaking Vue/React at runtime.
+      unsafe: false,
+      unsafe_arrows: false,
+      unsafe_comps: false,
+      unsafe_Function: false,
+      unsafe_math: false,
+      unsafe_symbols: false,
+      unsafe_methods: false,
+      unsafe_proto: false,
+      unsafe_regexp: false,
+      unsafe_undefined: false,
+      unused: true,
+    },
+    mangle: {
+      eval: false,
+      keep_classnames: false,
+      keep_fnames: false,
+      reserved: ["global", "globalThis"],
+      toplevel: false,
+      safari10: false,
+    },
+    format: {
+      ascii_only: false,
+      beautify: false,
+      braces: false,
+      comments: "some",
+      indent_level: 0,
+      inline_script: true,
+      keep_numbers: false,
+      keep_quoted_props: false,
+      max_line_len: 0,
+      quote_keys: false,
+      preserve_annotations: false,
+      safari10: false,
+      semicolons: true,
+      shebang: false,
+      webkit: false,
+      wrap_iife: false,
+      wrap_func_args: false,
+    },
+  };
 }
 
 export function createRollupOutputConfig() {
-    return {
-        minifyInternalExports: true,
-        // Use codeSplitting instead of inlineDynamicImports (deprecated)
-        // codeSplitting: true is the modern way to control dynamic imports
-        generatedCode: {
-            preset: "es2015",
-        },
-        manualChunks(id) {
-            // Keep browserify/CJS packages out of the shared vendor chunk so
-            // Terser top-level mangling cannot cross-contaminate module registries.
-            if (id.includes("node_modules/emulators")) {
-                return "emulators";
-            }
-            if (
-                id.includes("node_modules/react/") ||
-                id.includes("node_modules/react-dom/") ||
-                id.includes("node_modules/scheduler/")
-            ) {
-                return "react-vendor";
-            }
-            if (
-                id.includes("node_modules/vue/") ||
-                id.includes("node_modules/@vue/")
-            ) {
-                return "vue-vendor";
-            }
-        },
-    };
+  return {
+    minifyInternalExports: true,
+    // Use codeSplitting instead of inlineDynamicImports (deprecated)
+    // codeSplitting: true is the modern way to control dynamic imports
+    generatedCode: {
+      preset: "es2015",
+    },
+    manualChunks(id) {
+      // Keep browserify/CJS packages out of the shared vendor chunk so
+      // Terser top-level mangling cannot cross-contaminate module registries.
+      if (id.includes("node_modules/emulators")) {
+        return "emulators";
+      }
+      if (
+        id.includes("node_modules/react/") ||
+        id.includes("node_modules/react-dom/") ||
+        id.includes("node_modules/scheduler/")
+      ) {
+        return "react-vendor";
+      }
+      if (
+        id.includes("node_modules/vue/") ||
+        id.includes("node_modules/@vue/")
+      ) {
+        return "vue-vendor";
+      }
+    },
+  };
 }
 
 export function createCommonBuild({ isDevelopment, rollupInput } = {}) {
-    const build = {
-        cache: isDevelopment,
-        rollupOptions: {
-            input: rollupInput,
-            output: createRollupOutputConfig(),
-            treeshake: {
-                moduleSideEffects: true,
-                propertyReadSideEffects: false,
-                unknownGlobalSideEffects: false,
-            },
-        },
-        // Ensure CJS plugin uses a modern parser that understands class private fields
-        // (turbo.es2017-esm.js trips esbuild when target is too low).
-        commonjsOptions: {
-            esbuildTarget: "esnext",
-            transformMixedEsModules: true,
-            esbuildOptions: {
-                target: "esnext",
-            },
-            exclude: [/node_modules\/@hotwired\/turbo/],
-        },
-        target: ["esnext"],
-        modulePreload: { polyfill: true },
-        cssCodeSplit: true,
-        // Prebuilt emulator assets must stay as real URLs for <script src> / fetch hijacks.
-        assetsInlineLimit(filePath, content) {
-            if (filePath.includes("node_modules/emulators/")) return false;
-            if (filePath.endsWith(".wasm")) return false;
-            return content.length <= 500000;
-        },
-        cssTarget: ["esnext"],
-        sourcemap: false,
-        chunkSizeWarningLimit: 2147483647,
-        reportCompressedSize: false,
-        // esbuild minify avoids Terser `0|ref` transforms that break Vue/React runtimes.
-        minify: isDevelopment ? false : "esbuild",
-        terserOptions: undefined,
-    };
+  const build = {
+    cache: isDevelopment,
+    rollupOptions: {
+      input: rollupInput,
+      output: createRollupOutputConfig(),
+      treeshake: {
+        moduleSideEffects: true,
+        propertyReadSideEffects: false,
+        unknownGlobalSideEffects: false,
+      },
+    },
+    // Ensure CJS plugin uses a modern parser that understands class private fields
+    // (turbo.es2017-esm.js trips esbuild when target is too low).
+    commonjsOptions: {
+      esbuildTarget: "esnext",
+      transformMixedEsModules: true,
+      esbuildOptions: {
+        target: "esnext",
+      },
+      exclude: [/node_modules\/@hotwired\/turbo/],
+    },
+    target: ["esnext"],
+    modulePreload: { polyfill: true },
+    cssCodeSplit: true,
+    // Prebuilt emulator assets must stay as real URLs for <script src> / fetch hijacks.
+    assetsInlineLimit(filePath, content) {
+      if (filePath.includes("node_modules/emulators/")) return false;
+      if (filePath.endsWith(".wasm")) return false;
+      return content.length <= 500_000;
+    },
+    cssTarget: ["esnext"],
+    sourcemap: false,
+    chunkSizeWarningLimit: 2_147_483_647,
+    reportCompressedSize: false,
+    // esbuild minify avoids Terser `0|ref` transforms that break Vue/React runtimes.
+    minify: isDevelopment ? false : "esbuild",
+    terserOptions: undefined,
+  };
 
-    if (rollupInput) build.rollupOptions.input = rollupInput;
+  if (rollupInput) build.rollupOptions.input = rollupInput;
 
-    return build;
+  return build;
 }
 
 export function createOptimizeDepsForce(isDevelopment) {
-    return {
-        force: isDevelopment && process.env.VITE_FORCE_DEPS === "true",
-    };
+  return {
+    force: isDevelopment && process.env.VITE_FORCE_DEPS === "true",
+  };
 }
 
 export function createTimingProbePlugin({
-    label = "vite",
-    enabled = true,
-    slowMs = 150,
-    heartbeatMs = 10_000,
-    logFilePath = process.env.VITE_TIMING_LOG_FILE || "tmp/vite-timing.log",
+  label = "vite",
+  enabled = true,
+  slowMs = 150,
+  heartbeatMs = 10_000,
+  logFilePath = process.env.VITE_TIMING_LOG_FILE || "tmp/vite-timing.log",
 } = {}) {
-    if (!enabled) return null;
+  if (!enabled) return null;
 
-    let startedAt = 0;
-    let heartbeatTimer;
+  let startedAt = 0;
+  let heartbeatTimer;
 
-    const writeLine = createTimingLineWriter(logFilePath);
+  const writeLine = createTimingLineWriter(logFilePath);
 
-    return {
-        name: `timing-probe-${label}`,
-        enforce: "pre",
-        buildStart() {
-            startedAt = performance.now();
-            writeLine(`[timing:${label}] buildStart`);
-            if (heartbeatMs > 0) {
-                heartbeatTimer = setInterval(() => {
-                    const elapsed = (
-                        (performance.now() - startedAt) /
-                        1000
-                    ).toFixed(1);
-                    writeLine(`[timing:${label}] heartbeat +${elapsed}s`);
-                }, heartbeatMs);
-            }
-        },
-        buildEnd() {
-            if (heartbeatTimer) clearInterval(heartbeatTimer);
-            const totalMs = performance.now() - startedAt;
-            writeLine(
-                `[timing:${label}] buildEnd (${(totalMs / 1000).toFixed(1)}s)`,
-            );
-        },
-    };
+  return {
+    name: `timing-probe-${label}`,
+    enforce: "pre",
+    buildStart() {
+      startedAt = performance.now();
+      writeLine(`[timing:${label}] buildStart`);
+      if (heartbeatMs > 0) {
+        heartbeatTimer = setInterval(() => {
+          const elapsed = ((performance.now() - startedAt) / 1000).toFixed(1);
+          writeLine(`[timing:${label}] heartbeat +${elapsed}s`);
+        }, heartbeatMs);
+      }
+    },
+    buildEnd() {
+      if (heartbeatTimer) clearInterval(heartbeatTimer);
+      const totalMs = performance.now() - startedAt;
+      writeLine(`[timing:${label}] buildEnd (${(totalMs / 1000).toFixed(1)}s)`);
+    },
+  };
 }
 
 export function createTimingLineWriter(logFilePath) {
-    const resolvedLogPath = path.isAbsolute(logFilePath)
-        ? logFilePath
-        : path.resolve(process.cwd(), logFilePath);
+  const resolvedLogPath = path.isAbsolute(logFilePath)
+    ? logFilePath
+    : path.resolve(process.cwd(), logFilePath);
 
-    return (line) => {
-        // eslint-disable-next-line no-console
-        console.log(line);
-        try {
-            fs.mkdirSync(path.dirname(resolvedLogPath), { recursive: true });
-            fs.appendFileSync(resolvedLogPath, `${line}\n`, "utf8");
-        } catch {
-            // Best effort only; never break build due to logging I/O.
-        }
-    };
+  return (line) => {
+    console.log(line);
+    try {
+      fs.mkdirSync(path.dirname(resolvedLogPath), { recursive: true });
+      fs.appendFileSync(resolvedLogPath, `${line}\n`, "utf8");
+    } catch {
+      // Best effort only; never break build due to logging I/O.
+    }
+  };
 }
 
 export function wrapPluginsWithBuildStartTiming(
-    plugins,
-    {
-        label = "vite",
-        enabled = true,
-        logFilePath = process.env.VITE_TIMING_LOG_FILE || "tmp/vite-timing.log",
-        slowHookMs = Number(process.env.VITE_TIMING_HOOK_SLOW_MS || 0),
-    } = {},
+  plugins,
+  {
+    label = "vite",
+    enabled = true,
+    logFilePath = process.env.VITE_TIMING_LOG_FILE || "tmp/vite-timing.log",
+    slowHookMs = Number(process.env.VITE_TIMING_HOOK_SLOW_MS || 0),
+  } = {},
 ) {
-    if (!enabled) return plugins;
+  if (!enabled) return plugins;
 
-    const writeLine = createTimingLineWriter(logFilePath);
-    const HOOKS_TO_WRAP = [
-        "config",
-        "configResolved",
-        "options",
-        "buildStart",
-        "buildEnd",
-        "configureServer",
-        "configurePreviewServer",
-        "resolveId",
-        "load",
-    ];
+  const writeLine = createTimingLineWriter(logFilePath);
+  const HOOKS_TO_WRAP = [
+    "config",
+    "configResolved",
+    "options",
+    "buildStart",
+    "buildEnd",
+    "configureServer",
+    "configurePreviewServer",
+    "resolveId",
+    "load",
+  ];
 
-    writeLine(`[timing:${label}] plugin-count ${(plugins || []).length}`);
+  writeLine(`[timing:${label}] plugin-count ${(plugins || []).length}`);
 
-    const wrapHook = (pluginName, hookName, originalHook) => {
-        return async function wrappedHook(...args) {
-            const startedAt = performance.now();
-            writeLine(`[timing:${label}] ${hookName}:begin ${pluginName}`);
-            try {
-                return await originalHook.apply(this, args);
-            } finally {
-                const ms = performance.now() - startedAt;
-                if (ms >= slowHookMs) {
-                    writeLine(
-                        `[timing:${label}] ${hookName}:end ${ms.toFixed(1)}ms ${pluginName}`,
-                    );
-                }
-            }
-        };
+  const wrapHook = (pluginName, hookName, originalHook) => {
+    return async function wrappedHook(...arguments_) {
+      const startedAt = performance.now();
+      writeLine(`[timing:${label}] ${hookName}:begin ${pluginName}`);
+      try {
+        return await originalHook.apply(this, arguments_);
+      } finally {
+        const ms = performance.now() - startedAt;
+        if (ms >= slowHookMs) {
+          writeLine(
+            `[timing:${label}] ${hookName}:end ${ms.toFixed(1)}ms ${pluginName}`,
+          );
+        }
+      }
     };
+  };
 
-    return (plugins || []).map((plugin, index) => {
-        if (!plugin || typeof plugin !== "object") return plugin;
-        const pluginName = plugin.name || `plugin-${index}`;
-        const wrapped = { ...plugin };
-        let changed = false;
-        let hookCount = 0;
+  return (plugins || []).map((plugin, index) => {
+    if (!plugin || typeof plugin !== "object") return plugin;
+    const pluginName = plugin.name || `plugin-${index}`;
+    const wrapped = { ...plugin };
+    let changed = false;
+    let hookCount = 0;
 
-        for (const hookName of HOOKS_TO_WRAP) {
-            const hook = wrapped[hookName];
-            if (typeof hook === "function") {
-                wrapped[hookName] = wrapHook(pluginName, hookName, hook);
-                changed = true;
-                hookCount += 1;
-                continue;
-            }
-            if (
-                hook &&
-                typeof hook === "object" &&
-                typeof hook.handler === "function"
-            ) {
-                wrapped[hookName] = {
-                    ...hook,
-                    handler: wrapHook(pluginName, hookName, hook.handler),
-                };
-                changed = true;
-                hookCount += 1;
-            }
-        }
+    for (const hookName of HOOKS_TO_WRAP) {
+      const hook = wrapped[hookName];
+      if (typeof hook === "function") {
+        wrapped[hookName] = wrapHook(pluginName, hookName, hook);
+        changed = true;
+        hookCount += 1;
+        continue;
+      }
+      if (
+        hook &&
+        typeof hook === "object" &&
+        typeof hook.handler === "function"
+      ) {
+        wrapped[hookName] = {
+          ...hook,
+          handler: wrapHook(pluginName, hookName, hook.handler),
+        };
+        changed = true;
+        hookCount += 1;
+      }
+    }
 
-        if (hookCount > 0) {
-            writeLine(
-                `[timing:${label}] wrapped ${pluginName} hooks=${hookCount}`,
-            );
-        } else {
-            writeLine(`[timing:${label}] skipped ${pluginName} hooks=0`);
-            changed = true;
-        }
+    if (hookCount > 0) {
+      writeLine(`[timing:${label}] wrapped ${pluginName} hooks=${hookCount}`);
+    } else {
+      writeLine(`[timing:${label}] skipped ${pluginName} hooks=0`);
+      changed = true;
+    }
 
-        return changed ? wrapped : plugin;
-    });
+    return changed ? wrapped : plugin;
+  });
 }
 
 // Do not map `global` → `globalThis` here: browserify bundles (emulators/core-js)
@@ -470,52 +462,50 @@ export function wrapPluginsWithBuildStartTiming(
 // bakes `globalThis` into the chunk and Terser can mangle it into the same
 // symbol as unrelated code (e.g. React), breaking core-js shared-store init.
 export const commonDefine = {
-    "process.env.NODE_ENV": JSON.stringify(
-        process.env.NODE_ENV || "production",
-    ),
-    __VUE_OPTIONS_API__: true,
-    __VUE_PROD_DEVTOOLS__: false,
+  "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "production"),
+  __VUE_OPTIONS_API__: true,
+  __VUE_PROD_DEVTOOLS__: false,
 };
 
 export function createBabelOptions(pathModule) {
-    return {
-        // Use include/exclude instead of deprecated filter pattern
-        include: /\.(js|coffee)$/,
-        exclude: [
-            /node_modules\/(?:@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|@vue\/|vue\/|three|react|react-dom|scheduler)/,
-            /textcomplete\.min\.js$/,
-            /ort-web\.min\.js$/,
+  return {
+    // Use include/exclude instead of deprecated filter pattern
+    include: /\.(js|coffee)$/,
+    exclude: [
+      /node_modules\/(?:@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|@vue\/|vue\/|three|react|react-dom|scheduler)/,
+      /textcomplete\.min\.js$/,
+      /ort-web\.min\.js$/,
+    ],
+    babelConfig: {
+      babelrc: false,
+      configFile: false,
+      plugins: [
+        ["closure-elimination"],
+        ["module:faster.js"],
+        [
+          "object-to-json-parse",
+          {
+            minJSONStringSize: 1024,
+          },
         ],
-        babelConfig: {
-            babelrc: false,
-            configFile: false,
-            plugins: [
-                ["closure-elimination"],
-                ["module:faster.js"],
-                [
-                    "object-to-json-parse",
-                    {
-                        minJSONStringSize: 1024,
-                    },
-                ],
-            ],
-        },
-    };
+      ],
+    },
+  };
 }
 
 export function createCommonCss(removePrefixPluginFactory) {
-    return {
-        preprocessorOptions: {
-            scss: {
-                api: "modern-compiler",
-                includePaths: ["node_modules", "./node_modules"],
-            },
-        },
-        postcss: {
-            plugins: [
-                removePrefixPluginFactory(),
-                // The rest are configured by caller because they import different modules.
-            ],
-        },
-    };
+  return {
+    preprocessorOptions: {
+      scss: {
+        api: "modern-compiler",
+        includePaths: ["node_modules", "./node_modules"],
+      },
+    },
+    postcss: {
+      plugins: [
+        removePrefixPluginFactory(),
+        // The rest are configured by caller because they import different modules.
+      ],
+    },
+  };
 }

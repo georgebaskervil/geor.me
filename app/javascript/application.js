@@ -4,10 +4,10 @@ import "../stylesheets/application.scss";
 
 // Add loading class to body only during page-changing navigation
 document.addEventListener("turbo:visit", () => {
-    document.body.classList.add("turbo-loading");
+  document.body.classList.add("turbo-loading");
 });
 document.addEventListener("turbo:load", () => {
-    document.body.classList.remove("turbo-loading");
+  document.body.classList.remove("turbo-loading");
 });
 
 if (!import.meta.env.DEV) {
@@ -61,8 +61,8 @@ if (!import.meta.env.DEV) {
 
 import { createSuperHover } from "./vendor/superhover.js";
 
-if (window.matchMedia('(hover: hover)').matches) {
-  createSuperHover({ selector: '*', moveEventType: false });
+if (globalThis.matchMedia("(hover: hover)").matches) {
+  createSuperHover({ selector: "*", moveEventType: false });
 }
 
 // Hijack the XMLHttpRequest primitive to replace the wdosbox.js and wdosbox.wasm URLs

@@ -50,9 +50,9 @@ for (const viewport of viewports) {
     manifest.push(topName);
 
     await page.evaluate(() => {
-      const wrapper = document.getElementById("crt-content");
+      const wrapper = document.querySelector("#crt-content");
       if (wrapper) wrapper.scrollTop = wrapper.scrollHeight / 2;
-      window.lenis?.scrollTo(wrapper.scrollHeight / 2, { immediate: true });
+      globalThis.lenis?.scrollTo(wrapper.scrollHeight / 2, { immediate: true });
     });
     await page.waitForTimeout(400);
 
@@ -67,7 +67,11 @@ for (const viewport of viewports) {
 
 await writeFile(
   path.join(outputDir, "manifest.json"),
-  JSON.stringify({ baseUrl, capturedAt: new Date().toISOString(), files: manifest }, null, 2),
+  JSON.stringify(
+    { baseUrl, capturedAt: new Date().toISOString(), files: manifest },
+    null,
+    2,
+  ),
 );
 
 await browser.close();

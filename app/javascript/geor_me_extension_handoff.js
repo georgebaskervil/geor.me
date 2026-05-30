@@ -1,7 +1,7 @@
 // Adopt extension-injected project footer into a fixed slot above the CRT frame.
 (function installGeorMeExtensionHandoff() {
-  if (window.__georMeExtensionHandoffInstalled) return;
-  window.__georMeExtensionHandoffInstalled = true;
+  if (globalThis.__georMeExtensionHandoffInstalled) return;
+  globalThis.__georMeExtensionHandoffInstalled = true;
 
   const TAG = "[geor.me/extension]";
 
@@ -14,15 +14,16 @@
   }
 
   function adoptExtensionFooter() {
-    const slot = document.getElementById("geor-me-extension-footer-slot");
+    const slot = document.querySelector("#geor-me-extension-footer-slot");
     if (!slot) return;
 
     for (const node of document.body.children) {
-      if (node === slot || node.id === "geor-me-extension-footer-slot") continue;
+      if (node === slot || node.id === "geor-me-extension-footer-slot")
+        continue;
       if (!isExtensionFooter(node)) continue;
       if (node.parentElement === slot) continue;
 
-      slot.appendChild(node);
+      slot.append(node);
       slot.removeAttribute("aria-hidden");
       document.documentElement.classList.add("geor-me-extension-footer");
       console.debug(TAG, "adopted extension footer into slot");

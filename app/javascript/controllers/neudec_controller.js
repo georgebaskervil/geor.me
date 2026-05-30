@@ -3,11 +3,11 @@ import FFT from "fft.js";
 
 // Use CDN-provided Plotly when bundling excludes it
 const Plotly =
-  typeof window !== "undefined" && window.Plotly
-    ? window.Plotly
-    : typeof globalThis.Plotly !== "undefined"
-      ? globalThis.Plotly
-      : null;
+  globalThis.window !== undefined && globalThis.Plotly
+    ? globalThis.Plotly
+    : globalThis.Plotly === undefined
+      ? null
+      : globalThis.Plotly;
 
 function ensurePlotly() {
   if (Plotly) return true;
@@ -289,8 +289,9 @@ export default class extends Controller {
   readWavFile(file) {
     console.log("readWavFile called.", file);
     return file.arrayBuffer().then((arrayBuffer) => {
-      const audioContext = new (globalThis.AudioContext ||
-        globalThis.webkitAudioContext)();
+      const audioContext = new (
+        globalThis.AudioContext || globalThis.webkitAudioContext
+      )();
       return new Promise((resolve, reject) => {
         audioContext.decodeAudioData(
           arrayBuffer,

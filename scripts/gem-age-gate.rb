@@ -1,14 +1,13 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'bundler'
 require 'net/http'
 require 'json'
 require 'date'
 
 MIN_AGE_DAYS = 7
 MIN_AGE_SECONDS = MIN_AGE_DAYS * 24 * 60 * 60
-CUTOFF_DATE = Time.now - MIN_AGE_SECONDS
+CUTOFF_DATE = Time.zone.now - MIN_AGE_SECONDS
 
 RED = "\e[31m"
 YELLOW = "\e[33m"
@@ -28,12 +27,12 @@ def parse_gemfile_lock
   in_specs = false
 
   content.each_line do |line|
-    if line =~ /^GEM$/
+    if /^GEM$/.match?(line)
       in_specs = false
-    elsif line =~ /^  specs:$/
+    elsif /^  specs:$/.match?(line)
       in_specs = true
     elsif in_specs && line =~ /^    ([\w\-_.]+) \(([^)]+)\)$/
-      gems[$1] = $2.split(',').first.strip
+      gems[Regexp.last_match(1)] = Regexp.last_match(2).split(',').first.strip
     elsif line =~ /^PLATFORMS/ || line =~ /^DEPENDENCIES/
       in_specs = false
     end
@@ -53,7 +52,7 @@ def get_publish_date(name, version)
   return nil unless response.code == '200'
 
   DateTime.parse(JSON.parse(response.body)['created_at']).to_time
-rescue
+rescue StandardError
   nil
 end
 
@@ -76,9 +75,7 @@ def validate
         published = get_publish_date(name, version)
         mutex.synchronize do
           checked += 1
-          if published && published > CUTOFF_DATE
-            recent_gems << { name: name, version: version, published: published }
-          end
+          recent_gems << { name: name, version: version, published: published } if published && published > CUTOFF_DATE
           print "   #{checked}/#{gems.length} checked...\r"
           $stdout.flush
         end
@@ -94,7 +91,7 @@ def validate
     puts "\n#{RED}❌ GEM AGE GATE BLOCKED#{RESET}"
     puts "   #{recent_gems.length} gem(s) are newer than #{MIN_AGE_DAYS} days:\n"
     recent_gems.each do |g|
-      days_ago = ((Time.now - g[:published]) / (24 * 60 * 60)).to_i
+      days_ago = ((Time.zone.now - g[:published]) / (24 * 60 * 60)).to_i
       puts "   #{RED}• #{g[:name]} (#{g[:version]})#{RESET}"
       puts "     Published: #{g[:published].strftime('%Y-%m-%d')} (#{days_ago} days ago)"
     end

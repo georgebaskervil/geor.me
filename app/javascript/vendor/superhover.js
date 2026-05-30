@@ -52,18 +52,23 @@ export function createSuperHover(options = {}) {
   const enterEventType = options.enterEventType ?? DEFAULT_ENTER_EVENT;
   const leaveEventType = options.leaveEventType ?? DEFAULT_LEAVE_EVENT;
   const moveEventName =
-    options.moveEventType === false ? null : (options.moveEventType ?? DEFAULT_MOVE_EVENT);
+    options.moveEventType === false
+      ? null
+      : (options.moveEventType ?? DEFAULT_MOVE_EVENT);
   const root = options.root;
   const scopeDoc = getScopeDocument(root);
   const scopeWin = scopeDoc.defaultView ?? window;
-  const allowedPointerTypes = new Set(options.pointerTypes ?? [...DEFAULT_POINTER_TYPES]);
+  const allowedPointerTypes = new Set(
+    options.pointerTypes ?? [...DEFAULT_POINTER_TYPES],
+  );
   const checkIntervalMs = options.checkIntervalMs ?? 50;
   const suspendWhenPointerIdle = options.suspendWhenPointerIdle ?? true;
   const pointerIdleMs = options.pointerIdleMs ?? 120;
 
   let running = options.enabled ?? true;
   let destroyed = false;
-  let lastX = 0, lastY = 0;
+  let lastX = 0,
+    lastY = 0;
   let hasPointer = false;
   let current = null;
   let pending = false;
@@ -82,15 +87,20 @@ export function createSuperHover(options = {}) {
 
   function deactivate(prev, next) {
     prev.removeAttribute(activeAttribute);
-    prev.dispatchEvent(new CustomEvent(leaveEventType, {
-      bubbles: true, cancelable: false,
-      detail: { x: lastX, y: lastY, previous: prev, current: next },
-    }));
+    prev.dispatchEvent(
+      new CustomEvent(leaveEventType, {
+        bubbles: true,
+        cancelable: false,
+        detail: { x: lastX, y: lastY, previous: prev, current: next },
+      }),
+    );
   }
 
   function clearActive() {
     if (!current) return;
-    const prev = current; current = null; deactivate(prev, null);
+    const prev = current;
+    current = null;
+    deactivate(prev, null);
   }
 
   function resolveTarget() {
@@ -103,18 +113,28 @@ export function createSuperHover(options = {}) {
   }
 
   function apply() {
-    if (destroyed || !running) { clearActive(); return; }
+    if (destroyed || !running) {
+      clearActive();
+      return;
+    }
     const next = resolveTarget();
     if (next === current) return;
     const previousElement = current;
-    if (current) { const prev = current; current = null; deactivate(prev, next); }
+    if (current) {
+      const prev = current;
+      current = null;
+      deactivate(prev, next);
+    }
     current = next;
     if (current) {
       current.setAttribute(activeAttribute, "");
-      current.dispatchEvent(new CustomEvent(enterEventType, {
-        bubbles: true, cancelable: false,
-        detail: { x: lastX, y: lastY, previous: previousElement, current },
-      }));
+      current.dispatchEvent(
+        new CustomEvent(enterEventType, {
+          bubbles: true,
+          cancelable: false,
+          detail: { x: lastX, y: lastY, previous: previousElement, current },
+        }),
+      );
     }
   }
 
@@ -126,13 +146,19 @@ export function createSuperHover(options = {}) {
     scopeWin.requestAnimationFrame(() => {
       pending = false;
       if (destroyed) return;
-      if (!running || !hasPointer) { clearActive(); return; }
+      if (!running || !hasPointer) {
+        clearActive();
+        return;
+      }
       apply();
       if (moveEventName !== null && current !== null) {
-        current.dispatchEvent(new CustomEvent(moveEventName, {
-          bubbles: true, cancelable: false,
-          detail: { x: lastX, y: lastY, current },
-        }));
+        current.dispatchEvent(
+          new CustomEvent(moveEventName, {
+            bubbles: true,
+            cancelable: false,
+            detail: { x: lastX, y: lastY, current },
+          }),
+        );
       }
     });
   }
@@ -163,7 +189,9 @@ export function createSuperHover(options = {}) {
 
   function onPointerMove(e) {
     if (destroyed || !allowedPointerTypes.has(e.pointerType)) return;
-    lastX = e.clientX; lastY = e.clientY; hasPointer = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    hasPointer = true;
     resetPointerIdleTimer();
     if (!shouldProcessPointerMove()) return;
     if (running) schedule();
@@ -174,14 +202,25 @@ export function createSuperHover(options = {}) {
     schedule();
   }
 
-  function onPointerLeaveDocument() { hasPointer = false; schedule(); }
-  function onPointerOut(e) { if (!e.relatedTarget) onPointerLeaveDocument(); }
+  function onPointerLeaveDocument() {
+    hasPointer = false;
+    schedule();
+  }
+  function onPointerOut(e) {
+    if (!e.relatedTarget) onPointerLeaveDocument();
+  }
   function onVisibilityChange() {
-    if (scopeDoc.visibilityState === "hidden") { hasPointer = false; schedule(); }
+    if (scopeDoc.visibilityState === "hidden") {
+      hasPointer = false;
+      schedule();
+    }
   }
 
   scopeWin.addEventListener("pointermove", onPointerMove, { passive: true });
-  scopeDoc.addEventListener("scroll", onScroll, { capture: true, passive: true });
+  scopeDoc.addEventListener("scroll", onScroll, {
+    capture: true,
+    passive: true,
+  });
   scopeWin.addEventListener("resize", schedule, { passive: true });
   scopeWin.addEventListener("blur", onPointerLeaveDocument);
   scopeDoc.addEventListener("pointerleave", onPointerLeaveDocument);
@@ -192,9 +231,22 @@ export function createSuperHover(options = {}) {
   schedule();
 
   return {
-    pause()   { if (!destroyed) { running = false; cancelPendingCheck(); clearActive(); } },
-    resume()  { if (!destroyed) { running = true; schedule(); } },
-    refresh() { if (!destroyed) schedule(); },
+    pause() {
+      if (!destroyed) {
+        running = false;
+        cancelPendingCheck();
+        clearActive();
+      }
+    },
+    resume() {
+      if (!destroyed) {
+        running = true;
+        schedule();
+      }
+    },
+    refresh() {
+      if (!destroyed) schedule();
+    },
     destroy() {
       if (destroyed) return;
       destroyed = true;
@@ -208,7 +260,8 @@ export function createSuperHover(options = {}) {
       scopeDoc.removeEventListener("pointercancel", onPointerLeaveDocument);
       scopeDoc.removeEventListener("pointerout", onPointerOut);
       scopeDoc.removeEventListener("visibilitychange", onVisibilityChange);
-      hasPointer = false; clearActive();
+      hasPointer = false;
+      clearActive();
     },
   };
 }

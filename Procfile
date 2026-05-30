@@ -1,2 +1,2 @@
 vite: bun run vite
-web: rails s -p 3000
+web: bundle exec iodine -p ${PORT:-3000}

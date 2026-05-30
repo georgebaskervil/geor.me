@@ -1,4 +1,5 @@
 ## Learned User Preferences
+
 - Prefers autonomous dependency-rolling design that does not require routine human review.
 - Treats browser console warnings (referrer-policy, Robustext SharedArrayBuffer, CORB on telemetry) as non-actionable when they are graceful degradation with no functional impact.
 - Prefers direct execution for release tasks (commit, sync, push) once fixes are validated.
@@ -6,6 +7,7 @@
 - When optimizing visual effects, preserve pixel-perfect appearance unless explicitly told otherwise.
 
 ## Learned Workspace Facts
+
 - `geor.me` production/CI Docker builds run on Linux amd64, so `Gemfile.lock` must include `x86_64-linux` alongside local macOS platforms.
 - The homepage Robustext embed is same-origin, must keep pointer/keyboard interactivity, and must be fully destroyed/re-instantiated via Stimulus `robustext-embed` on carousel slide mount/unmount (Emscripten breaks with inline scripts and cloneNode remounts).
 - Page content renders inside a CRT barrel-filter stack (`.scanlines` outside; SVG `feDisplacementMap` on `#crt-content` and `.crt-shell` overlays inside `foreignObject`); Lenis smooth-scrolls the inner content.

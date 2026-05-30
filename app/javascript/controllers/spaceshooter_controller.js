@@ -10,7 +10,7 @@ export default class extends Controller {
     if (this._game) {
       try {
         this._game.destroy(true);
-      } catch (e) {
+      } catch {
         // ignore
       }
       this._game = null;
@@ -34,11 +34,11 @@ export default class extends Controller {
     function create() {
       const scene = this;
       // Player initial position and movement (floats where appropriate)
-      scene.playerX = 375.0;
+      scene.playerX = 375;
       scene.playerY = 500;
-      scene.velocityX = 0.0;
+      scene.velocityX = 0;
       scene.acceleration = 0.5;
-      scene.maxSpeed = 8.0;
+      scene.maxSpeed = 8;
       scene.damping = 0.9;
 
       // Pools
@@ -46,19 +46,27 @@ export default class extends Controller {
       scene.enemyPool = [];
 
       // Create bullet pool (20 bullets)
-      for (let i = 0; i < 20; i++) {
-        const r = scene.add.rectangle(0, 0, 5, 10, 0xffffff).setOrigin(0, 0).setVisible(false);
+      for (let index = 0; index < 20; index++) {
+        const r = scene.add
+          .rectangle(0, 0, 5, 10, 0xff_ff_ff)
+          .setOrigin(0, 0)
+          .setVisible(false);
         scene.bulletPool.push({ sprite: r, x: 0, y: 0, active: false });
       }
 
       // Create enemy pool (10 enemies)
-      for (let i = 0; i < 10; i++) {
-        const r = scene.add.rectangle(0, 0, 40, 40, 0xff0000).setOrigin(0, 0).setVisible(false);
+      for (let index = 0; index < 10; index++) {
+        const r = scene.add
+          .rectangle(0, 0, 40, 40, 0xff_00_00)
+          .setOrigin(0, 0)
+          .setVisible(false);
         scene.enemyPool.push({ sprite: r, x: 0, y: 0, active: false });
       }
 
       // Player rectangle
-      scene.playerRect = scene.add.rectangle(scene.playerX, scene.playerY, 50, 50, 0x0000ff).setOrigin(0, 0);
+      scene.playerRect = scene.add
+        .rectangle(scene.playerX, scene.playerY, 50, 50, 0x00_00_ff)
+        .setOrigin(0, 0);
 
       // Game state
       scene.score = 0;
@@ -72,7 +80,7 @@ export default class extends Controller {
       scene.bulletSpeed = 12;
       scene.enemySpeed = 3;
       scene.spawnInterval = 1000; // ms
-      scene.shotCooldown = 250;   // ms
+      scene.shotCooldown = 250; // ms
 
       // FPS monitoring
       scene.fps = 0;
@@ -80,18 +88,33 @@ export default class extends Controller {
       scene.lastFpsTime = scene.time.now;
 
       // Text
-      scene.scoreText = scene.add.text(10, 10, 'Score: 0', { font: '20px Arial', fill: '#ffffff' });
-      scene.livesText = scene.add.text(10, 30, 'Lives: 3', { font: '20px Arial', fill: '#ffffff' });
-      scene.fpsText = scene.add.text(10, 50, 'FPS: 0', { font: '20px Arial', fill: '#ffffff' });
-      scene.gameOverText = scene.add.text(300, 250, 'Game Over', { font: '40px Arial', fill: '#ffffff' }).setVisible(false);
-      scene.finalScoreText = scene.add.text(300, 300, '', { font: '20px Arial', fill: '#ffffff' }).setVisible(false);
+      scene.scoreText = scene.add.text(10, 10, "Score: 0", {
+        font: "20px Arial",
+        fill: "#ffffff",
+      });
+      scene.livesText = scene.add.text(10, 30, "Lives: 3", {
+        font: "20px Arial",
+        fill: "#ffffff",
+      });
+      scene.fpsText = scene.add.text(10, 50, "FPS: 0", {
+        font: "20px Arial",
+        fill: "#ffffff",
+      });
+      scene.gameOverText = scene.add
+        .text(300, 250, "Game Over", { font: "40px Arial", fill: "#ffffff" })
+        .setVisible(false);
+      scene.finalScoreText = scene.add
+        .text(300, 300, "", { font: "20px Arial", fill: "#ffffff" })
+        .setVisible(false);
 
       // Input
       scene.cursors = scene.input.keyboard.createCursorKeys();
-      scene.spaceKey = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+      scene.spaceKey = scene.input.keyboard.addKey(
+        Phaser.Input.Keyboard.KeyCodes.SPACE,
+      );
 
       // Bind pointer to allow restarting the game on click after game over
-      scene.input.on('pointerdown', function () {
+      scene.input.on("pointerdown", function () {
         if (scene.gameOver) {
           restartGame(scene);
         }
@@ -112,15 +135,23 @@ export default class extends Controller {
       }
 
       // Clamp velocity
-      scene.velocityX = Phaser.Math.Clamp(scene.velocityX, -scene.maxSpeed, scene.maxSpeed);
+      scene.velocityX = Phaser.Math.Clamp(
+        scene.velocityX,
+        -scene.maxSpeed,
+        scene.maxSpeed,
+      );
 
       // Update position and clamp
       scene.playerX += scene.velocityX;
-      scene.playerX = Phaser.Math.Clamp(scene.playerX, 0.0, 750.0);
+      scene.playerX = Phaser.Math.Clamp(scene.playerX, 0, 750);
       scene.playerRect.x = scene.playerX;
 
       // Shooting
-      if (scene.spaceKey.isDown && !scene.spacePressed && (scene.time.now - scene.lastShotTime) > scene.shotCooldown) {
+      if (
+        scene.spaceKey.isDown &&
+        !scene.spacePressed &&
+        scene.time.now - scene.lastShotTime > scene.shotCooldown
+      ) {
         spawnBullet(scene);
         scene.lastShotTime = scene.time.now;
         scene.spacePressed = true;
@@ -129,7 +160,7 @@ export default class extends Controller {
       }
 
       // Update bullets
-      scene.bulletPool.forEach(b => {
+      for (const b of scene.bulletPool) {
         if (b.active) {
           b.y -= scene.bulletSpeed;
           b.sprite.y = b.y;
@@ -138,17 +169,20 @@ export default class extends Controller {
             b.sprite.setVisible(false);
           }
         }
-      });
+      }
 
       // Spawn enemies
-      const activeEnemiesCount = scene.enemyPool.filter(e => e.active).length;
-      if ((scene.time.now - scene.lastSpawnTime) > scene.spawnInterval && activeEnemiesCount < 6) {
+      const activeEnemiesCount = scene.enemyPool.filter((e) => e.active).length;
+      if (
+        scene.time.now - scene.lastSpawnTime > scene.spawnInterval &&
+        activeEnemiesCount < 6
+      ) {
         spawnEnemy(scene);
         scene.lastSpawnTime = scene.time.now;
       }
 
       // Update enemies
-      scene.enemyPool.forEach(e => {
+      for (const e of scene.enemyPool) {
         if (e.active) {
           e.y += scene.enemySpeed;
           e.sprite.y = e.y;
@@ -159,15 +193,17 @@ export default class extends Controller {
             if (scene.lives <= 0) {
               scene.gameOver = true;
               scene.gameOverText.setVisible(true);
-              scene.finalScoreText.setText(`Final Score: ${scene.score}`).setVisible(true);
+              scene.finalScoreText
+                .setText(`Final Score: ${scene.score}`)
+                .setVisible(true);
             }
           }
         }
-      });
+      }
 
       // Build spatial grid
       const grid = new Map();
-      scene.enemyPool.forEach(enemy => {
+      for (const enemy of scene.enemyPool) {
         if (enemy.active) {
           let cellX = Math.floor(enemy.x / 80);
           cellX = Phaser.Math.Clamp(cellX, 0, 9);
@@ -177,11 +213,11 @@ export default class extends Controller {
           if (!grid.has(key)) grid.set(key, []);
           grid.get(key).push(enemy);
         }
-      });
+      }
 
       // Collision detection
-      scene.bulletPool.forEach(bullet => {
-        if (!bullet.active) return;
+      for (const bullet of scene.bulletPool) {
+        if (!bullet.active) continue;
         let bx = Math.floor(bullet.x / 80);
         bx = Phaser.Math.Clamp(bx, 0, 9);
         let by = Math.floor(bullet.y / 60);
@@ -207,7 +243,7 @@ export default class extends Controller {
             }
           }
         }
-      });
+      }
 
       // HUD
       scene.scoreText.setText(`Score: ${scene.score}`);
@@ -215,7 +251,7 @@ export default class extends Controller {
 
       // FPS
       scene.frameCount += 1;
-      if ((scene.time.now - scene.lastFpsTime) >= 1000) {
+      if (scene.time.now - scene.lastFpsTime >= 1000) {
         scene.fps = scene.frameCount;
         scene.frameCount = 0;
         scene.lastFpsTime = scene.time.now;
@@ -225,7 +261,7 @@ export default class extends Controller {
 
     // Helpers
     function spawnBullet(scene) {
-      const bullet = scene.bulletPool.find(b => !b.active);
+      const bullet = scene.bulletPool.find((b) => !b.active);
       if (bullet) {
         bullet.x = scene.playerX + 22.5;
         bullet.y = scene.playerY;
@@ -237,11 +273,11 @@ export default class extends Controller {
     }
 
     function spawnEnemy(scene) {
-      const enemy = scene.enemyPool.find(e => !e.active);
+      const enemy = scene.enemyPool.find((e) => !e.active);
       if (enemy) {
         const spawnX = Math.floor(Math.random() * 760);
-        const spawnPossible = scene.enemyPool.every(e => {
-          return !e.active || (Math.abs(e.x - spawnX) >= 100 || e.y >= 100);
+        const spawnPossible = scene.enemyPool.every((e) => {
+          return !e.active || Math.abs(e.x - spawnX) >= 100 || e.y >= 100;
         });
         if (spawnPossible) {
           enemy.x = spawnX;
@@ -255,10 +291,12 @@ export default class extends Controller {
     }
 
     function collision(bullet, enemy) {
-      return (bullet.x < enemy.x + 40) &&
-             (bullet.x + 5 > enemy.x) &&
-             (bullet.y < enemy.y + 40) &&
-             (bullet.y + 10 > enemy.y);
+      return (
+        bullet.x < enemy.x + 40 &&
+        bullet.x + 5 > enemy.x &&
+        bullet.y < enemy.y + 40 &&
+        bullet.y + 10 > enemy.y
+      );
     }
 
     function restartGame(scene) {
@@ -268,25 +306,25 @@ export default class extends Controller {
       scene.gameOverText.setVisible(false);
       scene.finalScoreText.setVisible(false);
 
-      scene.bulletPool.forEach(b => {
+      for (const b of scene.bulletPool) {
         b.active = false;
         b.sprite.setVisible(false);
-      });
-      scene.enemyPool.forEach(e => {
+      }
+      for (const e of scene.enemyPool) {
         e.active = false;
         e.sprite.setVisible(false);
-      });
+      }
 
-      scene.playerX = 375.0;
+      scene.playerX = 375;
       scene.playerRect.x = scene.playerX;
-      scene.velocityX = 0.0;
+      scene.velocityX = 0;
 
       scene.lastSpawnTime = scene.time.now;
       scene.lastShotTime = scene.time.now;
       scene.spacePressed = false;
 
-      scene.scoreText.setText('Score: 0');
-      scene.livesText.setText('Lives: 3');
+      scene.scoreText.setText("Score: 0");
+      scene.livesText.setText("Lives: 3");
       scene.fpsText.setText(`FPS: ${scene.fps}`);
     }
 
@@ -295,17 +333,17 @@ export default class extends Controller {
       width: 800,
       height: 600,
       parent: parent,
-      backgroundColor: '#000000',
-      scene: { preload, create, update }
+      backgroundColor: "#000000",
+      scene: { preload, create, update },
     };
 
     // create the game instance and keep a reference
     try {
       this._game = new Phaser.Game(config);
-    } catch (e) {
+    } catch (error) {
       // If Phaser fails to initialize (rare), log an error
-      // eslint-disable-next-line no-console
-      console.error('Phaser failed to start', e);
+
+      console.error("Phaser failed to start", error);
     }
   }
 }

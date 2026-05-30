@@ -49,6 +49,7 @@ bundle age_gate_cleanup
 This command removes exceptions for gems that are now old enough to pass the age gate without an exception.
 
 Example output:
+
 ```
 🔍 Checking 3 exception(s) for cleanup...
 
@@ -89,6 +90,7 @@ exceptions:
 5. Commit configuration with approval documented
 
 **Exception fields:**
+
 - `gem` (required): Gem name
 - `version` (optional): Specific version, omit for all versions
 - `reason` (required): Explanation for exception
@@ -111,6 +113,7 @@ All checks are logged to `.bundler-age-gate.log` in JSON format:
 ```
 
 **Compliance benefits:**
+
 - Track all security checks
 - Audit exception usage
 - Demonstrate policy compliance
@@ -121,7 +124,7 @@ All checks are logged to `.bundler-age-gate.log` in JSON format:
 Configure different age requirements for different gem sources (public vs private):
 
 ```yaml
-minimum_age_days: 7  # Global default
+minimum_age_days: 7 # Global default
 
 sources:
   # Public RubyGems - strict
@@ -135,7 +138,7 @@ sources:
     url: https://rubygems.pkg.github.com/your-org
     api_endpoint: https://rubygems.pkg.github.com/your-org/api/v1/versions/%s.json
     minimum_age_days: 3
-    auth_token: ${GITHUB_TOKEN}  # Environment variable
+    auth_token: ${GITHUB_TOKEN} # Environment variable
 
   # Internal Artifactory - very permissive
   - name: artifactory
@@ -146,6 +149,7 @@ sources:
 ```
 
 **Benefits:**
+
 - Stricter requirements for public gems (supply chain risk)
 - Permissive for internal gems (trusted sources)
 - Per-source API endpoints for private registries
@@ -153,6 +157,7 @@ sources:
 - CLI override still applies globally: `bundle age_check 14` enforces 14 days for ALL sources
 
 **How it works:**
+
 1. Plugin reads `Gemfile.lock` to determine each gem's source
 2. Applies per-source minimum age requirements
 3. Queries appropriate API endpoint with authentication
@@ -184,8 +189,9 @@ sources:
 Parallel gem checking with configurable concurrency (default: 8 workers).
 
 Configure via `.bundler-age-gate.yml`:
+
 ```yaml
-max_workers: 8  # Recommended for most projects (range: 1-16)
+max_workers: 8 # Recommended for most projects (range: 1-16)
 ```
 
 Set `max_workers: 1` to disable parallelisation if needed.
@@ -316,7 +322,7 @@ All planned features have been implemented! 🎉
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/NikoRoberts/bundler-age_gate.
+Bug reports and pull requests are welcome on GitHub at <https://github.com/NikoRoberts/bundler-age_gate>.
 
 ## License
 

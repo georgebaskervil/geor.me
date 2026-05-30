@@ -8,28 +8,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.4.1] - 2026-01-22
 
 ### Added
+
 - **`bundle age_gate_cleanup` command**: Automatically removes exceptions that are no longer needed
 
 ## [0.4.0] - 2026-01-22
 
 ### Added
+
 - **Parallel gem checking**: Concurrent HTTP requests for faster age verification
 - New configuration option: `max_workers` (range: 1-16, default: 8)
 - Thread-safe data structures with Mutex guards for concurrent access
 - Graceful fallback to sequential processing if parallelisation fails
 
 ### Changed
+
 - Refactored `Command#execute` for parallelisation support
 - Added `check_gems_parallel()` and `check_gems_sequential()` methods
 - HTTP I/O operations now execute concurrently without blocking
 
 ### Backwards Compatibility
+
 - Existing configs work unchanged (defaults to 8 workers)
 - Set `max_workers: 1` for sequential processing (debugging or CI constraints)
 
 ## [0.3.0] - 2026-01-22
 
 ### Added
+
 - **Multi-source support**: Configure different age requirements per gem source
   - Public RubyGems (strict) vs private gems (permissive)
   - Per-source API endpoint configuration
@@ -41,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CLI override**: Command-line days argument overrides all source configurations
 
 ### Changed
+
 - Violation output now includes source name and required age
 - Configuration structure expanded to support multiple sources
 - Default configuration maintains backwards compatibility (RubyGems only)
@@ -48,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - 2026-01-22
 
 ### Added
+
 - Configuration file support (`.bundler-age-gate.yml`)
 - Exception handling mechanism with approval workflow
 - Audit logging for compliance (JSON format)
@@ -60,15 +67,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive README documentation for enterprise deployment
 
 ### Changed
+
 - Command now reads from config file for default minimum age
 - Exit messages now include helpful hints for exceptions
 
 ### Fixed
+
 - Plugin compatibility with Bundler 4.x
 
 ## [0.1.0] - 2026-01-22
 
 ### Added
+
 - Initial release
 - `bundle age_check [DAYS]` command to verify gem ages
 - RubyGems API integration for release date checking

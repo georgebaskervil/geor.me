@@ -12,15 +12,15 @@ export function loadEmulators() {
     const script = document.createElement("script");
     script.src = emulatorsScriptUrl;
     script.async = true;
-    script.onload = () => {
+    script.addEventListener("load", () => {
       if (globalThis.emulators) {
         resolve(globalThis.emulators);
         return;
       }
       reject(new Error("emulators.js loaded but window.emulators is missing"));
-    };
+    });
     script.onerror = () => reject(new Error("Failed to load emulators.js"));
-    document.head.appendChild(script);
+    document.head.append(script);
   });
 
   return loadPromise;

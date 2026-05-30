@@ -24,14 +24,14 @@ import typehints from "./plugins/typehints.js";
 import removePrefix from "./plugins/postcss-remove-prefix.js";
 import postcssSuperHover from "./plugins/postcss-super-hover.js";
 import {
-    allObfuscatorConfig,
-    commonDefine,
-    createBabelOptions,
-    createCommonBuild,
-    createEsbuildConfig,
-    createOptimizeDepsForce,
-    createTypehintPlugin,
-    devViteSecurityHeaders,
+  allObfuscatorConfig,
+  commonDefine,
+  createBabelOptions,
+  createCommonBuild,
+  createEsbuildConfig,
+  createOptimizeDepsForce,
+  createTypehintPlugin,
+  devViteSecurityHeaders,
 } from "./config/vite/common.js";
 import path from "node:path";
 
@@ -92,7 +92,10 @@ function verifyVendorChunksPlugin() {
     writeBundle(_options, bundle) {
       for (const [fileName, chunk] of Object.entries(bundle)) {
         if (chunk.type !== "chunk") continue;
-        if (!fileName.includes("vue-vendor") && !fileName.includes("react-vendor")) {
+        if (
+          !fileName.includes("vue-vendor") &&
+          !fileName.includes("react-vendor")
+        ) {
           continue;
         }
         for (const pattern of corruptPatterns) {
@@ -108,7 +111,8 @@ function verifyVendorChunksPlugin() {
 }
 
 function checkBareSpecifiersPlugin() {
-  const staticImportPattern = /(?:\b(?:import|export)\b[^;]{0,200}?\bfrom\s*['"]([^./][^'"]*)['"])/g;
+  const staticImportPattern =
+    /(?:\b(?:import|export)\b[^;]{0,200}?\bfrom\s*['"]([^./][^'"]*)['"])/g;
   const dynamicImportPattern = /\bimport\(\s*['"]([^./][^'"]*)['"]\)/g;
 
   return {

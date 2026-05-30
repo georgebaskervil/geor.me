@@ -9,7 +9,7 @@ require "feedjira"
 
 class ApplicationController < ActionController::Base
   include EnhancedCaching
-  
+
   before_action :set_custom_headers
   before_action :load_images
   before_action :load_articles
@@ -36,18 +36,18 @@ class ApplicationController < ActionController::Base
     response.set_header("X-UA-Compatible", "IE=edge,chrome=1")
 
     # Set enhanced ETag for content-based caching (used by automatic caching system)
-    if Rails.env.production? && request.get? && (request.format.html? || request.accepts.include?("text/html"))
+    return unless Rails.env.production? && request.get? && (request.format.html? || request.accepts.include?("text/html"))
+
       # Use enhanced caching methods for better performance
       etag_content = Digest::SHA256.hexdigest([ articles_checksum, images_checksum ].join(":"))
       last_modified = [ articles_last_modified, images_last_modified ].max
-      
+
       # Use enhanced fresh_when for optimal caching
       fresh_when_enhanced(
         etag_content: etag_content,
         last_modified: last_modified,
         public: true
       )
-    end
   end
 
   def load_images

@@ -9,7 +9,9 @@ import path from "node:path";
 
 const input = process.argv[2];
 if (!input) {
-  console.error("Usage: bun scripts/encode_lossless_avif.mjs <input.png> [output.avif]");
+  console.error(
+    "Usage: bun scripts/encode_lossless_avif.mjs <input.png> [output.avif]",
+  );
   process.exit(1);
 }
 

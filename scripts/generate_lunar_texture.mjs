@@ -50,7 +50,10 @@ const html = `<!DOCTYPE html>
 
 await mkdir(path.dirname(outPath), { recursive: true });
 
-const tmpPng = path.join(path.dirname(outPath), `.lunar-texture-${process.pid}.png`);
+const temporaryPng = path.join(
+  path.dirname(outPath),
+  `.lunar-texture-${process.pid}.png`,
+);
 
 const browser = await chromium.launch();
 const page = await browser.newPage({
@@ -59,16 +62,18 @@ const page = await browser.newPage({
 });
 await page.setContent(html, { waitUntil: "load" });
 await page.locator("svg").screenshot({
-  path: tmpPng,
+  path: temporaryPng,
   omitBackground: true,
   type: "png",
 });
 await browser.close();
 
 try {
-  execFileSync("avifenc", [tmpPng, outPath, "--lossless"], { stdio: "inherit" });
+  execFileSync("avifenc", [temporaryPng, outPath, "--lossless"], {
+    stdio: "inherit",
+  });
 } finally {
-  await unlink(tmpPng).catch(() => {});
+  await unlink(temporaryPng).catch(() => {});
 }
 
 console.log(`Wrote ${outPath}`);

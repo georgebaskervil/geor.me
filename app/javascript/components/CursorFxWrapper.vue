@@ -1,8 +1,8 @@
 <template>
   <div
     v-show="loaded"
-    ref="cursor"
     id="cursor-fx"
+    ref="cursor"
     class="cursor-fx"
     :class="classes"
     :style="cssVars"
@@ -144,7 +144,7 @@ export default {
   methods: {
     isTouchDevice() {
       return (
-        "ontouchstart" in window ||
+        "ontouchstart" in globalThis ||
         navigator.maxTouchPoints > 0 ||
         navigator.msMaxTouchPoints > 0
       );
@@ -233,7 +233,7 @@ export default {
     },
     cancelStartDelay() {
       if (this.timeoutId) {
-        window.clearTimeout(this.timeoutId);
+        globalThis.clearTimeout(this.timeoutId);
         this.timeoutId = null;
       }
     },
@@ -260,7 +260,7 @@ export default {
       this.destroyed = false;
       this.cancelStartDelay();
 
-      this.timeoutId = window.setTimeout(
+      this.timeoutId = globalThis.setTimeout(
         () => this.init(),
         Number.parseInt(this.delay, 10),
       );

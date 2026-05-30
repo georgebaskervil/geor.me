@@ -5,7 +5,7 @@ if gem list --no-installed --exact --silent foreman; then
   gem install foreman
 fi
 
-# Default to port 3000 if not specified
-export PORT="${PORT:-3000}"
+# Local dev always uses Rails on localhost:3000 (ignore inherited PORT, e.g. conda)
+export PORT=3000
 
 exec foreman start --env /dev/null "$@"

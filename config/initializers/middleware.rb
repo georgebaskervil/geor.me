@@ -21,13 +21,13 @@ COMPRESSIBLE_CONTENT_TYPES = %w[
 ].map(&:downcase).freeze
 
 Rails.application.config.middleware.use Rack::Zstd,
-                                            compression_level: -3,     # Negative levels = "fast" mode (lower = faster)
-                                            strategy: :fast,           # Fastest strategy
-                                            window_log: 14,            # Small window → low memory & fast
-                                            hash_log: 13,
-                                            chain_log: 13,
-                                            search_log: 1,
-                                            min_match: 7
+                                        compression_level: -3,     # Negative levels = "fast" mode (lower = faster)
+                                        strategy: :fast,           # Fastest strategy
+                                        window_log: 14,            # Small window → low memory & fast
+                                        hash_log: 13,
+                                        chain_log: 13,
+                                        search_log: 1,
+                                        min_match: 7
 
 Rails.application.config.middleware.use WhitespaceCompressor
 

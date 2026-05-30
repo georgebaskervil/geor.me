@@ -39,11 +39,7 @@ class ProxyController < ApplicationController
 
     response = http.request(request)
 
-    if response.is_a?(Net::HTTPSuccess) || response.is_a?(Net::HTTPPartialContent)
-      response.body
-    else
-      nil
-    end
+    response.body if response.is_a?(Net::HTTPSuccess) || response.is_a?(Net::HTTPPartialContent)
   rescue StandardError => e
     Rails.logger.error "Proxy fetch error: #{e.message}"
     nil
@@ -70,8 +66,6 @@ class ProxyController < ApplicationController
     when Net::HTTPRedirection
       location = response["location"]
       resolve_redirects(location, limit - 1)
-    else
-      nil
     end
   rescue StandardError => e
     Rails.logger.error "Proxy resolve error: #{e.message}"

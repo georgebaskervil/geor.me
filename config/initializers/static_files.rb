@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Toggle Rails static file server depending on reverse proxy presence.
-# Puma does not serve static files; Rack::Static / Rails public_file_server is used.
+# Iodine can serve static files natively, but we keep Rails public_file_server for middleware compatibility.
 
 def behind_reverse_proxy?
   ENV.key?("DYNO") || # Heroku

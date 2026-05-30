@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en-GB" dir="ltr">
   <head>
-    <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?flags=gated&unknown=polyfill"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?flags=gated&unknown=polyfill"
+    ></script>
     <script src="/vendor/phaser.min.js"></script>
     <script src="/vendor/plotly.js"></script>
     <%- full_page_title = page_title(page_specific_title(@article)) -%>
@@ -47,15 +49,7 @@
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       preserveAspectRatio="none"
-      style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        contain: strict;
-      "
+      style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; contain: strict;"
     >
       <defs>
         <filter
@@ -97,89 +91,113 @@
       <g filter="url(#barrel)">
         <foreignobject x="0" y="0" width="100%" height="100%">
           <div class="crt-shell" xmlns="http://www.w3.org/1999/xhtml">
-          <div
-            id="crt-content"
-            data-controller="crt animation-visibility"
-          >
-      <%= render 'layouts/shortcutswrapper' do %>
-        <%= render 'layouts/distractionmodewrapper' do %>
-          <%= render 'layouts/leniswrapper' do %>
-            <div class="layout-main">
-              <header class="layout-header">
-                <a href="/" class="layout-home-link" rel="noopener">George Baskerville</a>
-                <% nav_items = [
-                  { title: "Posts", path: "/posts", external: false },
-                  { title: "Images", path: "/images", external: false },
-                  { title: "Miscellaneous", path: "/miscellaneous", external: false },
-                  { title: "Legal", path: "/legal", external: false },
-                ] %>
+            <div id="crt-content" data-controller="crt animation-visibility">
+              <%= render 'layouts/shortcutswrapper' do %>
+                <%= render 'layouts/distractionmodewrapper' do %>
+                  <%= render 'layouts/leniswrapper' do %>
+                    <div class="layout-main">
+                      <header class="layout-header">
+                        <a href="/" class="layout-home-link" rel="noopener">George Baskerville</a>
+                        <% nav_items = [
+                          { title: "Posts", path: "/posts", external: false },
+                          { title: "Images", path: "/images", external: false },
+                          { title: "Miscellaneous", path: "/miscellaneous", external: false },
+                          { title: "Legal", path: "/legal", external: false },
+                        ] %>
 
-                <nav class="layout-nav" data-controller="heading-highlight">
-                  <ul>
-                    <% nav_items.each do |item| %>
-                      <li>
-                        <% if item[:external] %>
-                          <a
-                            href="<%= item[:path] %>"
-                            target="_self"
-                            rel="noopener"
-                            class="<%= 'text-accent' if !item[:external] && request.path == item[:path] %>"
-                          >
-                            <%= item[:title] %>
-                          </a>
-                        <% else %>
-                          <a
-                            href="<%= item[:path] %>"
-                            class="<%= 'text-accent' if request.path == item[:path] %>"
-                          >
-                            <%= item[:title] %>
-                          </a>
-                        <% end %>
-                      </li>
-                    <% end %>
-                    <li>
-                      <button
-                        class="distraction-button"
-                        data-action="
-                          click->distractionmode#toggleDistractionMode
-                        "
-                      >
-                        ✨Distraction Mode✨
-                      </button>
-                    </li>
-                  </ul>
-                </nav>
-              </header>
-              <div class="flex-grow">
-                <main>
-                  <div class="main">
-                    <%= yield %>
-                    <%= render "layouts/footer" %>
-                  </div>
-                </main>
-              </div>
+                        <nav class="layout-nav" data-controller="heading-highlight">
+                          <ul>
+                            <% nav_items.each do |item| %>
+                              <li>
+                                <% if item[:external] %>
+                                  <a
+                                    href="<%= item[:path] %>"
+                                    target="_self"
+                                    rel="noopener"
+                                    class="
+                                      <%= 'text-accent' if !item[:external] && request.path == item[:path] %>
+                                    "
+                                  >
+                                    <%= item[:title] %>
+                                  </a>
+                                <% else %>
+                                  <a
+                                    href="<%= item[:path] %>"
+                                    class="
+                                      <%= 'text-accent' if request.path == item[:path] %>
+                                    "
+                                  >
+                                    <%= item[:title] %>
+                                  </a>
+                                <% end %>
+                              </li>
+                            <% end %>
+                            <li>
+                              <button
+                                class="distraction-button"
+                                data-action="
+                                  click->distractionmode#toggleDistractionMode
+                                "
+                              >
+                                ✨Distraction Mode✨
+                              </button>
+                            </li>
+                          </ul>
+                        </nav>
+                      </header>
+                      <div class="flex-grow">
+                        <main>
+                          <div class="main">
+                            <%= yield %>
+                            <%= render "layouts/footer" %>
+                          </div>
+                        </main>
+                      </div>
+                    </div>
+                    <%= render "layouts/floatingwindows" %>
+                  <% end %>
+                <% end %>
+              <% end %>
             </div>
-            <%= render "layouts/floatingwindows" %>
-          <% end %>
-        <% end %>
-      <% end %>
-          </div>
-          <%= render "layouts/cursor" %>
-          <%= render "layouts/oneko" %>
+            <%= render "layouts/cursor" %>
+            <%= render "layouts/oneko" %>
           </div>
         </foreignobject>
       </g>
     </svg>
-    <div id="geor-me-extension-footer-slot" class="geor-me-extension-footer-slot" aria-hidden="true">
-      <div style="width:98%;background:#1a1a1a;box-sizing:border-box;border-top-right-radius: 10px;border-top-left-radius: 10px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 16px;">
-          <span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:12px;color:#999;">A <strong style="color:#ccc;font-weight:600;">geor.me</strong> project</span>
-          <span style="display:flex;align-items:center;gap:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:12px;">
-            <a href="https://geor.me/licensing" style="color:#aaa;text-decoration:none;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:12px;">Licensing</a>
+    <div
+      id="geor-me-extension-footer-slot"
+      class="geor-me-extension-footer-slot"
+      aria-hidden="true"
+    >
+      <div
+        style="width:98%;background:#1a1a1a;box-sizing:border-box;border-top-right-radius: 10px;border-top-left-radius: 10px;"
+      >
+        <div
+          style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 16px;"
+        >
+          <span
+            style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:12px;color:#999;"
+          >A
+            <strong style="color:#ccc;font-weight:600;">geor.me</strong>
+            project</span>
+          <span
+            style="display:flex;align-items:center;gap:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:12px;"
+          >
+            <a
+              href="https://geor.me/licensing"
+              style="color:#aaa;text-decoration:none;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:12px;"
+            >Licensing</a>
             <span style="color:#444;">·</span>
-            <a href="https://geor.me/privacy" style="color:#aaa;text-decoration:none;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:12px;">Privacy</a>
+            <a
+              href="https://geor.me/privacy"
+              style="color:#aaa;text-decoration:none;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:12px;"
+            >Privacy</a>
             <span style="color:#444;">·</span>
-            <a href="https://geor.me/dmca" style="color:#aaa;text-decoration:none;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:12px;">DMCA</a>
+            <a
+              href="https://geor.me/dmca"
+              style="color:#aaa;text-decoration:none;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:12px;"
+            >DMCA</a>
           </span>
         </div>
       </div>

@@ -6,7 +6,12 @@
     <p class="posts-description"><%= @article[:description] %></p>
     <% if @article[:format] == :pdf %>
       <p class="posts-text">
-        <a class="dl-link" href="<%= post_file_path(@article[:slug]) %>" target="_self" rel="noopener">View PDF</a>
+        <a
+          class="dl-link"
+          href="<%= post_file_path(@article[:slug]) %>"
+          target="_self"
+          rel="noopener"
+        >View PDF</a>
       </p>
     <% else %>
       <%= sanitize(

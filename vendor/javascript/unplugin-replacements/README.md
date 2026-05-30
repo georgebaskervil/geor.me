@@ -28,8 +28,8 @@ npm install @e18e/unplugin-replacements --save-dev
 ## Usage
 
 ```ts
-import { defineConfig } from 'vite'
-import replacements from '@e18e/unplugin-replacements/vite'
+import {defineConfig} from 'vite';
+import replacements from '@e18e/unplugin-replacements/vite';
 
 export default defineConfig({
   plugins: [
@@ -37,7 +37,7 @@ export default defineConfig({
       // plugin options
     })
   ]
-})
+});
 ```
 
 ## Options
@@ -51,7 +51,7 @@ Specify which codemods to include. When provided, only the listed transformation
 ```ts
 replacements({
   include: ['arrayAt', 'objectHasOwn']
-})
+});
 ```
 
 ### `exclude`
@@ -63,7 +63,7 @@ Specify which codemods to exclude. All transformations will be applied except th
 ```ts
 replacements({
   exclude: ['arrayAt']
-})
+});
 ```
 
 > [!NOTE]

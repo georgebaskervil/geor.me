@@ -40,7 +40,8 @@ export default class extends Controller {
     if (!image) return;
 
     const href =
-      image.getAttribute("href") || image.getAttributeNS("http://www.w3.org/1999/xlink", "href");
+      image.getAttribute("href") ||
+      image.getAttributeNS("http://www.w3.org/1999/xlink", "href");
     if (!href || href.startsWith("blob:")) return;
 
     try {
@@ -50,7 +51,11 @@ export default class extends Controller {
       const objectUrl = URL.createObjectURL(blob);
       this.displacementObjectUrl = objectUrl;
       image.setAttribute("href", objectUrl);
-      image.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", objectUrl);
+      image.setAttributeNS(
+        "http://www.w3.org/1999/xlink",
+        "xlink:href",
+        objectUrl,
+      );
     } catch {
       // Keep original href if preload fails.
     }

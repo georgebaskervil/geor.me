@@ -24,7 +24,7 @@ export default class extends Controller {
     iframe.src = this.srcValue;
 
     this.iframe = iframe;
-    this.element.appendChild(iframe);
+    this.element.append(iframe);
   }
 
   destroy() {

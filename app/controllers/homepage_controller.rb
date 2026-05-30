@@ -34,11 +34,7 @@ class HomepageController < ApplicationController
 
     response = http.request(request)
 
-    if response.is_a?(Net::HTTPSuccess) || response.is_a?(Net::HTTPPartialContent)
-      response.body
-    else
-      nil
-    end
+    response.body if response.is_a?(Net::HTTPSuccess) || response.is_a?(Net::HTTPPartialContent)
   rescue StandardError
     nil
   end
@@ -62,8 +58,6 @@ class HomepageController < ApplicationController
       url
     when Net::HTTPRedirection
       resolve_redirects(response["location"], limit - 1)
-    else
-      nil
     end
   rescue StandardError
     nil

@@ -11,11 +11,11 @@ ruby "3.3.7"
 gem "better_html"
 gem "bootsnap", "1.24.4", require: false
 gem "feedjira"
+gem "iodine", "0.7.58"
 gem "kramdown"
 gem "nokogiri", "1.18.7"
-# Use Puma for now - Falcon dependencies don't meet security requirements yet
-gem "puma"
 gem "rails", "8.0.1"
+gem "reactionview", "~> 0.3.0"
 gem "sentry-rails"
 gem "sentry-ruby"
 gem "stimulus-rails"
@@ -32,8 +32,6 @@ gem "fast_underscore"                    # C implementation of String#underscore
 gem "freezolite"                         # Memory-efficient constants freezing
 gem "memo_wise"                          # Per-instance memoization of expensive methods
 gem "oj", "= 3.16.17"                    # Fast JSON library (3-5x faster)
-gem "pluck_in_batches"                   # Efficient batched column-only queries
-gem "rails_http_preload", "~> 0.3.0"     # HTTP/2 preload headers
 
 group :development, :test do
   gem "debug"
@@ -56,5 +54,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-gem "reactionview", "~> 0.3.0"
