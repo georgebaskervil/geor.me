@@ -193,6 +193,7 @@ GEM
     parser (3.3.11.1)
       ast (~> 2.4.1)
       racc
+    permessage_deflate (0.1.4)
     pp (0.6.3)
       prettyprint
     prettier_print (1.2.1)
@@ -372,6 +373,7 @@ DEPENDENCIES
   memo_wise
   nokogiri (= 1.18.7)
   oj (= 3.16.17)
+  permessage_deflate (~> 0.1.4)
   rails (= 8.0.1)
   reactionview (~> 0.3.0)
   rubocop

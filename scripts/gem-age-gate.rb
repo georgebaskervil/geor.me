@@ -7,7 +7,7 @@ require 'date'
 
 MIN_AGE_DAYS = 7
 MIN_AGE_SECONDS = MIN_AGE_DAYS * 24 * 60 * 60
-CUTOFF_DATE = Time.zone.now - MIN_AGE_SECONDS
+CUTOFF_DATE = Time.now - MIN_AGE_SECONDS
 
 RED = "\e[31m"
 YELLOW = "\e[33m"
@@ -91,7 +91,7 @@ def validate
     puts "\n#{RED}❌ GEM AGE GATE BLOCKED#{RESET}"
     puts "   #{recent_gems.length} gem(s) are newer than #{MIN_AGE_DAYS} days:\n"
     recent_gems.each do |g|
-      days_ago = ((Time.zone.now - g[:published]) / (24 * 60 * 60)).to_i
+      days_ago = ((Time.now - g[:published]) / (24 * 60 * 60)).to_i
       puts "   #{RED}• #{g[:name]} (#{g[:version]})#{RESET}"
       puts "     Published: #{g[:published].strftime('%Y-%m-%d')} (#{days_ago} days ago)"
     end

@@ -5,6 +5,14 @@
   @apply text-4xl font-bold mb-4 text-text;
 }
 
+.cr-h2 {
+  font-size: 1.5rem;
+  margin-top: 24px;
+  margin-bottom: 16px;
+
+  @apply text-2xl font-bold text-text;
+}
+
 .cr-p {
   margin-bottom: 16px;
 
@@ -12,5 +20,19 @@
 }
 
 .cr-link {
-  @apply text-accent hover:underline;
+  @apply text-accent no-underline hover:underline;
+}
+
+.drawer-ul-spacing {
+  list-style: none;
+  padding-left: 0;
+}
+
+.drawer-ul-spacing,
+.drawer-li-spacing {
+  @apply text-text;
+}
+
+.drawer-li-spacing .drawer-link {
+  font-size: inherit;
 }

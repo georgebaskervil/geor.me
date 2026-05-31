@@ -21,6 +21,7 @@ export default class extends Controller {
     iframe.title = "Robustext";
     iframe.loading = "lazy";
     iframe.setAttribute("allowfullscreen", "");
+    iframe.setAttribute("tabindex", "-1");
     iframe.src = this.srcValue;
 
     this.iframe = iframe;

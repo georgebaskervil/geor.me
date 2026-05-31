@@ -1,21 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import FFT from "fft.js";
-
-// Use CDN-provided Plotly when bundling excludes it
-const Plotly =
-  globalThis.window !== undefined && globalThis.Plotly
-    ? globalThis.Plotly
-    : globalThis.Plotly === undefined
-      ? null
-      : globalThis.Plotly;
-
-function ensurePlotly() {
-  if (Plotly) return true;
-  console.error(
-    "Plotly not loaded — include the CDN script before the app bundle.",
-  );
-  return false;
-}
+import { loadPlotly } from "../utils/loadVendorScript.js";
 
 // Helper function moved to outer scope.
 function writeString(view, offset, string) {
@@ -35,7 +20,30 @@ export default class extends Controller {
   ];
 
   connect() {
+    this.disconnected = false;
+    this._plotlyPromise = loadPlotly()
+      .then((Plotly) => {
+        if (this.disconnected) return null;
+        this.Plotly = Plotly;
+        return Plotly;
+      })
+      .catch((error) => {
+        console.error("Plotly failed to load", error);
+        return null;
+      });
     console.log("Neudec controller connected.");
+  }
+
+  disconnect() {
+    this.disconnected = true;
+  }
+
+  async ensurePlotly() {
+    if (this.Plotly) return this.Plotly;
+    if (this._plotlyPromise) {
+      return this._plotlyPromise;
+    }
+    return null;
   }
 
   // ----- ENCODE: WAV to FFT XML -----
@@ -162,7 +170,7 @@ export default class extends Controller {
       return;
     }
     Promise.all([this.readXMLFile(xmlFile), this.readWavFile(wavFile)])
-      .then(([xmlData, wavData]) => {
+      .then(async ([xmlData, wavData]) => {
         console.log("XML Data:", xmlData);
         // Use wavData.data since readWavFile returns an object with sampleRate and data.
         console.log("WAV Data length:", wavData.data.length);
@@ -224,9 +232,9 @@ export default class extends Controller {
           xaxis: { title: "Index" },
           yaxis: { title: "Amplitude" },
         };
-        if (!ensurePlotly()) return;
+        if (!(await this.ensurePlotly())) return;
         console.log("Plotting analysis data.");
-        Plotly.newPlot(this.analysisPlotTarget, [trace1, trace2], layout);
+        this.Plotly.newPlot(this.analysisPlotTarget, [trace1, trace2], layout);
       })
       .catch((error) => {
         console.error("Error during analysis:", error);

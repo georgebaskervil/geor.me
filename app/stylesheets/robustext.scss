@@ -13,4 +13,12 @@
   border: 0;
   display: block;
   background: #161820;
+
+  // Emscripten focuses the inner canvas on load; suppress the host focus ring.
+  &:focus,
+  &:focus-visible,
+  &:focus-within {
+    outline: none;
+    box-shadow: none;
+  }
 }

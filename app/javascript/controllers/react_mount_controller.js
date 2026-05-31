@@ -1,12 +1,9 @@
 import { Controller } from "@hotwired/stimulus";
-import React from "react";
-import { createRoot } from "react-dom/client";
-import HomeControlPanel from "../components/HomeControlPanel.jsx";
-import DeviceManagement from "../components/DeviceManagement.jsx";
+import { assetLog } from "../utils/assetLoadLog.js";
 
-const components = {
-  HomeControlPanel,
-  DeviceManagement,
+const componentLoaders = {
+  HomeControlPanel: () => import("../components/HomeControlPanel.jsx"),
+  DeviceManagement: () => import("../components/DeviceManagement.jsx"),
 };
 
 export default class extends Controller {
@@ -17,10 +14,12 @@ export default class extends Controller {
 
   connect() {
     if (!this.hasComponentValue) return;
-    this.createApp();
+    this.disconnected = false;
+    this._mountPromise = this.createApp();
   }
 
   disconnect() {
+    this.disconnected = true;
     if (this.root) {
       this.root.unmount();
       this.root = undefined;
@@ -30,18 +29,34 @@ export default class extends Controller {
   propsValueChanged() {
     if (this.root) {
       this.disconnect();
-      this.createApp();
+      this.disconnected = false;
+      this._mountPromise = this.createApp();
     }
   }
 
-  createApp() {
+  async createApp() {
     const componentName = this.componentValue;
-    const Component = components[componentName];
+    const loadComponent = componentLoaders[componentName];
 
-    if (!Component) {
+    if (!loadComponent) {
       console.error(`Component ${componentName} not found`);
       return;
     }
+
+    const startedAt = performance.now();
+    assetLog("React mount chunks load start", componentName);
+
+    const [{ default: Component }, React, { createRoot }] = await Promise.all([
+      loadComponent(),
+      import("react"),
+      import("react-dom/client"),
+    ]);
+
+    assetLog("React mount chunks ready", componentName, {
+      ms: Math.round(performance.now() - startedAt),
+    });
+
+    if (this.disconnected) return;
 
     const properties = this.hasPropsValue ? this.propsValue : {};
 

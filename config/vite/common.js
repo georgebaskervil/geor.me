@@ -4,60 +4,6 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export const allObfuscatorConfig = {
-  excludes: [
-    /vendor-modules/,
-    /react-vendor/,
-    /vue-vendor/,
-    /vue\.runtime/,
-    /rolldown-runtime/,
-    /HomeControlPanel/,
-    /DeviceManagement/,
-    /react_mount_controller/,
-    /turbo_mount_controller/,
-    /TaskStackApp/,
-    /TaskStack/,
-    /TaskBlock/,
-    /TaskCreator/,
-    /CursorFxWrapper/,
-  ],
-  enable: true,
-  log: true,
-  // When true, the plugin replaces manualChunks and only excludes vendor-modules.
-  autoExcludeNodeModules: true,
-  threadPool: true,
-  options: {
-    compact: true,
-    controlFlowFlattening: true,
-    controlFlowFlatteningThreshold: 1,
-    deadCodeInjection: true,
-    debugProtection: true,
-    debugProtectionInterval: 0,
-    disableConsoleOutput: true,
-    identifierNamesGenerator: "hexadecimal",
-    log: false,
-    numbersToExpressions: false,
-    renameGlobals: false,
-    selfDefending: true,
-    simplify: true,
-    splitStrings: true,
-    ignoreImports: true,
-    stringArray: true,
-    stringArrayCallsTransform: true,
-    stringArrayCallsTransformThreshold: 0.5,
-    stringArrayEncoding: [],
-    stringArrayIndexShift: true,
-    stringArrayRotate: true,
-    stringArrayShuffle: true,
-    stringArrayWrappersCount: 1,
-    stringArrayWrappersChainedCalls: true,
-    stringArrayWrappersParametersMaxCount: 2,
-    stringArrayWrappersType: "variable",
-    stringArrayThreshold: 0.75,
-    unicodeEscapeSequence: false,
-  },
-};
-
 export function withInstrumentation(p) {
   let modified = 0;
   return {
@@ -301,7 +247,8 @@ export function createCommonBuild({ isDevelopment, rollupInput } = {}) {
     assetsInlineLimit(filePath, content) {
       if (filePath.includes("node_modules/emulators/")) return false;
       if (filePath.endsWith(".wasm")) return false;
-      return content.length <= 500_000;
+      if (/\/app\/images\//.test(filePath)) return false;
+      return content.length <= 4096;
     },
     cssTarget: ["esnext"],
     sourcemap: false,

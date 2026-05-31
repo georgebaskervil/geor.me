@@ -61,7 +61,7 @@ export default class WaveformController extends Controller
     fileNameDisplay = document.getElementById("fileNameDisplay")
     if fileNameDisplay && @filename
       fileNameDisplay.textContent = "Loaded file: #{@filename}"
-      fileNameDisplay.style.display = "block"
+      fileNameDisplay.classList.add("is-visible")
   
   renderWaveformWithSavedValues: ->
     startTimeEl = document.getElementById("startTime")
@@ -195,7 +195,7 @@ export default class WaveformController extends Controller
 
     ctx.clearRect 0, 0, width, height
     ctx.beginPath()
-    ctx.strokeStyle = "#D6D6D6"
+    ctx.strokeStyle = @waveformStrokeColor(canvas)
     
     samplesPerPixel = Math.ceil channelData.length / width
     midHeight = height / 2
@@ -207,3 +207,7 @@ export default class WaveformController extends Controller
       ctx.lineTo x, (1 + max) * midHeight
 
     ctx.stroke()
+
+  waveformStrokeColor: (canvas) ->
+    stroke = getComputedStyle(canvas).getPropertyValue("--wf-stroke").trim()
+    if stroke.length > 0 then stroke else "#b0a2c6"

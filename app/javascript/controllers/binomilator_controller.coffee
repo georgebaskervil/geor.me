@@ -1,17 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-
-# Use CDN-provided Plotly when bundling excludes it
-if typeof window isnt 'undefined' and window.Plotly?
-  Plotly = window.Plotly
-else if typeof Plotly isnt 'undefined'
-  Plotly = Plotly
-else
-  Plotly = null
-
-ensurePlotly = ->
-  return true if Plotly?
-  console.error "Plotly not loaded — include the CDN script before the app bundle."
-  return false
+import { loadPlotly } from "../utils/loadVendorScript"
 
 export default class extends Controller
   @targets: ["n", "p", "x", "plot", "results"]
@@ -26,12 +14,19 @@ export default class extends Controller
   STORAGE_KEY = 'binomilator-state'
 
   connect: ->
+    @disconnected = false
     @factCache = {}  # initialize cache for factorial results
     @plotTarget.classList.add 'loading'
-    @loadStateFromStorage()
-    @initializeOutputs() # Call after loading state
-    @updateAll()
-    @plotInitialized = true
+    loadPlotly()
+      .then (Plotly) =>
+        return if @disconnected
+        @Plotly = Plotly
+        @loadStateFromStorage()
+        @initializeOutputs() # Call after loading state
+        @updateAll()
+        @plotInitialized = true
+      .catch (error) =>
+        console.error "Plotly failed to load", error
     
     # More comprehensive event handling
     @saveHandler = this.saveStateToStorage.bind(this)
@@ -46,6 +41,7 @@ export default class extends Controller
     document.addEventListener('visibilitychange', @handleVisibilityChange.bind(this))
   
   disconnect: ->
+    @disconnected = true
     # Clean up all event listeners
     document.removeEventListener('turbo:before-visit', @saveHandler)
     document.removeEventListener('turbo:before-cache', @saveHandler)
@@ -144,14 +140,14 @@ export default class extends Controller
     @updatePlot()
 
   updatePlot: ->
-    return unless ensurePlotly()
+    return unless @Plotly?
     data = @getPlotData()
     layout = @getPlotLayout()
 
     if @plotInitialized
-      Plotly.react @plotTarget, data, layout, displayModeBar: false
+      @Plotly.react @plotTarget, data, layout, displayModeBar: false
     else
-      Plotly.newPlot @plotTarget, data, layout, displayModeBar: false
+      @Plotly.newPlot @plotTarget, data, layout, displayModeBar: false
 
     @plotTarget.classList.remove 'loading'
 

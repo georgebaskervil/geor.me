@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
 # Iodine setup — CLI flags override these when provided.
+# WebSockets (Action Cable at /cable) are upgraded by Iodine via rack.upgrade?; no extra config.
 return unless defined?(Iodine)
 
 Iodine.threads = ENV.fetch("RAILS_MAX_THREADS", 5).to_i
 Iodine.workers = ENV.fetch("WEB_CONCURRENCY", 1).to_i
+
+if ENV["REDIS_URL"].present? && defined?(Iodine::PubSub::Redis)
+  Iodine::PubSub.default = Iodine::PubSub::Redis.new(ENV["REDIS_URL"])
+end
 
 if defined?(Rails) && Rails.env.development?
   Iodine::DEFAULT_SETTINGS[:port] = "3000"

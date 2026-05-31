@@ -54,3 +54,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "permessage_deflate", "~> 0.1.4"

@@ -1,17 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-
-# Use CDN-provided Plotly when bundling excludes it
-if typeof window isnt 'undefined' and window.Plotly?
-  Plotly = window.Plotly
-else if typeof Plotly isnt 'undefined'
-  Plotly = Plotly
-else
-  Plotly = null
-
-ensurePlotly = ->
-  return true if Plotly?
-  console.error "Plotly not loaded — include the CDN script before the app bundle."
-  return false
+import { loadPlotly } from "../utils/loadVendorScript"
 
 export default class extends Controller
   @targets = ["plot", "wavelength", "slitCount", "slitWidth", "slitSpacing"]
@@ -24,8 +12,18 @@ export default class extends Controller
   }
 
   connect: ->
-    @defaults()
-    @update()
+    @disconnected = false
+    loadPlotly()
+      .then (Plotly) =>
+        return if @disconnected
+        @Plotly = Plotly
+        @defaults()
+        @update()
+      .catch (error) =>
+        console.error "Plotly failed to load", error
+
+  disconnect: ->
+    @disconnected = true
 
   defaults: ->
     @wavelengthValue = 650 # Red light (nm)
@@ -39,7 +37,7 @@ export default class extends Controller
     @maxWidth = 5
 
   update: ->
-    return unless ensurePlotly()
+    return unless @Plotly?
     lambda = @wavelengthValue * 1e-9
     k = 2 * Math.PI / lambda
     w = @slitWidthValue * lambda
@@ -70,7 +68,7 @@ export default class extends Controller
       }
     }
 
-    Plotly.newPlot(@plotTarget, data, layout)
+    @Plotly.newPlot(@plotTarget, data, layout)
 
   sinc: (x) ->
     return 1 if x is 0

@@ -1,151 +1,188 @@
 /**
- * LiveUpdater - A reusable system for automatically updating dynamic content
- *
- * Usage:
- * new LiveUpdater({
- *   endpoint: '/api/v1/stats/request_count',
- *   selector: '[data-live-counter]',
- *   interval: 5000,
- *   transform: (data) => data.count.toLocaleString()
- * });
+ * Live stats via Action Cable (Iodine WebSocket). JSON polling only if the socket fails.
  */
-export class LiveUpdater {
-  constructor(options) {
-    this.endpoint = options.endpoint;
-    this.selector = options.selector;
-    this.interval = options.interval || 10_000; // Default 10 seconds
-    this.transform = options.transform || ((data) => data);
-    this.retryDelay = options.retryDelay || 30_000; // Retry after 30s on error
-    this.maxRetries = options.maxRetries || 3;
 
-    this.elements = document.querySelectorAll(this.selector);
-    this.isRunning = false;
-    this.retryCount = 0;
-    this.timeoutId = undefined;
+import { createConsumer } from "@rails/actioncable";
 
-    // Only start if elements exist on the page
-    if (this.elements.length > 0) {
-      this.start();
+const LIVE_URL = "/api/v1/stats/live";
+const FALLBACK_INTERVAL_MS = 60_000;
 
-      // Stop updating when page becomes hidden to save resources
-      document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-          this.pause();
-        } else {
-          this.resume();
-        }
-      });
+function timeSinceText(timeSince) {
+  return `${timeSince.years} years, ${timeSince.months} months, and ${timeSince.days} days`;
+}
+
+function applySnapshot(snapshot) {
+  if (!snapshot) return;
+
+  for (const element of document.querySelectorAll("[data-live-time-since]")) {
+    const text = timeSinceText(snapshot.time_since);
+    if (element.textContent !== text) {
+      element.textContent = text;
     }
   }
 
-  async start() {
-    if (this.isRunning) return;
+  for (const element of document.querySelectorAll("[data-live-current-day]")) {
+    const day = snapshot.current_day;
+    if (element.textContent !== day) {
+      element.textContent = day;
+    }
+  }
+}
 
-    this.isRunning = true;
-    this.scheduleUpdate();
+class LiveStatsCable {
+  constructor() {
+    this.consumer = null;
+    this.subscription = null;
+    this.fallbackTimer = null;
+    this.paused = false;
+    this.usingFallback = false;
+    this.intentionalDisconnect = false;
+  }
+
+  targetsPresent() {
+    return (
+      document.querySelector("[data-live-time-since]") ||
+      document.querySelector("[data-live-current-day]")
+    );
+  }
+
+  start() {
+    if (!this.targetsPresent()) return;
+    this.stopFallback();
+    this.paused = false;
+
+    if (this.subscription) return;
+
+    if (typeof createConsumer !== "function") {
+      this.startFallback();
+      return;
+    }
+
+    this.connectCable();
+  }
+
+  connectCable() {
+    try {
+      this.consumer = createConsumer();
+      this.subscription = this.consumer.subscriptions.create(
+        { channel: "LiveStatsChannel" },
+        {
+          connected: () => {
+            this.stopFallback();
+          },
+          received: (snapshot) => {
+            applySnapshot(snapshot);
+          },
+          disconnected: () => {
+            if (this.paused || this.intentionalDisconnect) return;
+            this.startFallback();
+          },
+        },
+      );
+    } catch (error) {
+      console.warn("LiveStatsCable:", error);
+      this.startFallback();
+    }
+  }
+
+  startFallback() {
+    if (this.usingFallback) return;
+    this.usingFallback = true;
+    this.disconnectCable();
+
+    const poll = async () => {
+      try {
+        const response = await fetch(LIVE_URL, {
+          headers: { Accept: "application/json" },
+          cache: "no-cache",
+        });
+        if (!response.ok) {
+          throw new Error(`Live stats fetch failed (${response.status})`);
+        }
+        applySnapshot(await response.json());
+      } catch (error) {
+        console.warn("LiveStatsCable fallback:", error);
+      }
+    };
+
+    poll();
+    this.fallbackTimer = setInterval(poll, FALLBACK_INTERVAL_MS);
+  }
+
+  stopFallback() {
+    this.usingFallback = false;
+    if (this.fallbackTimer) {
+      clearInterval(this.fallbackTimer);
+      this.fallbackTimer = null;
+    }
+  }
+
+  disconnectCable() {
+    this.intentionalDisconnect = true;
+    this.subscription?.unsubscribe();
+    this.subscription = null;
+    this.consumer?.disconnect();
+    this.consumer = null;
+    this.intentionalDisconnect = false;
   }
 
   pause() {
-    this.isRunning = false;
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId);
-      this.timeoutId = undefined;
-    }
+    this.paused = true;
+    this.stopFallback();
+    this.disconnectCable();
   }
 
   resume() {
-    if (!this.isRunning && this.elements.length > 0) {
+    if (this.paused && this.targetsPresent()) {
+      this.paused = false;
       this.start();
     }
   }
 
   stop() {
-    this.pause();
-    this.elements = [];
-  }
-
-  scheduleUpdate() {
-    if (!this.isRunning) return;
-
-    this.timeoutId = setTimeout(() => {
-      this.update();
-    }, this.interval);
-  }
-
-  async update() {
-    if (!this.isRunning) return;
-
-    try {
-      const response = await fetch(this.endpoint, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        // Add cache busting to ensure fresh data
-        cache: "no-cache",
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      const transformedData = this.transform(data);
-
-      // Update all matching elements
-      for (const element of this.elements) {
-        if (element.textContent !== transformedData.toString()) {
-          element.textContent = transformedData;
-        }
-      }
-
-      // Reset retry count on success
-      this.retryCount = 0;
-
-      // Schedule next update
-      this.scheduleUpdate();
-    } catch (error) {
-      console.warn(`LiveUpdater failed to fetch from ${this.endpoint}:`, error);
-
-      this.retryCount++;
-
-      if (this.retryCount <= this.maxRetries) {
-        // Retry with exponential backoff
-        const delay = this.retryDelay * Math.pow(2, this.retryCount - 1);
-        console.log(
-          `Retrying in ${delay / 1000}s (attempt ${this.retryCount}/${this.maxRetries})`,
-        );
-
-        this.timeoutId = setTimeout(() => {
-          this.update();
-        }, delay);
-      } else {
-        console.error(`LiveUpdater gave up after ${this.maxRetries} retries`);
-        // Still schedule regular updates in case the network recovers
-        this.retryCount = 0;
-        this.scheduleUpdate();
-      }
-    }
+    this.stopFallback();
+    this.disconnectCable();
   }
 }
 
-// Auto-initialize common live updaters when DOM is loaded
-document.addEventListener("DOMContentLoaded", () => {
-  // Time since counter updater
-  new LiveUpdater({
-    endpoint: "/api/v1/stats/time_since",
-    selector: "[data-live-time-since]",
-    interval: 60_000, // Update every minute
-    transform: (data) =>
-      `${data.years} years, ${data.months} months, and ${data.days} days`,
+let liveStatsCable;
+
+function initLiveStats() {
+  if (!document.querySelector("[data-live-time-since], [data-live-current-day]")) {
+    liveStatsCable?.stop();
+    liveStatsCable = null;
+    return;
+  }
+
+  liveStatsCable ??= new LiveStatsCable();
+  liveStatsCable.start();
+}
+
+function bindLiveStatsLifecycle() {
+  document.addEventListener("visibilitychange", () => {
+    if (!liveStatsCable) return;
+    if (document.hidden) {
+      liveStatsCable.pause();
+    } else {
+      liveStatsCable.resume();
+    }
   });
 
-  // Current day updater for footer
-  new LiveUpdater({
-    endpoint: "/api/v1/stats/current_day",
-    selector: "[data-live-current-day]",
-    interval: 300_000, // Update every 5 minutes (day doesn't change often)
-    transform: (data) => data.day,
+  document.addEventListener("turbo:before-visit", () => {
+    liveStatsCable?.pause();
   });
-});
+
+  document.addEventListener("turbo:load", initLiveStats);
+}
+
+bindLiveStatsLifecycle();
+initLiveStats();
+
+export class LiveUpdater {
+  constructor(options) {
+    console.warn(
+      "LiveUpdater is deprecated; live stats use Action Cable via LiveStatsCable.",
+      options,
+    );
+  }
+}

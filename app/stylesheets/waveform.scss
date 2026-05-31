@@ -1,3 +1,5 @@
+@use "variables";
+
 .waveform-h1 {
   font-size: 2.5rem;
   margin-bottom: 24px;
@@ -16,25 +18,46 @@
 }
 
 .wf-canvas {
+  --wf-stroke: #{variables.$accent};
+
   width: 100%;
   height: 700px;
-  border: 1px solid #2d2a2a;
+  border: 1px solid variables.$neutral;
   border-radius: 10px;
+}
+
+.wf-file-name {
+  display: none;
+  margin-top: 10px;
+  font-weight: bold;
+  color: variables.$accent;
+}
+
+.wf-file-name.is-visible {
+  display: block;
 }
 
 .wf-controls {
   margin-bottom: 10px;
-  color: #c0caf5;
+  color: variables.$text;
+}
+
+.wf-controls label {
+  @apply text-mamba;
 }
 
 .wf-controls input,
 .wf-controls button {
   background-color: transparent;
-  color: #c0caf5;
-  border: 1px solid #2d2a2a;
+  color: variables.$accent;
+  border: 1px solid variables.$neutral;
   padding: 5px;
   margin-right: 10px;
   border-radius: 10px;
+}
+
+.wf-controls input[type="number"] {
+  color: variables.$text;
 }
 
 .wf-controls input[type="file"] {
@@ -43,8 +66,8 @@
 
 .wf-controls input[type="file"]::file-selector-button {
   background-color: transparent;
-  color: #c0caf5;
-  border: 1px solid #2d2a2a;
+  color: variables.$accent;
+  border: 1px solid variables.$neutral;
   padding: 5px;
   border-radius: 10px;
 }

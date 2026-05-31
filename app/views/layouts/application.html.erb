@@ -1,34 +1,25 @@
 <!DOCTYPE html>
 <html lang="en-GB" dir="ltr">
   <head>
-    <script
-      src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?flags=gated&unknown=polyfill"
-    ></script>
-    <script src="/vendor/phaser.min.js"></script>
-    <script src="/vendor/plotly.js"></script>
-    <%- full_page_title = page_title(page_specific_title(@article)) -%>
-    <%- favicon_path = vite_asset_path("~/images/favicon.jpg") -%>
-    <link rel="dns-prefetch" href="r2.<%= domain %>">
-    <link rel="preconnect" href="r2.<%= domain %>">
-    <%= yield :specifcstylesheets %>
-    <%= vite_stylesheet_tag "~/stylesheets/application.scss" %>
-    <link
-      rel="preload"
-      href="<%= vite_asset_path("~/fonts/SpaceMono-Regular-subset.woff2") %>"
-      as="font"
-      type="font/woff2"
-      crossorigin="anonymous"
-    >
-    <script>
-      // Site bundle owns Lenis on #crt-content; extension userscript skips when this is set.
-      window._lenisInitialised = true;
-    </script>
-    <%= vite_javascript_tag "~/javascript/application.js" %>
     <meta charset="utf-8">
     <meta
       name="viewport"
       content="width=device-width,initial-scale=1,viewport-fit=cover"
     >
+    <meta name="view-transition" content="same-origin">
+    <%- full_page_title = page_title(page_specific_title(@article)) -%>
+    <%- favicon_path = vite_asset_path("~/images/favicon.jpg") -%>
+    <link rel="dns-prefetch" href="r2.<%= domain %>">
+    <link rel="preconnect" href="r2.<%= domain %>">
+    <%= vite_stylesheet_tag "~/stylesheets/entries/core.scss" %>
+    <% Array(@route_stylesheet_entries).each do |entry| %>
+      <%= vite_stylesheet_tag "~/stylesheets/#{entry}", data: { turbo_track: "reload" } %>
+    <% end %>
+    <script>
+      // Site bundle owns Lenis on #crt-content; extension userscript skips when this is set.
+      window._lenisInitialised = true;
+    </script>
+    <%= vite_javascript_tag "~/javascript/application.js" %>
     <meta name="robots" content="noindex, nofollow">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title><%= full_page_title %></title>
@@ -39,6 +30,7 @@
     <meta name="apple-mobile-web-app-title" content="<%= site_name %>">
     <meta name="apple-mobile-web-app-status-bar-style" content="<%= theme_color %>">
     <%= csrf_meta_tags %>
+    <%= action_cable_meta_tag %>
     <%= csp_meta_tag %>
     <%= vite_client_tag %>
   </head>
@@ -93,9 +85,12 @@
           <div class="crt-shell" xmlns="http://www.w3.org/1999/xhtml">
             <div id="crt-content" data-controller="crt animation-visibility">
               <%= render 'layouts/shortcutswrapper' do %>
-                <%= render 'layouts/distractionmodewrapper' do %>
                   <%= render 'layouts/leniswrapper' do %>
-                    <div class="layout-main">
+                    <div
+                      id="site-main"
+                      class="layout-main"
+                      data-turbo-transition="page"
+                    >
                       <header class="layout-header">
                         <a href="/" class="layout-home-link" rel="noopener">George Baskerville</a>
                         <% nav_items = [
@@ -135,9 +130,9 @@
                             <li>
                               <button
                                 class="distraction-button"
-                                data-action="
-                                  click->distractionmode#toggleDistractionMode
-                                "
+                                data-controller="distractionmode-launcher"
+                                data-distractionmode-launcher-scope-value="distractionmode-scope"
+                                data-action="click->distractionmode-launcher#activate"
                               >
                                 ✨Distraction Mode✨
                               </button>
@@ -154,13 +149,14 @@
                         </main>
                       </div>
                     </div>
-                    <%= render "layouts/floatingwindows" %>
                   <% end %>
-                <% end %>
               <% end %>
             </div>
-            <%= render "layouts/cursor" %>
+            <div id="distractionmode-scope">
+              <%= render "layouts/floatingwindows" %>
+            </div>
             <%= render "layouts/oneko" %>
+            <%= render "layouts/cursor" %>
           </div>
         </foreignobject>
       </g>

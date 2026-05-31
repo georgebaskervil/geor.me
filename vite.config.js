@@ -16,7 +16,6 @@ import stylehacks from "stylehacks";
 import postcssMqOptimize from "postcss-mq-optimize";
 import autoprefixer from "autoprefixer";
 import nodePolyfills from "rollup-plugin-polyfill-node";
-import vitePluginBundleObfuscator from "vite-plugin-bundle-obfuscator";
 import { purgePolyfills } from "unplugin-purge-polyfills";
 import replacements from "./vendor/javascript/unplugin-replacements/lib/vite.js";
 import coffeescript from "./plugins/coffeescript.js";
@@ -24,7 +23,6 @@ import typehints from "./plugins/typehints.js";
 import removePrefix from "./plugins/postcss-remove-prefix.js";
 import postcssSuperHover from "./plugins/postcss-super-hover.js";
 import {
-  allObfuscatorConfig,
   commonDefine,
   createBabelOptions,
   createCommonBuild,
@@ -201,17 +199,8 @@ export default defineConfig(({ mode }) => {
           postcssInlineRtl(),
           postcssUrl([
             {
-              filter: "**/*.woff2",
-              url: "inline",
-              encodeType: "base64",
-              maxSize: 2_147_483_647,
-            },
-            {
-              url: "inline",
-              maxSize: 2_147_483_647,
-              encodeType: "encodeURIComponent",
-              optimizeSvgEncode: true,
-              ignoreFragmentWarning: true,
+              filter: "**/*.{woff,woff2,ttf,otf,eot,svg,png,jpg,jpeg,gif,webp,avif}",
+              url: "rebase",
             },
           ]),
           postcssRemoveRoot(),
@@ -283,9 +272,6 @@ export default defineConfig(({ mode }) => {
         "app/javascript/src/**/*",
       ]),
       isDevelopment ? undefined : typehintPlugin,
-      isDevelopment
-        ? undefined
-        : vitePluginBundleObfuscator(allObfuscatorConfig),
       vue(),
     ],
   };

@@ -76,11 +76,14 @@ Rails.application.routes.draw do
 
   root "homepage#index"
 
+  mount ActionCable.server => "/cable"
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # API routes for live updates
   namespace :api do
     namespace :v1 do
+      get "stats/live", to: "stats#live"
       get "stats/time_since", to: "stats#time_since"
       get "stats/current_day", to: "stats#current_day"
     end

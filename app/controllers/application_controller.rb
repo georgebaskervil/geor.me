@@ -9,6 +9,7 @@ require "feedjira"
 
 class ApplicationController < ActionController::Base
   include EnhancedCaching
+  include RouteStylesheets
 
   before_action :set_custom_headers
   before_action :load_images

@@ -1,17 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-
-# Use CDN-provided Plotly when bundling excludes it
-if typeof window isnt 'undefined' and window.Plotly?
-  Plotly = window.Plotly
-else if typeof Plotly isnt 'undefined'
-  Plotly = Plotly
-else
-  Plotly = null
-
-ensurePlotly = ->
-  return true if Plotly?
-  console.error "Plotly not loaded — include the CDN script before the app bundle."
-  return false
+import { loadPlotly } from "../utils/loadVendorScript"
 
 export default class extends Controller
   @targets = [
@@ -22,11 +10,18 @@ export default class extends Controller
   STORAGE_KEY = 'bayesometer-state'
 
   connect: ->
+    @disconnected = false
     @plotInitialized = false
     @plotTarget.classList.add 'loading'
-    @loadStateFromStorage()
-    @updateAll()
-    @plotInitialized = true
+    loadPlotly()
+      .then (Plotly) =>
+        return if @disconnected
+        @Plotly = Plotly
+        @loadStateFromStorage()
+        @updateAll()
+        @plotInitialized = true
+      .catch (error) =>
+        console.error "Plotly failed to load", error
     
     # More comprehensive event handling
     @saveHandler = this.saveStateToStorage.bind(this)
@@ -41,6 +36,7 @@ export default class extends Controller
     document.addEventListener('visibilitychange', @handleVisibilityChange.bind(this))
   
   disconnect: ->
+    @disconnected = true
     # Clean up all event listeners
     document.removeEventListener('turbo:before-visit', @saveHandler)
     document.removeEventListener('turbo:before-cache', @saveHandler)
@@ -130,7 +126,7 @@ export default class extends Controller
     @validResultsTarget.style.display = "block"
 
   updatePlot: (ph, pth, ptnh, pht) ->
-    return unless ensurePlotly()
+    return unless @Plotly?
     n = 100
     xVals = (i / n for i in [0...n])
     yVals = (i / n for i in [0...n])
@@ -177,9 +173,9 @@ export default class extends Controller
     config = { displayModeBar: false, responsive: true }
 
     if @plotInitialized
-      Plotly.react @plotTarget, data, layout, config
+      @Plotly.react @plotTarget, data, layout, config
     else
-      Plotly.newPlot @plotTarget, data, layout, config
+      @Plotly.newPlot @plotTarget, data, layout, config
 
     @plotTarget.classList.remove 'loading'
 

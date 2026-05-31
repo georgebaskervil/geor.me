@@ -1,10 +1,14 @@
 import "./geor_me_extension_handoff";
 import * as Sentry from "@sentry/browser";
-import "../stylesheets/application.scss";
+import { shouldPerformTransition } from "./turbo_view_transitions";
 
-// Add loading class to body only during page-changing navigation
+// Core CSS is loaded via vite_stylesheet_tag in the layout (not bundled here).
+
+// Blur overlay during navigation when View Transitions API is unavailable.
 document.addEventListener("turbo:visit", () => {
-  document.body.classList.add("turbo-loading");
+  if (!shouldPerformTransition()) {
+    document.body.classList.add("turbo-loading");
+  }
 });
 document.addEventListener("turbo:load", () => {
   document.body.classList.remove("turbo-loading");
@@ -65,30 +69,7 @@ if (globalThis.matchMedia("(hover: hover)").matches) {
   createSuperHover({ selector: "*", moveEventType: false });
 }
 
-// Hijack the XMLHttpRequest primitive to replace the wdosbox.js and wdosbox.wasm URLs
-// Its a hack, but I can't find a way to control what other libraries are doing
-// without going in and modifying them directly
-import wdosboxJsUrl from "emulators/dist/wdosbox.js?url";
-import wdosboxWasmUrl from "emulators/dist/wdosbox.wasm?url";
-
-(function () {
-  const originalOpen = XMLHttpRequest.prototype.open;
-  XMLHttpRequest.prototype.open = function (method, url, ...rest) {
-    if (url.includes("wdosbox.js")) url = wdosboxJsUrl;
-    if (url.includes("wdosbox.wasm")) url = wdosboxWasmUrl;
-    return originalOpen.call(this, method, url, ...rest);
-  };
-
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = async function (resource, ...rest) {
-    if (typeof resource === "string") {
-      if (resource.includes("wdosbox.js")) resource = wdosboxJsUrl;
-      if (resource.includes("wdosbox.wasm")) resource = wdosboxWasmUrl;
-    }
-    return originalFetch(resource, ...rest);
-  };
-})();
-
 import "@hotwired/turbo-rails";
+import "./turbo_view_transitions";
 import "./controllers";
 import "./live_updater";

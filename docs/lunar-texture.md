@@ -2,7 +2,7 @@
 
 The `html` background uses two tiled layers (see `app/stylesheets/globals.scss`):
 
-1. **Star field** — inline SVG data URI (small circles, no filters).
+1. **Star field** — `app/images/starfield.svg` (tiled 220×220).
 2. **Lunar grain** — formerly an inline SVG with a live filter; now `app/images/lunar-texture.avif`.
 
 ## Former inline SVG (replaced)
@@ -36,6 +36,8 @@ Regenerate after changing filter parameters in the script.
 
 | Asset                      | Format        | Why                                                                   |
 | -------------------------- | ------------- | --------------------------------------------------------------------- |
+| `starfield.svg`            | SVG           | CSS `background-image` — keep SVG (tiny, no filters)                  |
+| `turbo-loading-spinner.svg`| SVG           | Turbo visit overlay spinner (SMIL animation)                          |
 | `lunar-texture.avif`       | Lossless AVIF | CSS `background-image` — AVIF is fine                                 |
 | `crt-displacement-map.png` | PNG           | SVG `feImage` input; AVIF is not reliably decoded in filter pipelines |
 | `favicon.jpg`              | JPEG          | Favicon / touch-icon — no AVIF support                                |

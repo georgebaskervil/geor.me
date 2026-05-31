@@ -1,11 +1,21 @@
 import { Controller } from "@hotwired/stimulus";
+import { loadPhaser } from "../utils/loadVendorScript.js";
 
 export default class extends Controller {
   connect() {
-    this.startGame();
+    this.disconnected = false;
+    this._startPromise = loadPhaser()
+      .then(() => {
+        if (this.disconnected) return;
+        this.startGame();
+      })
+      .catch((error) => {
+        console.error("Phaser failed to load", error);
+      });
   }
 
   disconnect() {
+    this.disconnected = true;
     // If a Phaser game instance was created, destroy it to free resources
     if (this._game) {
       try {
