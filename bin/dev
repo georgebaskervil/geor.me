@@ -8,4 +8,20 @@ fi
 # Local dev always uses Rails on localhost:3000 (ignore inherited PORT, e.g. conda)
 export PORT=3000
 
+# Stop leftover foreman/vite/iodine from a previous bin/dev (same ports only)
+kill_port() {
+  port=$1
+  pids=$(lsof -ti ":$port" 2>/dev/null) || return 0
+  [ -z "$pids" ] && return 0
+  echo "Stopping process(es) on port $port ($pids)..."
+  kill $pids 2>/dev/null || true
+  sleep 0.3
+  pids=$(lsof -ti ":$port" 2>/dev/null) || return 0
+  [ -z "$pids" ] && return 0
+  kill -9 $pids 2>/dev/null || true
+}
+
+kill_port 3000
+kill_port 3036
+
 exec foreman start --env /dev/null "$@"

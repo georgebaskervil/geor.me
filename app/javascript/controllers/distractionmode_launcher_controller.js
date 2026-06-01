@@ -60,6 +60,8 @@ export default class extends Controller {
     );
 
     connectDeferredControllers(scope);
+    // Let Stimulus connect deferred controllers before toggle (they miss the event otherwise).
+    await Promise.resolve();
 
     assetLog("distraction mode ready", {
       ms: Math.round(performance.now() - startedAt),

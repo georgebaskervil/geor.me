@@ -1,4 +1,4 @@
-@use "variables";
+ @use "variables";
 
 .deepseek-chat {
   width: 547px;
@@ -12,7 +12,10 @@
   flex-direction: column;
   font-family: PixelatedElegance-Regular, monospace;
   color: variables.$text;
-  background-color: #7f3670;
+  background-image: url("~/images/eu.avif");
+  background-size: cover;        // or contain, or explicit size
+  background-position: center;
+  background-repeat: no-repeat;
 
   textarea {
     flex: 1;

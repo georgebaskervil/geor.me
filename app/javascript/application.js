@@ -73,3 +73,6 @@ import "@hotwired/turbo-rails";
 import "./turbo_view_transitions";
 import "./controllers";
 import "./live_updater";
+import { registerServiceWorker } from "./register_service_worker";
+
+registerServiceWorker();

@@ -89,7 +89,7 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Precompile assets with vite
+# Precompile assets with vite (includes Workbox SW → public/service-worker.js)
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails vite:build
 
 # Final stage for app image

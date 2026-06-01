@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "preinstall": "bun scripts/bun-age-gate.mjs || exit 1",
-    "build": "vite build --outDir public",
+    "postinstall": "bun run sync:web-llm",
+    "build": "vite build --outDir public && bun run sync:web-llm",
+    "sync:web-llm": "mkdir -p public/vendor/web-llm && cp node_modules/@mlc-ai/web-llm/lib/index.js public/vendor/web-llm/index.js",
     "generate:crt-map": "python3 scripts/generate_crt_displacement_map.py",
     "generate:lunar-texture": "bun scripts/generate_lunar_texture.mjs"
   },
@@ -16,11 +18,11 @@
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.23",
     "@million/lint": "^1.0.14",
+    "@mlc-ai/web-llm": "0.2.83",
     "@rails/actioncable": "^8.1.300",
     "@rails/request.js": "^0.0.11",
     "@sentry/browser": "^9.47.1",
     "@vitejs/plugin-vue": "^5.2.4",
-    "@wllama/wllama": "^2.4.0",
     "autoprefixer": "^10.5.0",
     "babel-plugin-closure-elimination": "^1.3.2",
     "babel-plugin-object-to-json-parse": "^0.2.3",
@@ -86,5 +88,8 @@
     "core-js",
     "esbuild",
     "fsevents"
-  ]
+  ],
+  "devDependencies": {
+    "vite-plugin-pwa": "^1.3.0"
+  }
 }

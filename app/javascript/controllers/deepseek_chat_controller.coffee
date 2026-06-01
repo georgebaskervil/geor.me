@@ -1,58 +1,73 @@
 import { Controller } from "@hotwired/stimulus"
-import { Wllama, LoggerWithoutDebug } from "@wllama/wllama/esm/index.js"
-import multiThreadWllama from "@wllama/wllama/esm/multi-thread/wllama.wasm?url"
-import singleThreadWllama from "@wllama/wllama/esm/single-thread/wllama.wasm?url"
+import { application } from "./application"
+import { loadWebLLM } from "../utils/loadWebLLM"
+
+MODEL_ID = "SmolLM2-360M-Instruct-q4f16_1-MLC"
 
 export default class extends Controller
   @targets = ["userInput", "chatDisplay", "sendButton", "loadingIndicator"]
 
   connect: ->
     @modelLoaded = false
+    @initStarted = false
     @messages = [
       { role: "system", content: "You are a helpful assistant." }
     ]
-    document.addEventListener "distractionmode:toggle", @handleDistractionMode.bind(@)
-    # Optionally show the loading indicator immediately
+    @onDistractionToggle = @handleDistractionMode.bind(@)
+    document.addEventListener "distractionmode:toggle", @onDistractionToggle
     if @hasLoadingIndicatorTarget
-      @loadingIndicatorTarget.textContent = "Loading model, please wait..."
+      @loadingIndicatorTarget.textContent = "Loading model…"
       @loadingIndicatorTarget.style.display = "block"
-    # Disable the send button until load completes
     if @hasSendButtonTarget
       @sendButtonTarget.disabled = true
+    # Toggle fires before this deferred controller connects; start load if windows are already open.
+    @initIfDistractionModeVisible()
 
   disconnect: ->
-    document.removeEventListener "distractionmode:toggle", @handleDistractionMode.bind(@)
+    document.removeEventListener "distractionmode:toggle", @onDistractionToggle
 
-  handleDistractionMode: ->
-    @initWllama()
+  handleDistractionMode: (event) ->
+    return unless event.detail?.enabled
+    @initEngine()
 
-  initWllama: ->
-    # Point to the files hosted at r2.geor.me
-    fullPart1Url = "https://r2.geor.me/browserdeepseek-00001-of-00004.gguf"
-    fullPart2Url = "https://r2.geor.me/browserdeepseek-00002-of-00004.gguf"
-    fullPart3Url = "https://r2.geor.me/browserdeepseek-00003-of-00004.gguf"
-    fullPart4Url = "https://r2.geor.me/browserdeepseek-00004-of-00004.gguf"
+  initIfDistractionModeVisible: ->
+    scope = document.getElementById("distractionmode-scope")
+    return unless scope
+    dm = application.getControllerForElementAndIdentifier(scope, "distractionmode")
+    @initEngine() if dm?.areWindowsVisible
 
-    @instance = new Wllama(
-      {
-        "single-thread/wllama.wasm": singleThreadWllama,
-        "multi-thread/wllama.wasm": multiThreadWllama
-      },
-      {
-        parallelDownloads: 4,
-        logger: LoggerWithoutDebug,
-      },
-    )
-    @instance.loadModelFromUrl(fullPart1Url, fullPart2Url, fullPart3Url, fullPart4Url,
-      {
-        n_ctx: 1024,
-      }
-    ).then =>
+  initEngine: ->
+    return if @initStarted
+    @initStarted = true
+
+    unless navigator.gpu?
+      @showLoadError "WebGPU is not available. Use Chrome or Edge with WebGPU enabled."
+      return
+
+    @setLoadingMessage "Loading model…"
+
+    loadWebLLM().then(({ CreateMLCEngine }) =>
+      CreateMLCEngine(
+        MODEL_ID,
+        {
+          initProgressCallback: (report) =>
+            text = report.text ? "Loading model…"
+            if report.progress?
+              @setLoadingMessage "#{text} (#{Math.round(report.progress * 100)}%)"
+            else
+              @setLoadingMessage text
+        },
+      )
+    ).then((engine) =>
+      @engine = engine
       @modelLoaded = true
-      if @hasLoadingIndicatorTarget
-        @loadingIndicatorTarget.style.display = "none"
+      @hideLoading()
       if @hasSendButtonTarget
         @sendButtonTarget.disabled = false
+    ).catch((err) =>
+      console.error err
+      @showLoadError "Failed to load model: #{err?.message ? err}"
+    )
 
   sendMessage: (ev) ->
     ev.preventDefault()
@@ -63,29 +78,76 @@ export default class extends Controller
     userContent = @userInputTarget.value.trim()
     return unless userContent.length > 0
 
-    @messages.push({ role: "user", content: userContent })
+    @appendMessage "user", userContent
+    @messages.push { role: "user", content: userContent }
     @userInputTarget.value = ""
+    if @hasSendButtonTarget
+      @sendButtonTarget.disabled = true
 
-    @instance.createChatCompletion(@messages,
-      nPredict: 500,
-      sampling:
-        temp: 0.7
-        top_p: 0.9
-        top_k: 40
-    ).then (reply) =>
-      @messages.push({ role: "assistant", content: reply })
-      @renderChat(reply)
+    assistantEl = @appendMessage "assistant", ""
+    @streamReply(assistantEl)
 
-  transformChatMLToHTML: (chatml) ->
-    # Example: turn <think> tags into .thinking-message divs, etc.
-    chatml
-      .replace(/<think>/g, '<div class="thinking-message">')
-      .replace(/<\/think>/g, '</div>')
-      .replace(/<assistant>/g, '<div class="assistant-message">')
-      .replace(/<\/assistant>/g, '</div>')
-      .replace(/<user>/g, '<div class="user-message">')
-      .replace(/<\/user>/g, '</div>')
+  streamReply: (assistantEl) ->
+    fullReply = ""
+    @engine.chat.completions.create({
+      messages: @messages
+      stream: true
+      max_tokens: 500
+      temperature: 0.7
+    }).then((chunks) =>
+      pump = =>
+        chunks.next().then(({ done, value }) =>
+          if done
+            @messages.push { role: "assistant", content: fullReply }
+            if @hasSendButtonTarget
+              @sendButtonTarget.disabled = false
+            return
+          delta = value?.choices?[0]?.delta?.content ? ""
+          if delta.length > 0
+            fullReply += delta
+            assistantEl.textContent = fullReply
+            @scrollChatToBottom()
+          pump()
+        ).catch((err) =>
+          console.error err
+          assistantEl.textContent = "Error: #{err?.message ? err}"
+          if @hasSendButtonTarget
+            @sendButtonTarget.disabled = false
+        )
+      pump()
+    ).catch((err) =>
+      console.error err
+      assistantEl.textContent = "Error: #{err?.message ? err}"
+      if @hasSendButtonTarget
+        @sendButtonTarget.disabled = false
+    )
 
-  renderChat: (assistantReply) ->
-    htmlContent = @transformChatMLToHTML(assistantReply)
-    @chatDisplayTarget.insertAdjacentHTML("beforeend", htmlContent)
+  appendMessage: (role, content) ->
+    el = document.createElement("div")
+    el.className = "#{role}-message"
+    el.textContent = content
+    @chatDisplayTarget.appendChild(el)
+    @scrollChatToBottom()
+    el
+
+  scrollChatToBottom: ->
+    container = @chatDisplayTarget.closest(".deepseek-chat-app")
+    if container?
+      container.scrollTop = container.scrollHeight
+
+  setLoadingMessage: (text) ->
+    return unless @hasLoadingIndicatorTarget
+    @loadingIndicatorTarget.textContent = text
+    @loadingIndicatorTarget.style.display = "block"
+
+  hideLoading: ->
+    return unless @hasLoadingIndicatorTarget
+    @loadingIndicatorTarget.style.display = "none"
+
+  showLoadError: (text) ->
+    @initStarted = false
+    if @hasLoadingIndicatorTarget
+      @loadingIndicatorTarget.textContent = text
+      @loadingIndicatorTarget.style.display = "block"
+    if @hasSendButtonTarget
+      @sendButtonTarget.disabled = true

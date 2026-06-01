@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import * as THREE from "three";
 import { loadEmulators } from "../utils/loadEmulators.js";
-import spaceTexture from "~/images/space.png";
+import spaceTexture from "~/images/space.avif";
 import doomFiles from "~/libs/doom_shareware.jsdos";
 
 // Connects to data-controller="doom-cube"

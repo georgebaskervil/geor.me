@@ -42,4 +42,4 @@ Regenerate after changing filter parameters in the script.
 | `crt-displacement-map.png` | PNG           | SVG `feImage` input; AVIF is not reliably decoded in filter pipelines |
 | `favicon.jpg`              | JPEG          | Favicon / touch-icon — no AVIF support                                |
 
-Other lossless AVIF candidates (e.g. doom cube `space.png`) can use `bun scripts/encode_lossless_avif.mjs` when the consumer is CSS or a normal `<img>` / fetch decode path.
+Other lossless AVIF candidates (e.g. doom cube `space.avif`) can use `bun scripts/encode_lossless_avif.mjs` when the consumer is CSS or a normal `<img>` / fetch decode path.

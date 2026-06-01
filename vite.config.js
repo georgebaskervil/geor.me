@@ -31,6 +31,7 @@ import {
   createTypehintPlugin,
   devViteSecurityHeaders,
 } from "./config/vite/common.js";
+import { createPwaPlugin } from "./config/vite/pwa.js";
 import path from "node:path";
 
 /** Inline browserify global detection in emulators (core-js) so it cannot collide with other minified top-level bindings. */
@@ -239,10 +240,12 @@ export default defineConfig(({ mode }) => {
         "@rails/request.js",
         "@sentry/browser",
         "stimulus-use",
+        "@million/lint/runtime-dev",
+        "lenis",
+        "stimulus-use/hotkeys"
       ],
       exclude: [
         "@hotwired/turbo",
-        "@wllama/wllama/esm/index.js",
         "@vue/runtime-core", // Babel traversal issues
       ],
       ...createOptimizeDepsForce(isDevelopment),
@@ -272,6 +275,7 @@ export default defineConfig(({ mode }) => {
         "app/javascript/src/**/*",
       ]),
       isDevelopment ? undefined : typehintPlugin,
+      isDevelopment ? undefined : createPwaPlugin(),
       vue(),
     ],
   };
