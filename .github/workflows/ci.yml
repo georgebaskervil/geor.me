@@ -6,6 +6,11 @@ on:
     branches:
       - "main"
 
+# One deploy per ref; new pushes to main cancel older in-flight main runs.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   package-age-gates:
     name: Package age gates

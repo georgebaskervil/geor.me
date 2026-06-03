@@ -6,6 +6,10 @@ on:
   pull_request_target:
   workflow_dispatch:
 
+concurrency:
+  group: auto-approve-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
