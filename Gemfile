@@ -9,7 +9,7 @@ plugin "bundler-age_gate", path: "plugins/bundler-age_gate"
 ruby "3.3.7"
 
 gem "better_html"
-gem "bootsnap", "1.24.4", require: false
+gem "bootsnap", "1.24.6", require: false
 gem "feedjira"
 gem "iodine", "0.7.59"
 gem "kramdown"
