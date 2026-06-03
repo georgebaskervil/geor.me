@@ -16,6 +16,9 @@ INPUT_VIDEO="$1"
 OUTPUT_NAME="$2"
 SEGMENTS_DIR="app/videos"
 VIEWS_DIR="app/views/videos"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=scripts/hls_encode_settings.sh
+source "$ROOT/scripts/hls_encode_settings.sh"
 
 # Check if input file exists
 if [ ! -f "$INPUT_VIDEO" ]; then
@@ -35,8 +38,8 @@ echo "📄 Output playlist: $VIEWS_DIR/${OUTPUT_NAME}.m3u8.erb"
 # This creates a blurred, scaled version of the video as background for the bars
 ffmpeg -i "$INPUT_VIDEO" \
   -c:v libx264 \
-  -preset slow \
-  -crf 18 \
+  -preset "$HLS_PRESET" \
+  -crf "$HLS_CRF" \
   -an \
   -f hls \
   -hls_time 8 \
@@ -45,11 +48,14 @@ ffmpeg -i "$INPUT_VIDEO" \
   -hls_segment_filename "$SEGMENTS_DIR/${OUTPUT_NAME}-optimised%d.m2ts" \
   -hls_playlist_type vod \
   -movflags +faststart \
-  -profile:v high \
-  -level 4.0 \
-  -maxrate 5M \
-  -bufsize 10M \
-  -filter_complex "[0:v]scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,boxblur=luma_radius=min(h\,w)/20:luma_power=1:chroma_radius=min(cw\,ch)/20:chroma_power=1[bg];[0:v]scale=1280:720:force_original_aspect_ratio=decrease[ov];[bg][ov]overlay=(main_w-overlay_w)/2:(main_h-overlay_h)/2,format=yuv420p[v]" \
+  -profile:v "$HLS_PROFILE" \
+  -level "$HLS_LEVEL" \
+  -maxrate "$HLS_MAXRATE" \
+  -bufsize "$HLS_BUFSIZE" \
+  -g "$HLS_GOP" \
+  -keyint_min "$HLS_GOP" \
+  -sc_threshold 0 \
+  -filter_complex "[0:v]scale=${HLS_SCALE_W}:${HLS_SCALE_H}:force_original_aspect_ratio=increase:flags=neighbor,crop=${HLS_SCALE_W}:${HLS_SCALE_H},boxblur=luma_radius=min(h\,w)/12:luma_power=1:chroma_radius=min(cw\,ch)/12:chroma_power=1[bg];[0:v]scale=${HLS_SCALE_W}:${HLS_SCALE_H}:force_original_aspect_ratio=decrease:flags=neighbor[ov];[bg][ov]overlay=(main_w-overlay_w)/2:(main_h-overlay_h)/2,format=yuv420p[v]" \
   -map "[v]" \
   temp_playlist.m3u8
 

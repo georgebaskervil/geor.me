@@ -39,15 +39,22 @@ choco install ffmpeg
 
 ## Encoding Settings Explained
 
-### Video Settings
+### Video Settings (default: potato tier)
 
-- **Codec**: `libx264` - Best compatibility across browsers
-- **Preset**: `slow` - Higher quality compression (slower encoding)
-- **CRF**: `18` - Constant Rate Factor (lower = higher quality)
-- **Profile**: `high` - Better compression than baseline
-- **Resolution**: `1280x720` - Good for web streaming
-- **Bitrate**: `5M max` - Higher bitrate for better quality
-- **Level**: `4.0` - Supports higher bitrates and resolutions
+Defaults live in `scripts/hls_encode_settings.sh` (sourced by all encode scripts):
+
+- **Resolution**: `426×240` — chunky when blown up in distraction windows / carousel
+- **CRF**: `34`, **preset**: `ultrafast`, **maxrate**: `350k`
+- **Scale flags**: `neighbor` for blockier downscale
+- Override per run: `HLS_CRF=30 HLS_SCALE_W=640 ./scripts/encode_video_blur_bars.sh …`
+
+Re-crush existing segments without source MP4s:
+
+```bash
+chmod +x scripts/reencode_hls_potato.sh scripts/hls_playlist_to_erb.sh
+./scripts/reencode_hls_potato.sh
+# or: ./scripts/reencode_hls_potato.sh soapcarving gta
+```
 
 ### Audio
 

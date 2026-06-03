@@ -16,6 +16,9 @@ INPUT_VIDEO="$1"
 OUTPUT_NAME="$2"
 SEGMENTS_DIR="app/videos"
 VIEWS_DIR="app/views/videos"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=scripts/hls_encode_settings.sh
+source "$ROOT/scripts/hls_encode_settings.sh"
 
 # Check if input file exists
 if [ ! -f "$INPUT_VIDEO" ]; then
@@ -35,8 +38,8 @@ echo "📄 Output playlist: $VIEWS_DIR/${OUTPUT_NAME}.m3u8.erb"
 # This creates high-quality optimized segments for web streaming
 ffmpeg -i "$INPUT_VIDEO" \
   -c:v libx264 \
-  -preset slow \
-  -crf 18 \
+  -preset "$HLS_PRESET" \
+  -crf "$HLS_CRF" \
   -an \
   -f hls \
   -hls_time 8 \
@@ -45,11 +48,14 @@ ffmpeg -i "$INPUT_VIDEO" \
   -hls_segment_filename "$SEGMENTS_DIR/${OUTPUT_NAME}-optimised%d.m2ts" \
   -hls_playlist_type vod \
   -movflags +faststart \
-  -profile:v high \
-  -level 4.0 \
-  -maxrate 5M \
-  -bufsize 10M \
-  -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2:#161820" \
+  -profile:v "$HLS_PROFILE" \
+  -level "$HLS_LEVEL" \
+  -maxrate "$HLS_MAXRATE" \
+  -bufsize "$HLS_BUFSIZE" \
+  -g "$HLS_GOP" \
+  -keyint_min "$HLS_GOP" \
+  -sc_threshold 0 \
+  -vf "${HLS_VF_SCALE},pad=${HLS_SCALE_W}:${HLS_SCALE_H}:(ow-iw)/2:(oh-ih)/2:#161820,format=yuv420p" \
   temp_playlist.m3u8
 
 # Generate ERB template from the FFmpeg output

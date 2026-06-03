@@ -34,8 +34,12 @@ jobs:
         shell: bash
         run: ruby scripts/gem-age-gate.rb
 
+  # PRs must never push images or redeploy — same-repo PRs still receive secrets.
   build-push:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
 
     steps:
       - name: Check out code
