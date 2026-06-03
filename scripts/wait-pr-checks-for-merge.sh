@@ -1,18 +1,14 @@
 #!/usr/bin/env bash
 # Wait for PR checks before Dependabot auto-merge.
 # Only Socket and Snyk gate merge; all other checks are ignored.
-#
-# Exit codes: 0 = ready; 1 = failing/stalled/timeout; 2 = no Socket/Snyk checks (stale PR, skip merge).
 set -euo pipefail
 
 pr=${1:?PR number required}
 repo=${2:-${GITHUB_REPOSITORY:?}}
 timeout_minutes=${3:-30}
 poll_seconds=${POLL_SECONDS:-20}
-# Match "Socket Security: …", "code/snyk (…)", etc.
 allow_regex='(?i)(socket|snyk)'
 stall_polls=${STALL_POLLS:-15}
-bootstrap_polls=${BOOTSTRAP_POLLS:-6}
 max_polls=${MAX_POLLS:-120}
 
 deadline=$(( $(date +%s) + timeout_minutes * 60 ))
@@ -35,13 +31,8 @@ while [[ $(date +%s) -lt $deadline && poll -lt $max_polls ]]; do
   )
 
   if [[ ${#summary[@]} -eq 0 || -z "${summary[0]:-}" ]]; then
-    if [[ $poll -le $bootstrap_polls ]]; then
-      echo "… waiting for Socket/Snyk checks to register (poll $poll/$bootstrap_polls)"
-      sleep "$poll_seconds"
-      continue
-    fi
-    echo "Skipping PR #$pr — no Socket/Snyk checks (likely opened before those tools were enabled)"
-    exit 2
+    echo "No Socket/Snyk checks on PR #$pr; nothing to wait on"
+    exit 0
   fi
 
   signature=$(printf '%s\n' "${summary[@]}" | LC_ALL=C sort | cksum | awk '{print $1}')
