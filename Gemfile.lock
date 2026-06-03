@@ -185,7 +185,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.7-x86_64-linux-gnu)
       racc (~> 1.4)
-    oj (3.16.17)
+    oj (3.17.1)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
     ostruct (0.6.3)
@@ -372,7 +372,7 @@ DEPENDENCIES
   kramdown
   memo_wise
   nokogiri (= 1.18.7)
-  oj (= 3.16.17)
+  oj (= 3.17.1)
   permessage_deflate (~> 0.1.4)
   rails (= 8.0.1)
   reactionview (~> 0.3.0)

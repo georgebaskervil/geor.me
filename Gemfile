@@ -31,7 +31,7 @@ gem "fast_blank"                         # C implementation of String#blank?
 gem "fast_underscore"                    # C implementation of String#underscore
 gem "freezolite"                         # Memory-efficient constants freezing
 gem "memo_wise"                          # Per-instance memoization of expensive methods
-gem "oj", "= 3.16.17"                    # Fast JSON library (3-5x faster)
+gem "oj", "3.17.1"                     # Fast JSON library (3-5x faster)
 
 group :development, :test do
   gem "debug"
