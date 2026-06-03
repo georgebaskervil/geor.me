@@ -4,7 +4,7 @@ const WINDOW_TRANSITION =
   "transform 0.3s cubic-bezier(0.34,1.56,0.64,1), left 0.3s cubic-bezier(0.34,1.56,0.64,1), top 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease-in-out";
 
 const WINDOW_Z_BASE = 1;
-const WINDOW_Z_MAX = 6;
+const WINDOW_Z_NORMALIZE_AT = 100;
 
 const INITIAL_POSITIONS = [
   { left: 20, top: 100 },
@@ -36,6 +36,7 @@ export default class extends Controller {
     this.onPointerMove = this.onPointerMove.bind(this);
     this.onPointerUp = this.onPointerUp.bind(this);
     this.onTitleBarDragStart = this.onTitleBarDragStart.bind(this);
+    this.bringWindowToFront = this.bringWindowToFront.bind(this);
     this.adjustWindowPositions = this.adjustWindowPositions.bind(this);
   }
 
@@ -93,14 +94,32 @@ export default class extends Controller {
     document.dispatchEvent(new MouseEvent("mousemove", detail));
   }
 
-  bringWindowToFront = (event) => {
-    const fw = event.currentTarget.closest(".window98");
+  raiseWindow(fw) {
     if (!fw) return;
-    this.highestZIndex = Math.min(WINDOW_Z_MAX, this.highestZIndex + 1);
+    this.highestZIndex += 1;
     fw.style.zIndex = String(this.highestZIndex);
-  };
+    if (this.highestZIndex >= WINDOW_Z_NORMALIZE_AT) {
+      this.normalizeWindowStack();
+    }
+  }
 
-  toggleDistractionMode = () => {
+  normalizeWindowStack() {
+    const ordered = [...this.windowTargets].sort(
+      (a, b) => Number.parseInt(a.style.zIndex, 10) - Number.parseInt(b.style.zIndex, 10),
+    );
+    for (const [index, fw] of ordered.entries()) {
+      fw.style.zIndex = String(WINDOW_Z_BASE + index);
+    }
+    this.highestZIndex = WINDOW_Z_BASE + ordered.length - 1;
+  }
+
+  bringWindowToFront(event) {
+    const fw = event.currentTarget.closest(".window98");
+    if (!fw || fw === this.currentlyDragging) return;
+    this.raiseWindow(fw);
+  }
+
+  toggleDistractionMode() {
     this.areWindowsVisible = !this.areWindowsVisible;
 
     for (const w of this.windowTargets) {
@@ -135,7 +154,7 @@ export default class extends Controller {
         bubbles: true,
       }),
     );
-  };
+  }
 
   onTitleBarDragStart(event) {
     if (event.button !== 0 || this.currentlyDragging) return;
@@ -157,8 +176,7 @@ export default class extends Controller {
     this.dragStartClientX = event.clientX;
     this.dragStartClientY = event.clientY;
     this.lastPointerX = event.clientX;
-    this.highestZIndex = Math.min(WINDOW_Z_MAX, this.highestZIndex + 1);
-    fw.style.zIndex = String(this.highestZIndex);
+    this.raiseWindow(fw);
     fw.style.transition = "none";
 
     this.dragPointerId = event.pointerId;

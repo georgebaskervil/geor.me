@@ -6,6 +6,8 @@ export default class extends Controller {
     if (!this.element) return;
 
     const videoElement = this.element;
+    videoElement.muted = true;
+    videoElement.defaultMuted = true;
     const container = videoElement.closest(".floating-window");
     const source = videoElement.dataset.streamUrl;
 

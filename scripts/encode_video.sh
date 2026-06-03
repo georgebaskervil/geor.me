@@ -37,10 +37,7 @@ ffmpeg -i "$INPUT_VIDEO" \
   -c:v libx264 \
   -preset slow \
   -crf 18 \
-  -c:a aac \
-  -b:a 192k \
-  -ac 2 \
-  -ar 44100 \
+  -an \
   -f hls \
   -hls_time 8 \
   -hls_list_size 0 \

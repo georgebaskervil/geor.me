@@ -30,7 +30,7 @@ choco install ffmpeg
    ```bash
    ffmpeg -i input_video.mp4 \
      -c:v libx264 -preset medium -crf 23 \
-     -c:a aac -b:a 128k \
+     -an \
      -f hls -hls_time 8 \
      -hls_segment_filename "app/videos/my_project-optimised%d.m2ts" \
      -vf "scale=1280:720:force_original_aspect_ratio=decrease" \
@@ -49,12 +49,14 @@ choco install ffmpeg
 - **Bitrate**: `5M max` - Higher bitrate for better quality
 - **Level**: `4.0` - Supports higher bitrates and resolutions
 
-### Audio Settings
+### Audio
 
-- **Codec**: `aac` - Standard for web
-- **Bitrate**: `192k` - Higher quality for web
-- **Channels**: `2` (stereo)
-- **Sample Rate**: `44100 Hz`
+Segments are **video-only** (`-an`). Players use `muted` on `<video>` for autoplay. To remux existing `.m2ts` files:
+
+```bash
+chmod +x scripts/strip_hls_segment_audio.sh
+./scripts/strip_hls_segment_audio.sh
+```
 
 ### HLS Settings
 
@@ -136,7 +138,7 @@ Edit `app/views/homepage/index.html.erb`:
 ```bash
 ffmpeg -i input.mp4 \
   -c:v libx264 -preset medium -crf 25 \
-  -c:a aac -b:a 96k \
+  -an \
   -vf "scale=854:480" \
   -maxrate 1M -bufsize 2M \
   -f hls -hls_time 6 \
@@ -173,7 +175,7 @@ ffmpeg -i input.mp4 -c:v libx264 -preset slow -b:v 1M -pass 1 -f null /dev/null
 
 # Pass 2
 ffmpeg -i input.mp4 -c:v libx264 -preset slow -b:v 1M -pass 2 \
-  -c:a aac -b:a 128k -f hls -hls_time 8 \
+  -an -f hls -hls_time 8 \
   -hls_segment_filename "segments%d.m2ts" \
   output.m3u8
 ```

@@ -12,8 +12,8 @@
   flex-direction: column;
   font-family: PixelatedElegance-Regular, monospace;
   color: variables.$text;
-  background-image: url("~/images/eu.avif");
-  background-size: cover;        // or contain, or explicit size
+  background-image: url("~/images/ai_shrimp_jesus.avif");
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 
@@ -27,6 +27,7 @@
 
   button {
     padding: 0.5rem 1rem;
+    color: #0f172a
   }
 
   .deepseek-chat-app {

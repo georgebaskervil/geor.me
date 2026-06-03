@@ -37,10 +37,7 @@ ffmpeg -i "$INPUT_VIDEO" \
   -c:v libx264 \
   -preset slow \
   -crf 18 \
-  -c:a aac \
-  -b:a 192k \
-  -ac 2 \
-  -ar 44100 \
+  -an \
   -f hls \
   -hls_time 8 \
   -hls_list_size 0 \
@@ -54,7 +51,6 @@ ffmpeg -i "$INPUT_VIDEO" \
   -bufsize 10M \
   -filter_complex "[0:v]scale=1280:720:force_original_aspect_ratio=increase,crop=1280:720,boxblur=luma_radius=min(h\,w)/20:luma_power=1:chroma_radius=min(cw\,ch)/20:chroma_power=1[bg];[0:v]scale=1280:720:force_original_aspect_ratio=decrease[ov];[bg][ov]overlay=(main_w-overlay_w)/2:(main_h-overlay_h)/2,format=yuv420p[v]" \
   -map "[v]" \
-  -map 0:a \
   temp_playlist.m3u8
 
 # Generate ERB template from the FFmpeg output

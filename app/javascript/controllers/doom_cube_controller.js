@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus";
 import * as THREE from "three";
+import { application } from "./application";
 import { loadEmulators } from "../utils/loadEmulators.js";
 import spaceTexture from "~/images/space.avif";
 import doomFiles from "~/libs/doom_shareware.jsdos";
@@ -10,16 +11,33 @@ export default class extends Controller {
 
   connect() {
     this.hiddenByVisibility = false;
-    document.addEventListener(
-      "distractionmode:toggle",
-      this.handleDistractionMode.bind(this),
-    );
+    this.onDistractionToggle = this.handleDistractionMode.bind(this);
+    document.addEventListener("distractionmode:toggle", this.onDistractionToggle);
     this.visibilityObserver = new IntersectionObserver(
       (entries) =>
         this.onVisibilityChange(entries.some((entry) => entry.isIntersecting)),
       { threshold: 0.05 },
     );
     this.visibilityObserver.observe(this.element);
+    // Toggle often fires before this deferred/lazy controller finishes connecting.
+    this.initIfDistractionModeVisible();
+  }
+
+  initIfDistractionModeVisible() {
+    const scope = document.getElementById("distractionmode-scope");
+    if (!scope) return;
+
+    const dm = application.getControllerForElementAndIdentifier(
+      scope,
+      "distractionmode",
+    );
+    if (!dm?.areWindowsVisible) return;
+
+    if (this.initialized) {
+      this.resumeEmulator();
+    } else {
+      this.initializeDoomCube();
+    }
   }
 
   handleDistractionMode(event) {
@@ -51,6 +69,7 @@ export default class extends Controller {
   }
 
   initializeDoomCube() {
+    if (this.initialized) return;
     this.initialized = true;
 
     // Move all initialization code here
@@ -162,6 +181,7 @@ export default class extends Controller {
   }
 
   disconnect() {
+    document.removeEventListener("distractionmode:toggle", this.onDistractionToggle);
     this.visibilityObserver?.disconnect();
     this.pauseEmulator();
     if (this.ci && this.ci.destroy) {
