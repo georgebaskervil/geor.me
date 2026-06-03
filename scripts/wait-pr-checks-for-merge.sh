@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Wait for PR checks before Dependabot auto-merge.
 # Only Socket and Snyk gate merge; all other checks are ignored.
+#
+# Exit codes: 0 = ready; 1 = failing/stalled/timeout; 2 = no Socket/Snyk checks (stale PR, skip merge).
 set -euo pipefail
 
 pr=${1:?PR number required}
@@ -38,8 +40,8 @@ while [[ $(date +%s) -lt $deadline && poll -lt $max_polls ]]; do
       sleep "$poll_seconds"
       continue
     fi
-    echo "No Socket/Snyk checks on PR #$pr after bootstrap; proceeding without waiting on other checks"
-    exit 0
+    echo "Skipping PR #$pr — no Socket/Snyk checks (likely opened before those tools were enabled)"
+    exit 2
   fi
 
   signature=$(printf '%s\n' "${summary[@]}" | LC_ALL=C sort | cksum | awk '{print $1}')

@@ -1,3 +1,5 @@
+# GitHub App install: Pull requests + Contents (write). Add Workflows (write) to merge PRs that touch .github/workflows/.
+# Merge uses immediate rebase (not --auto); branch auto-merge does not need to be enabled in protection rules.
 name: Auto approve
 
 on:
@@ -26,23 +28,50 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           pr=${{ github.event.pull_request.number }}
-          bash scripts/wait-pr-checks-for-merge.sh "$pr" "${{ github.repository }}"
-          gh pr merge "$pr" --repo "${{ github.repository }}" --rebase --delete-branch --auto \
-            || echo "Failed to auto-merge (may need retry)"
+          repo="${{ github.repository }}"
+          set +e
+          bash scripts/wait-pr-checks-for-merge.sh "$pr" "$repo"
+          wait_code=$?
+          set -e
+          if [[ $wait_code -eq 2 ]]; then
+            echo "Skipping merge for PR #$pr — no Socket/Snyk checks"
+            exit 0
+          fi
+          if [[ $wait_code -ne 0 ]]; then
+            echo "Skipping merge for PR #$pr — Socket/Snyk not green"
+            exit 0
+          fi
+          gh pr merge "$pr" --repo "$repo" --rebase --delete-branch || {
+            echo "Failed to merge PR #$pr ($(gh pr view "$pr" --repo "$repo" --json mergeStateStatus -q .mergeStateStatus))"
+          }
       - name: Bulk approve Dependabot PRs
         if: github.event_name == 'workflow_dispatch'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           set -euo pipefail
+          repo="${{ github.repository }}"
           for pr in $(gh pr list --author dependabot[bot] --state open --json number --jq '.[].number'); do
+            if ! bash scripts/pr-has-socket-snyk-checks.sh "$pr" "$repo"; then
+              echo "Skipping PR #$pr — no Socket/Snyk checks (stale Dependabot PR)"
+              continue
+            fi
             echo "Approving PR #$pr"
             gh pr review "$pr" --approve
             echo "Merging and cleaning up PR #$pr"
-            if bash scripts/wait-pr-checks-for-merge.sh "$pr" "${{ github.repository }}"; then
-              gh pr merge "$pr" --repo "${{ github.repository }}" --rebase --delete-branch --auto \
-                || echo "Failed to merge PR #$pr (may be conflicting or in progress)"
-            else
-              echo "Skipping merge for PR #$pr — checks not green"
+            set +e
+            bash scripts/wait-pr-checks-for-merge.sh "$pr" "$repo"
+            wait_code=$?
+            set -e
+            if [[ $wait_code -eq 2 ]]; then
+              echo "Skipping merge for PR #$pr — no Socket/Snyk checks"
+              continue
             fi
+            if [[ $wait_code -ne 0 ]]; then
+              echo "Skipping merge for PR #$pr — Socket/Snyk not green"
+              continue
+            fi
+            gh pr merge "$pr" --repo "$repo" --rebase --delete-branch || {
+              echo "Failed to merge PR #$pr ($(gh pr view "$pr" --repo "$repo" --json mergeStateStatus -q .mergeStateStatus))"
+            }
           done
