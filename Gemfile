@@ -13,7 +13,7 @@ gem "bootsnap", "1.24.6", require: false
 gem "feedjira"
 gem "iodine", "0.7.59"
 gem "kramdown"
-gem "nokogiri", "1.18.7"
+gem "nokogiri", "1.19.3"
 gem "rails", "8.1.3"
 gem "reactionview", "~> 0.3.0"
 gem "sentry-rails"
