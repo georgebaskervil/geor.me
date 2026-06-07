@@ -5,34 +5,34 @@ updates:
     schedule:
       interval: "weekly"
     cooldown:
-      default-days: 8
-      semver-major-days: 8
-      semver-minor-days: 8
-      semver-patch-days: 8
+      default-days: 10
+      semver-major-days: 14
+      semver-minor-days: 10
+      semver-patch-days: 10
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
     cooldown:
-      default-days: 8
-      semver-major-days: 8
-      semver-minor-days: 8
-      semver-patch-days: 8
+      default-days: 10
+      semver-major-days: 14
+      semver-minor-days: 10
+      semver-patch-days: 10
   - package-ecosystem: "docker"
     directory: "/"
     schedule:
       interval: "weekly"
     cooldown:
-      default-days: 8
-      semver-major-days: 8
-      semver-minor-days: 8
-      semver-patch-days: 8
+      default-days: 10
+      semver-major-days: 14
+      semver-minor-days: 10
+      semver-patch-days: 10
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
     cooldown:
-      default-days: 8
-      semver-major-days: 8
-      semver-minor-days: 8
-      semver-patch-days: 8
+      default-days: 10
+      semver-major-days: 14
+      semver-minor-days: 10
+      semver-patch-days: 10

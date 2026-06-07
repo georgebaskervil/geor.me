@@ -9,15 +9,15 @@ plugin "bundler-age_gate", path: "plugins/bundler-age_gate"
 ruby "3.3.7"
 
 gem "better_html"
-gem "bootsnap", "1.24.6", require: false
+gem "bootsnap", "1.24.4", require: false
 gem "feedjira"
 gem "iodine", "0.7.59"
 gem "kramdown"
 gem "nokogiri", "1.19.3"
 gem "rails", "8.1.3"
 gem "reactionview", "~> 0.3.0"
-gem "sentry-rails"
-gem "sentry-ruby"
+gem "sentry-rails", "6.5.0"
+gem "sentry-ruby", "6.5.0"
 gem "stimulus-rails"
 gem "turbo-mount"
 gem "turbo-rails"
@@ -31,7 +31,9 @@ gem "fast_blank"                         # C implementation of String#blank?
 gem "fast_underscore"                    # C implementation of String#underscore
 gem "freezolite"                         # Memory-efficient constants freezing
 gem "memo_wise"                          # Per-instance memoization of expensive methods
-gem "oj", "3.17.3"                     # Fast JSON library (3-5x faster)
+gem "json", "2.19.7"
+gem "oj", "3.17.1"                     # Fast JSON library (3-5x faster)
+gem "psych", "5.3.1"
 
 group :development, :test do
   gem "debug"
