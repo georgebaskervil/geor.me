@@ -11,7 +11,7 @@ ruby "3.3.7"
 gem "better_html"
 gem "bootsnap", "1.24.4", require: false
 gem "feedjira"
-gem "iodine", "0.7.58"
+gem "iodine", "0.7.59"
 gem "kramdown"
 gem "nokogiri", "1.19.3"
 gem "rails", "8.1.3"
