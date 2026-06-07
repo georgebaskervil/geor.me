@@ -23,6 +23,9 @@
 # RIGHTS UNDER ARTICLE 4 OF THE EUROPEAN UNION DIRECTIVE 2019/790 ON COPYRIGHT
 # AND RELATED RIGHTS IN THE DIGITAL SINGLE MARKET.
 
+User-agent: archive.org_bot
+Disallow:
+
 User-agent: *
 Content-Signal: search=no,ai-input=no,ai-train=no
 Disallow: /
