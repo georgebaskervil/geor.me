@@ -1,0 +1,7 @@
+# Snyk (https://snyk.io) policy file
+version: v1.25.1
+ignore:
+  SNYK-RUBY-IODINE-16073479:
+    - "*":
+        reason: iodine 0.7.59 Linux C extension raises TypeError during Docker vite:build; stay on 0.7.58 until upstream fix
+        expires: 2027-06-01T00:00:00.000Z
