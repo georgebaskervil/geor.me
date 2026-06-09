@@ -42,7 +42,7 @@ class B2AssetProxy
 
   def response_headers(path, response)
     headers = {
-      "Content-Type" => response["Content-Type"].presence || Rack::Mime.mime_type(File.extname(path)) || "application/octet-stream",
+      "Content-Type" => content_type_for(path, response),
       "Cache-Control" => cache_control_for(path),
       "Accept-Ranges" => response["Accept-Ranges"].presence || "bytes"
     }
@@ -50,6 +50,14 @@ class B2AssetProxy
     headers["Content-Length"] = response["Content-Length"] if response["Content-Length"].present?
     headers["Content-Range"] = response["Content-Range"] if response["Content-Range"].present?
     headers
+  end
+
+  def content_type_for(path, response)
+    raw = response["Content-Type"].to_s.strip
+    base = raw.split(";", 2).first.strip
+    return raw if base.present? && base != "application/octet-stream"
+
+    B2AssetsStorage.mime_type_for(path)
   end
 
   def cache_control_for(path)

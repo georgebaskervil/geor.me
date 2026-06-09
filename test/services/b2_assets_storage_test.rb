@@ -32,6 +32,12 @@ class B2AssetsStorageTest < ActiveSupport::TestCase
     )
   end
 
+  test "mime_type_for maps vite asset extensions" do
+    assert_equal "text/css", B2AssetsStorage.mime_type_for("assets/application-abc123.css")
+    assert_equal "application/javascript", B2AssetsStorage.mime_type_for("assets/application-abc123.js")
+    assert_equal "video/mp2t", B2AssetsStorage.mime_type_for("videos/clip0.m2ts")
+  end
+
   test "configured? is false without credentials" do
     original_key = ENV["B2_ASSETS_KEY_ID"]
     original_secret = ENV["B2_ASSETS_SECRET"]

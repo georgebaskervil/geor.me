@@ -36,6 +36,16 @@ class B2AssetsStorage
       "#{public_base_url}/#{object_key(path)}"
     end
 
+    def mime_type_for(relative_path)
+      ext = File.extname(relative_path)
+      Rack::Mime.mime_type(ext).presence || case ext.downcase
+      when ".mjs" then "application/javascript"
+      when ".m2ts" then "video/mp2t"
+      when ".m3u8" then "application/vnd.apple.mpegurl"
+      else "application/octet-stream"
+      end
+    end
+
     def vite_output_dir
       Rails.root.join("public/vite")
     end
@@ -72,7 +82,7 @@ class B2AssetsStorage
           next
         end
 
-        bucket.object(key).upload_file(absolute)
+        bucket.object(key).upload_file(absolute, content_type: mime_type_for(relative))
         uploaded += 1
       end
 
