@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Libreverse</title>
+    <item>
+      <title>Sample Libreverse Post</title>
+      <link>https://libreverse.geor.me/posts/sample-libreverse-post</link>
+      <description><p>A <strong>sample</strong> feed entry for tests.</p></description>
+      <author>georgebaskervil@example.com (George Baskerville)</author>
+      <pubDate>Sun, 01 Jun 2025 12:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

@@ -1,14 +1,5 @@
 <h1 class="posts-header-text-text">Latest Posts</h1>
 
-<p class="dl-link-box">
-  Articles licensed under CC0 1.0 Universal. Download them on the
-  <a
-    href="https://github.com/georgebaskervil/Personal-Website/tree/main/data/articles"
-    target="_self"
-    rel="noopener"
-  >GitHub repo</a>.
-</p>
-
 <section class="posts-section">
   <% @all_posts.each do |article| %>
     <% if article[:format] == :feed %>

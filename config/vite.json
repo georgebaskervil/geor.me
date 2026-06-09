@@ -2,7 +2,6 @@
   "all": {
     "sourceCodeDir": "app",
     "additionalEntrypoints": [
-      "~/articles/**/*",
       "~/emoji/**/*",
       "~/fonts/**/*",
       "~/icons/**/*",

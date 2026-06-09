@@ -9,7 +9,7 @@ class PostsController < ApplicationController
 
   def show
     if @article && @article[:format] == :pdf
-      send_article_file(@article[:file_path])
+      redirect_to_pdf(@article[:file_url])
     else
       super
     end
@@ -20,19 +20,17 @@ class PostsController < ApplicationController
     return render plain: "File not found", status: :not_found unless safe_post_identifier?(identifier)
 
     article = @articles.find { |a| a[:slug] == identifier }
-    return render plain: "File not found", status: :not_found unless article
+    return render plain: "File not found", status: :not_found unless article&.dig(:file_url)
 
-    send_article_file(article[:file_path])
+    redirect_to_pdf(article[:file_url])
   end
 
   private
 
-  def send_article_file(path)
-    safe_path = safe_articles_file_path(path)
-    return render plain: "File not found", status: :not_found unless safe_path
+  def redirect_to_pdf(url)
+    return render plain: "File not found", status: :not_found if url.blank?
 
-    content_type = Rack::Mime.mime_type(File.extname(safe_path)) || "application/octet-stream"
-    send_file safe_path, type: content_type, disposition: "inline"
+    redirect_to url, allow_other_host: true
   end
 
   def safe_post_identifier?(identifier)
