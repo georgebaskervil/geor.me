@@ -97,7 +97,7 @@ RUN --mount=type=secret,id=b2_key_id \
     --mount=type=secret,id=b2_secret \
     B2_ASSETS_KEY_ID="$(cat /run/secrets/b2_key_id 2>/dev/null || true)" \
     B2_ASSETS_SECRET="$(cat /run/secrets/b2_secret 2>/dev/null || true)" \
-    bundle exec rake vite:upload_to_b2
+    SECRET_KEY_BASE_DUMMY=1 bundle exec rake vite:upload_to_b2
 
 ENV VITE_ASSETS_B2_ENABLED="1"
 
