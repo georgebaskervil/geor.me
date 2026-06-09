@@ -64,8 +64,14 @@ jobs:
           password: ${{ secrets.QUAY_PASSWORD }}
 
       - name: Build Docker image
+        env:
+          B2_ASSETS_KEY_ID: ${{ secrets.B2_ASSETS_KEY_ID }}
+          B2_ASSETS_SECRET: ${{ secrets.B2_ASSETS_SECRET }}
         run: |
-          docker build -t quay.io/georgebaskervil/personal_website_rails:latest .
+          DOCKER_BUILDKIT=1 docker build \
+            --secret id=b2_key_id,env=B2_ASSETS_KEY_ID \
+            --secret id=b2_secret,env=B2_ASSETS_SECRET \
+            -t quay.io/georgebaskervil/personal_website_rails:latest .
 
       - name: Push to Quay.io
         run: |

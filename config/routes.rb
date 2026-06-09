@@ -69,6 +69,7 @@ Rails.application.routes.draw do
   get "/dmca", to: "dmca#index"
 
   get "/proxy/georlist", to: "proxy#georlist"
+  get "/vite/*path", to: "vite_assets#show", format: false, constraints: { path: /.+/ }
 
   # Home Control Panel routes
   get "/homecontrolpanel", to: "home_control#index"

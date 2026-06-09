@@ -8,6 +8,9 @@ plugin "bundler-age_gate", path: "plugins/bundler-age_gate"
 
 ruby "3.3.7"
 
+gem "aws-sdk-s3", "1.224.0"
+gem "aws-sdk-core", "3.250.0"
+gem "aws-partitions", "1.1255.0"
 gem "better_html"
 gem "bootsnap", "1.24.4", require: false
 gem "feedjira"
