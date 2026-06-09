@@ -12,4 +12,10 @@ namespace :vite do
   task strip_from_image: :environment do
     B2AssetsStorage.strip_from_image!
   end
+
+  desc "Test Backblaze B2 credentials (list, upload, public read, delete)"
+  task test_b2: :environment do
+    success = B2AssetsStorage.test_connection!
+    exit(1) unless success
+  end
 end

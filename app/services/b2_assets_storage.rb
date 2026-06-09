@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "aws-sdk-s3"
+require "net/http"
 
 class B2AssetsStorage
   ENDPOINT = ENV.fetch("B2_ASSETS_ENDPOINT", "https://s3.us-east-005.backblazeb2.com")
@@ -128,6 +129,50 @@ class B2AssetsStorage
         secret_access_key: ENV.fetch("B2_ASSETS_SECRET"),
         force_path_style: false
       )
+    end
+
+    def test_connection!
+      unless configured?
+        warn "B2 not configured — set B2_ASSETS_KEY_ID and B2_ASSETS_SECRET"
+        return false
+      end
+
+      key_id = ENV["B2_ASSETS_KEY_ID"].to_s
+      puts "endpoint: #{ENDPOINT}"
+      puts "bucket:   #{BUCKET}"
+      puts "region:   #{REGION}"
+      puts "key id:   #{key_id[0, 8]}… (#{key_id.length} chars)"
+
+      client.list_objects_v2(bucket: BUCKET, prefix: "#{PREFIX}/", max_keys: 1)
+      puts "list:     ok"
+
+      test_key = "#{PREFIX}/_connection-test-#{Time.now.to_i}.txt"
+      body = "geor.me b2 test #{Time.now.utc.iso8601}"
+      client.put_object(bucket: BUCKET, key: test_key, body: body, content_type: "text/plain")
+      puts "upload:   ok (#{test_key})"
+
+      client.head_object(bucket: BUCKET, key: test_key)
+      puts "head:     ok"
+
+      public_url = "#{public_base_url}/#{test_key}"
+      uri = URI(public_url)
+      response = Net::HTTP.start(uri.host, uri.port, use_ssl: true, open_timeout: 5, read_timeout: 10) do |http|
+        http.get(uri.request_uri)
+      end
+      unless response.is_a?(Net::HTTPSuccess)
+        warn "public:   failed — HTTP #{response.code} for #{public_url}"
+        return false
+      end
+      puts "public:   ok (#{public_url})"
+
+      client.delete_object(bucket: BUCKET, key: test_key)
+      puts "delete:   ok"
+      puts "B2 connection test passed"
+      true
+    rescue Aws::S3::Errors::ServiceError => e
+      warn "B2 failed at #{e.class}: #{e.message}"
+      warn "Common fixes: swap key ID vs application key, scope key to bucket #{BUCKET}, enable list/read/write/delete"
+      false
     end
 
     private

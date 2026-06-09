@@ -28,15 +28,15 @@ gem "tzinfo-data"
 gem "unicode"
 gem "vite_rails"
 gem "zstd-ruby"
-
-# Performance optimisations
-gem "fast_blank"                         # C implementation of String#blank?
-gem "fast_underscore"                    # C implementation of String#underscore
-gem "freezolite"                         # Memory-efficient constants freezing
-gem "memo_wise"                          # Per-instance memoization of expensive methods
+gem "fast_blank"                         
+gem "fast_underscore"                    
+gem "freezolite"                         
+gem "memo_wise"                          
 gem "json", "2.19.7"
-gem "oj", "3.17.1"                     # Fast JSON library (3-5x faster)
+gem "oj", "3.17.1"                     
 gem "psych", "5.3.1"
+gem "permessage_deflate", "~> 0.1.4"
+gem "net-imap", "0.6.4"
 
 group :development, :test do
   gem "debug"
@@ -59,5 +59,3 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
-
-gem "permessage_deflate", "~> 0.1.4"

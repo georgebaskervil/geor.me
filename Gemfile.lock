@@ -191,7 +191,7 @@ GEM
       prism (~> 1.5)
     msgpack (1.8.1)
     mutex_m (0.3.0)
-    net-imap (0.6.4.1)
+    net-imap (0.6.4)
       date
       net-protocol
     net-pop (0.1.2)
@@ -395,6 +395,7 @@ DEPENDENCIES
   iodine (= 0.7.59)
   json (= 2.19.7)
   memo_wise
+  net-imap (= 0.6.4)
   nokogiri (= 1.19.3)
   oj (= 3.17.1)
   permessage_deflate (~> 0.1.4)
