@@ -50,7 +50,7 @@
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-inline-rtl": "^0.9.8",
     "postcss-mq-optimize": "^2.2.0",
-    "postcss-preset-env": "^10.6.1",
+    "postcss-preset-env": "^11.3.0",
     "postcss-remove-root": "^0.0.2",
     "postcss-url": "^10.1.4",
     "prettier": "^3.8.3",
