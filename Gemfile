@@ -36,7 +36,7 @@ gem "json", "2.19.7"
 gem "oj", "3.17.1"                     
 gem "psych", "5.3.1"
 gem "permessage_deflate", "~> 0.1.4"
-gem "net-imap", "0.6.4"
+gem "net-imap", "0.6.4.1"
 
 group :development, :test do
   gem "debug"
