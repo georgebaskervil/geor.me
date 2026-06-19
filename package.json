@@ -81,7 +81,7 @@
     "vite-plugin-static-copy": "^4.1.0",
     "vite-plugin-stimulus-hmr": "^3.0.0",
     "vue": "^3.5.34",
-    "vue-eslint-parser": "^9.4.3"
+    "vue-eslint-parser": "^10.4.1"
   },
   "trustedDependencies": [
     "@swc/core",
