@@ -54,6 +54,15 @@ Rails.application.configure do
   config.action_controller.perform_caching = true
   config.action_controller.enable_fragment_cache_logging = false
 
+  if ActiveModel::Type::Boolean.new.cast(
+    ENV.fetch("VITE_ASSETS_B2_ENABLED", Rails.env.production? ? "true" : "false")
+  )
+    config.asset_host = ENV.fetch(
+      "B2_ASSETS_PUBLIC_URL",
+      "https://geor-me-static.libreverse.io/file/geor-me-assets"
+    )
+  end
+
   config.cache_store = :memory_store
 
   # Use a real queuing backend for Active Job (and separate queues per environment).

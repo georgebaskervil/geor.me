@@ -45,26 +45,11 @@ class ViteAssetsControllerTest < ActionController::TestCase
     assert_response :not_found
   end
 
-  test "proxies from B2 when local file is missing" do
+  test "redirects to CDN when local file is missing and B2 is enabled" do
     ENV["VITE_ASSETS_B2_ENABLED"] = "true"
-    proxy_response = B2AssetProxy::Response.new(
-      status: :ok,
-      headers: {
-        "Content-Type" => "application/javascript",
-        "Cache-Control" => "public, max-age=31536000, immutable"
-      },
-      body: "from-b2"
-    )
-
-    proxy = Object.new
-    proxy.define_singleton_method(:fetch) { |_path, range: nil| proxy_response }
-    @controller.instance_variable_set(:@b2_proxy, proxy)
 
     get :show, params: { path: "assets/missing-abc123.js" }
 
-    assert_response :success
-    assert_equal "from-b2", @response.body
-    assert_equal "application/javascript", @response.headers["Content-Type"]
-    assert_includes @response.headers["Cache-Control"], "immutable"
+    assert_redirected_to "https://geor-me-static.libreverse.io/file/geor-me-assets/vite/assets/missing-abc123.js"
   end
 end

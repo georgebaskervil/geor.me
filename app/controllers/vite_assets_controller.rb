@@ -28,20 +28,10 @@ class ViteAssetsController < ApplicationController
 
     return head :not_found unless B2AssetsStorage.enabled?
 
-    result = b2_proxy.fetch(path, range: request.headers["Range"])
-    return head :not_found if result.nil?
-    return head :bad_gateway if result == :bad_gateway
-
-    result.headers.each { |name, value| response.headers[name] = value }
-    self.status = result.status
-    self.response_body = result.body
+    redirect_to B2AssetsStorage.public_object_url(path), allow_other_host: true, status: :found
   end
 
   private
-
-  def b2_proxy
-    @b2_proxy ||= B2AssetProxy.new
-  end
 
   def safe_vite_path?(path)
     path.present? &&

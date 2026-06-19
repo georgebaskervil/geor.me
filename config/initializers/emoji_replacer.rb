@@ -58,7 +58,9 @@ class EmojiReplacer
   def build_img_tag(emoji)
     codepoints = emoji.codepoints.reject { |cp| cp == 0xFE0F }.map { |cp| cp.to_s(16) }.join("-")
 
-    svg_path = ViteRuby.instance.manifest.path_for("emoji/#{codepoints}.svg")
+    svg_path = B2AssetsStorage.cdn_url_for_manifest_path(
+      ViteRuby.instance.manifest.path_for("emoji/#{codepoints}.svg")
+    )
 
     if svg_path.blank?
       Rails.logger.warn "EmojiReplacer: SVG path not found for emoji '#{emoji}' with codepoints '#{codepoints}'."

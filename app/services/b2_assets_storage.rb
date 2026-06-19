@@ -29,11 +29,23 @@ class B2AssetsStorage
     end
 
     def public_base_url
-      ENV.fetch("B2_ASSETS_PUBLIC_URL", "https://#{BUCKET}.s3.#{REGION}.backblazeb2.com")
+      ENV.fetch("B2_ASSETS_PUBLIC_URL", "https://geor-me-static.libreverse.io/file/#{BUCKET}")
     end
 
     def public_object_url(path)
       "#{public_base_url}/#{object_key(path)}"
+    end
+
+    # Manifest paths look like "/vite/assets/foo.js"; map to the public CDN URL.
+    def cdn_url_for_manifest_path(manifest_path)
+      return manifest_path unless cdn_urls?
+
+      relative = manifest_path.to_s.delete_prefix("/vite/").delete_prefix("#{PREFIX}/")
+      public_object_url(relative)
+    end
+
+    def cdn_urls?
+      enabled? && !Rails.env.development? && !Rails.env.test?
     end
 
     def mime_type_for(relative_path)
@@ -77,7 +89,7 @@ class B2AssetsStorage
         keys << key
         local_size = File.size(absolute)
 
-        if skip_upload?(key, local_size)
+        if skip_upload?(key, local_size, relative)
           skipped += 1
           next
         end
@@ -187,9 +199,11 @@ class B2AssetsStorage
 
     private
 
-    def skip_upload?(key, local_size)
+    def skip_upload?(key, local_size, relative_path)
       head = client.head_object(bucket: BUCKET, key: key)
-      head.content_length == local_size
+      expected_type = mime_type_for(relative_path)
+      actual_type = head.content_type.to_s.split(";", 2).first.strip
+      head.content_length == local_size && actual_type == expected_type
     rescue Aws::S3::Errors::NotFound
       false
     end
