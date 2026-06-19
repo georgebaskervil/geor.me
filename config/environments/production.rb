@@ -54,9 +54,8 @@ Rails.application.configure do
   config.action_controller.perform_caching = true
   config.action_controller.enable_fragment_cache_logging = false
 
-  if ActiveModel::Type::Boolean.new.cast(
-    ENV.fetch("VITE_ASSETS_B2_ENABLED", Rails.env.production? ? "true" : "false")
-  )
+  # Only when explicitly enabled at runtime (Docker sets VITE_ASSETS_B2_ENABLED after vite:build).
+  if ENV["VITE_ASSETS_B2_ENABLED"].to_s.match?(/\A(1|true|yes|on)\z/i)
     config.asset_host = ENV.fetch(
       "B2_ASSETS_PUBLIC_URL",
       "https://geor-me-static.libreverse.io/file/geor-me-assets"
