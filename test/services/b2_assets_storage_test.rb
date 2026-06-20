@@ -25,6 +25,22 @@ class B2AssetsStorageTest < ActiveSupport::TestCase
     assert_not @asset.exist?
   end
 
+  test "strip_from_image keeps crt displacement map for same-origin feImage" do
+    displacement = @vite_root.join("assets/crt-displacement-map-abc123.png")
+    displacement.write("png")
+
+    B2AssetsStorage.strip_from_image!(root: @vite_root)
+
+    assert displacement.exist?
+    assert_not @asset.exist?
+  end
+
+  test "keep_in_image? retains manifests and crt displacement assets" do
+    assert B2AssetsStorage.keep_in_image?(".vite/manifest.json")
+    assert B2AssetsStorage.keep_in_image?("assets/crt-displacement-map-abc.png")
+    assert_not B2AssetsStorage.keep_in_image?("assets/application-abc.js")
+  end
+
   test "public_object_url points at the B2 friendly CDN host" do
     assert_equal(
       "https://geor-me-static.libreverse.io/file/geor-me-assets/vite/assets/application-abc123.js",

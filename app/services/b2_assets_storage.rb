@@ -9,6 +9,8 @@ class B2AssetsStorage
   REGION = ENV.fetch("B2_ASSETS_REGION", "us-east-005")
   PREFIX = "vite"
   MANIFEST_KEEP_PATTERN = %r{\A\.vite/manifest(-assets)?\.json\z}.freeze
+  # feImage in the CRT SVG filter must stay same-origin — Safari rejects cross-origin CDN URLs.
+  CRT_DISPLACEMENT_KEEP_PREFIX = "assets/crt-displacement-map"
 
   class << self
     def configured?
@@ -113,7 +115,7 @@ class B2AssetsStorage
           next unless File.file?(absolute)
 
           relative = Pathname.new(absolute).relative_path_from(root).to_s
-          next if relative.match?(MANIFEST_KEEP_PATTERN)
+          next if keep_in_image?(relative)
 
           FileUtils.rm(absolute)
           removed += 1
@@ -195,6 +197,11 @@ class B2AssetsStorage
       warn "B2 failed at #{e.class}: #{e.message}"
       warn "Common fixes: swap key ID vs application key, scope key to bucket #{BUCKET}, enable list/read/write/delete"
       false
+    end
+
+    def keep_in_image?(relative)
+      relative.match?(MANIFEST_KEEP_PATTERN) ||
+        relative.start_with?(CRT_DISPLACEMENT_KEEP_PREFIX)
     end
 
     private

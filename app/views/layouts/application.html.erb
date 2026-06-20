@@ -20,6 +20,8 @@
       window._lenisInitialised = true;
     </script>
     <%= vite_javascript_tag "~/javascript/application.js" %>
+    <% crt_displacement_map = same_origin_vite_asset_path("~/images/crt-displacement-map.png") %>
+    <link rel="preload" as="image" href="<%= crt_displacement_map %>">
     <meta name="robots" content="noindex, nofollow">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title><%= full_page_title %></title>
@@ -35,7 +37,6 @@
     <%= vite_client_tag %>
   </head>
   <body>
-    <% crt_displacement_map = vite_asset_path("~/images/crt-displacement-map.png") %>
     <div class="scanlines"></div>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -73,15 +74,11 @@
             xChannelSelector="R"
             yChannelSelector="G"
             edgeMode="duplicate"
-            x="-50%"
-            y="-50%"
-            width="200%"
-            height="200%"
           />
         </filter>
       </defs>
       <g filter="url(#barrel)">
-        <foreignobject x="0" y="0" width="100%" height="100%">
+        <foreignobject id="crt-foreign-object" x="0" y="0" width="100%" height="100%">
           <div class="crt-shell" xmlns="http://www.w3.org/1999/xhtml">
             <div id="crt-content" data-controller="crt animation-visibility">
               <%= render 'layouts/shortcutswrapper' do %>

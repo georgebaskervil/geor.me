@@ -11,12 +11,15 @@ export default class extends Controller {
   connect() {
     this.displacement = document.querySelector("#crt-displacement");
     this.displacementImage = document.querySelector("#crt-displacement-image");
+    this.foreignObject = document.querySelector("#crt-foreign-object");
+    this.syncForeignObjectDimensions();
     this.preloadDisplacementMap();
     this.updateScale();
     this.onResize = () => {
       if (this.resizeFrame) return;
       this.resizeFrame = requestAnimationFrame(() => {
         this.resizeFrame = undefined;
+        this.syncForeignObjectDimensions();
         this.updateScale();
       });
     };
@@ -35,6 +38,15 @@ export default class extends Controller {
     }
   }
 
+  syncForeignObjectDimensions() {
+    const foreignObject = this.foreignObject;
+    if (!foreignObject) return;
+
+    // Safari mishandles percentage-sized foreignObject inside filtered SVG.
+    foreignObject.setAttribute("width", String(window.innerWidth));
+    foreignObject.setAttribute("height", String(window.innerHeight));
+  }
+
   async preloadDisplacementMap() {
     const image = this.displacementImage;
     if (!image) return;
@@ -43,6 +55,16 @@ export default class extends Controller {
       image.getAttribute("href") ||
       image.getAttributeNS("http://www.w3.org/1999/xlink", "href");
     if (!href || href.startsWith("blob:")) return;
+
+    let url;
+    try {
+      url = new URL(href, window.location.href);
+    } catch {
+      return;
+    }
+
+    // Same-origin feImage URLs work in Safari; blob preload is only for cross-origin CDN fallbacks.
+    if (url.origin === window.location.origin) return;
 
     try {
       const response = await fetch(href);
