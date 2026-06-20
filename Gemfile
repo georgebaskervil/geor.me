@@ -15,8 +15,8 @@ gem "better_html"
 gem "bootsnap", "1.24.4", require: false
 gem "feedjira"
 # Pin 0.7.58: 0.7.59 C extension fails on Linux during Docker vite:build (see .snyk).
-gem "iodine", "0.7.58", require: false
-gem "nokogiri", "1.19.3"
+gem "iodine", "0.7.59", require: false
+gem "nokogiri", "1.19.4"
 gem "rails", "8.1.3"
 gem "reactionview", "~> 0.3.0"
 gem "sentry-rails", "6.6.2"
