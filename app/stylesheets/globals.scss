@@ -8,6 +8,7 @@ $text-glow: 1px 1px 2px rgb(0 0 0 / 50%);
 }
 
 body {
+  font-family: variables.$font-family;
   text-shadow: $text-glow;
 }
 
@@ -15,6 +16,7 @@ input,
 textarea,
 select,
 button {
+  font-family: inherit;
   text-shadow: $text-glow;
 }
 
@@ -24,7 +26,7 @@ body {
 }
 
 html {
-  font-family: SpaceMono-Regular-subset, monospace;
+  font-family: variables.$font-family;
   background-color: #2c2a2f;
   background-image:
     url("~/images/starfield.svg"),
@@ -58,21 +60,26 @@ img {
 }
 
 @font-face {
-  font-family: SpaceMono-Regular-subset;
-  src: url("~/fonts/SpaceMono-Regular-subset.woff2") format("woff2");
+  font-family: "Xanh Mono";
+  src: url("~/fonts/XanhMono-Regular-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: WaitingfortheSunrise-Regular-subset;
-  src: url("~/fonts/WaitingfortheSunrise-Regular-subset.woff2") format("woff2");
+  font-family: "Xanh Mono";
+  src: url("~/fonts/XanhMono-Italic-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
   font-display: swap;
 }
 
 @font-face {
-  font-family: PixelatedEleganceRegular-ovyAA-subset;
-  src: url("~/fonts/PixelatedEleganceRegular-ovyAA-subset.woff2")
-    format("woff2");
+  font-family: "Pixelify Sans";
+  src: url("~/fonts/PixelifySans-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
   font-display: swap;
 }
 
@@ -86,6 +93,8 @@ body {
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  // Safari: foreignObject does not inherit web fonts from html — set explicitly.
+  font-family: variables.$font-family;
   // Safari: promote foreignObject layer inside filtered SVG (no visual change).
   transform: translateZ(0);
 }
@@ -103,6 +112,7 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  font-family: variables.$font-family;
 }
 
 .crt-scroll-content {
@@ -350,14 +360,15 @@ html.geor-me-extension-footer .crt-scroll-content {
   WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-.floating-window.window98 {
+#distractionmode-scope .floating-window.window98 {
   position: fixed;
   width: 300px;
   background: variables.$surface;
   border: 2px solid variables.$window-frame;
   box-shadow: 2px 2px 5px rgb(0 0 0 / 50%);
   z-index: 1;
-  font-family: PixelatedEleganceRegular-ovyAA-subset, Arial, sans-serif;
+  font-family: variables.$distraction-font-family;
+  font-optical-sizing: auto;
   user-select: none;
   pointer-events: auto;
 

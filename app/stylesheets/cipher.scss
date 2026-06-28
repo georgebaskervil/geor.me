@@ -3,7 +3,6 @@
 
 .cipher-container {
   margin: 2rem auto;
-  font-family: SpaceMono-Regular-subset, monospace;
 }
 
 .cipher-input {
@@ -13,7 +12,6 @@
   padding: 0.75rem;
   background: color.adjust(#1a1b26, $lightness: 5%);
   color: variables.$text;
-  font-family: SpaceMono-Regular-subset, monospace;
   border: 1px solid variables.$neutral;
   transition: all 0.3s ease;
 
@@ -52,7 +50,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: SpaceMono-Regular-subset, monospace;
   color: variables.$text;
   transition: all 0.3s ease;
   cursor: pointer;

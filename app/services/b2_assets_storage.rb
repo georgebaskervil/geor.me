@@ -11,6 +11,9 @@ class B2AssetsStorage
   MANIFEST_KEEP_PATTERN = %r{\A\.vite/manifest(-assets)?\.json\z}.freeze
   # feImage in the CRT SVG filter must stay same-origin — Safari rejects cross-origin CDN URLs.
   CRT_DISPLACEMENT_KEEP_PREFIX = "assets/crt-displacement-map"
+  # CSS must stay same-origin: root-relative url(/vite/assets/...) in a CDN-hosted
+  # stylesheet resolves against the CDN host, not geor.me.
+  CSS_KEEP_SUFFIX = ".css"
 
   class << self
     def configured?
@@ -201,7 +204,8 @@ class B2AssetsStorage
 
     def keep_in_image?(relative)
       relative.match?(MANIFEST_KEEP_PATTERN) ||
-        relative.start_with?(CRT_DISPLACEMENT_KEEP_PREFIX)
+        relative.start_with?(CRT_DISPLACEMENT_KEEP_PREFIX) ||
+        relative.end_with?(CSS_KEEP_SUFFIX)
     end
 
     private

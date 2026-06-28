@@ -35,9 +35,20 @@ class B2AssetsStorageTest < ActiveSupport::TestCase
     assert_not @asset.exist?
   end
 
-  test "keep_in_image? retains manifests and crt displacement assets" do
+  test "strip_from_image keeps css for same-origin url() resolution" do
+    stylesheet = @vite_root.join("assets/application-abc123.css")
+    stylesheet.write("body{color:red}")
+
+    B2AssetsStorage.strip_from_image!(root: @vite_root)
+
+    assert stylesheet.exist?
+    assert_not @asset.exist?
+  end
+
+  test "keep_in_image? retains manifests, crt displacement assets, and css" do
     assert B2AssetsStorage.keep_in_image?(".vite/manifest.json")
     assert B2AssetsStorage.keep_in_image?("assets/crt-displacement-map-abc.png")
+    assert B2AssetsStorage.keep_in_image?("assets/application-abc123.css")
     assert_not B2AssetsStorage.keep_in_image?("assets/application-abc.js")
   end
 

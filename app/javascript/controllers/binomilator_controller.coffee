@@ -206,7 +206,7 @@ export default class extends Controller
     plot_bgcolor: 'rgba(0,0,0,0)'
     font:
       color: '#c0caf5'
-      family: '"Space Mono", monospace'
+      family: '"Xanh Mono", monospace'
     margin:
       t: 40
       r: 40

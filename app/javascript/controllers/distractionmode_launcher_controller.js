@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import { application } from "./application";
 import { assetLog } from "../utils/assetLoadLog.js";
+import { loadDistractionFont, applyDistractionFont } from "../loadFonts.js";
 
 const DEFERRED_CONTROLLER_ATTR = "data-distraction-deferred";
 
@@ -41,12 +42,14 @@ export default class extends Controller {
         scope,
         "distractionmode",
       );
+      applyDistractionFont();
       distraction?.toggleDistractionMode();
       return;
     }
 
     const startedAt = performance.now();
     assetLog("distraction mode load start");
+    await loadDistractionFont();
 
     const { default: DistractionmodeController } = await import(
       "./distractionmode_controller.js"
