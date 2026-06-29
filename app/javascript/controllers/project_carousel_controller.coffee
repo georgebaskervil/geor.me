@@ -68,6 +68,10 @@ export default class extends Controller
     return unless slide
     media = slide.querySelector(".carousel-embed-container, .video-container")
     return unless media
+    # Persistent embeds (e.g. the heavy Libreverse iframe) stay mounted across slide
+    # changes; CSS hides them with display:none so the browser suspends rendering
+    # without discarding the iframe document from memory.
+    return if media.hasAttribute("data-carousel-persist")
     media.remove()
 
   syncSlideMedia: (activeIndex) ->
@@ -87,10 +91,12 @@ export default class extends Controller
       for entry in entries
         if entry.isIntersecting
           @carouselInView = true
+          @element.classList.remove("is-offscreen")
           @syncSlideMedia(@currentSlideValue)
           @startAutoAdvance()
         else
           @carouselInView = false
+          @element.classList.add("is-offscreen")
           @stopAutoAdvance()
           @pauseAllVideos()
           @unmountAllSlideMedia()

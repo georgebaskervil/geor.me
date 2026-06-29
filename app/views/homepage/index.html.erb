@@ -78,6 +78,9 @@
         description: "My open-source metaverse project.",
         partial: "libreverse/content",
         background: "#0e0e0e",
+        # Heavy WebGL iframe — keep it mounted across slide changes instead of
+        # recreating it (reload cost >> keeping a hidden frame in memory).
+        persist: true,
       },
       {
         title: "RobusText",
@@ -164,9 +167,12 @@
                 </div>
               </div>
               <% if project[:partial] %>
-                <div class="carousel-embed-container">
+                <%= tag.div(
+                  class: "carousel-embed-container",
+                  data: (project[:persist] ? { carousel_persist: true } : {})
+                ) do %>
                   <%= render project[:partial] %>
-                </div>
+                <% end %>
               <% end %>
             <% end %>
           <% end %>

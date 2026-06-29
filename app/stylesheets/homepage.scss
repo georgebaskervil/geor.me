@@ -268,6 +268,15 @@
   }
 }
 
+/* Persistent embeds (the Libreverse iframe) are too expensive to recreate, so they stay
+   mounted. Suspend their rendering with display:none when the slide is inactive or the
+   carousel is off-screen — the browser stops processing the frame but keeps its document
+   in memory, so returning to the slide costs no reload. */
+.carousel-slide:not(.active) [data-carousel-persist],
+.carousel-container.is-offscreen [data-carousel-persist] {
+  display: none;
+}
+
 .project-info {
   @apply absolute bottom-0 left-0 right-0 z-10;
   @apply bg-gradient-to-t from-black/80 to-transparent;
