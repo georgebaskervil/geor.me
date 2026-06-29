@@ -50,7 +50,6 @@ Rails.application.routes.draw do
   get "/streaming/robustext_video", to: "videos#robustext", defaults: { format: :m3u8 }
   get "/streaming/spaceshooter_video", to: "videos#spaceshooter", defaults: { format: :m3u8 }
   get "/streaming/taskstack_video", to: "videos#taskstack", defaults: { format: :m3u8 }
-  get "/streaming/uwuifier_video", to: "videos#uwuifier", defaults: { format: :m3u8 }
   get "/streaming/home_control_panel_video", to: "videos#home_control_panel", defaults: { format: :m3u8 }
   get "/neudec", to: "neudec#index"
   get "/doomdisclaimer", to: "doomdisclaimer#index"

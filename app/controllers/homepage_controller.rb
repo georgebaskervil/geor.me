@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class HomepageController < ApplicationController
-  helper_method :fetch_georlist_preview
+  helper_method :fetch_georlist_preview, :fetch_uwuifier_stats
 
   def index
   end
@@ -12,6 +12,10 @@ class HomepageController < ApplicationController
       body = fetch_with_redirects(url, range: "bytes=0-4095")
       body ? body.lines.first(20).join : "Preview unavailable"
     end
+  end
+
+  def fetch_uwuifier_stats
+    GithubRepoStatsService.fetch("georgebaskervil/uwuifier")
   end
 
   private

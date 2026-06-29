@@ -421,6 +421,116 @@
     pointer-events: none;
   }
 
+  /* uwuifier: live GitHub repo stats panel */
+  .uwuifier-github-panel {
+    @apply w-full h-full p-4 overflow-auto flex flex-col;
+
+    gap: 0.6rem;
+    background: #161820;
+    color: #c6c2c7;
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .ugp-repo-link {
+    @apply font-semibold;
+
+    color: #c39399;
+    font-size: 0.9rem;
+    text-decoration: none;
+    word-break: break-word;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .ugp-stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .ugp-stat {
+    @apply whitespace-nowrap;
+
+    color: #c6c2c7;
+  }
+
+  .ugp-pushed {
+    margin-left: auto;
+    opacity: 0.7;
+  }
+
+  .ugp-lang-bar {
+    display: flex;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: #2d2a2a;
+  }
+
+  .ugp-lang-segment {
+    height: 100%;
+    background: #c39399;
+
+    &[data-lang="Python"] {
+      background: #3572a5;
+    }
+    &[data-lang="Shell"] {
+      background: #89e051;
+    }
+    &[data-lang="JavaScript"] {
+      background: #f1e05a;
+    }
+    &[data-lang="TypeScript"] {
+      background: #3178c6;
+    }
+    &[data-lang="HTML"] {
+      background: #e34c26;
+    }
+    &[data-lang="CSS"] {
+      background: #563d7c;
+    }
+  }
+
+  .ugp-lang-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+
+    color: rgb(198 194 199 / 75%);
+    font-size: 0.7rem;
+  }
+
+  .ugp-commits {
+    @apply list-none p-0 m-0 overflow-hidden;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .ugp-commit {
+    @apply truncate;
+
+    color: rgb(198 194 199 / 85%);
+    font-size: 0.7rem;
+
+    &::before {
+      content: "› ";
+      color: #c39399;
+    }
+  }
+
+  .ugp-unavailable {
+    @apply m-auto text-center;
+
+    color: rgb(198 194 199 / 60%);
+  }
+
   /* Restore old dark indigo/pink colour scheme for embedded content */
   .bg-background {
     background-color: #161820 !important;

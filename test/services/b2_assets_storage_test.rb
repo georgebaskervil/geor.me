@@ -54,7 +54,7 @@ class B2AssetsStorageTest < ActiveSupport::TestCase
 
   test "public_object_url points at the B2 friendly CDN host" do
     assert_equal(
-      "https://geor-me-static.libreverse.io/file/geor-me-assets/vite/assets/application-abc123.js",
+      "https://cdn.geor.me/file/geor-me-assets/vite/assets/application-abc123.js",
       B2AssetsStorage.public_object_url("assets/application-abc123.js")
     )
   end
@@ -62,7 +62,7 @@ class B2AssetsStorageTest < ActiveSupport::TestCase
   test "cdn_url_for_manifest_path maps /vite paths to CDN URLs when enabled" do
     B2AssetsStorage.stub(:cdn_urls?, true) do
       assert_equal(
-        "https://geor-me-static.libreverse.io/file/geor-me-assets/vite/assets/application-abc123.js",
+        "https://cdn.geor.me/file/geor-me-assets/vite/assets/application-abc123.js",
         B2AssetsStorage.cdn_url_for_manifest_path("/vite/assets/application-abc123.js")
       )
     end

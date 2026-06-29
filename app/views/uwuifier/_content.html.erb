@@ -1,0 +1,46 @@
+<% stats = fetch_uwuifier_stats %>
+<div class="uwuifier-github-panel">
+  <% if stats %>
+    <% total_bytes = stats[:languages].values.sum %>
+    <a href="<%= stats[:html_url] %>" target="_blank" rel="noopener" class="ugp-repo-link">
+      <%= stats[:full_name] %>
+    </a>
+    <div class="ugp-stat-row">
+      <span class="ugp-stat">★ <%= stats[:stars] %></span>
+      <span class="ugp-stat">⑂ <%= stats[:forks] %></span>
+      <span class="ugp-stat">⚠ <%= stats[:open_issues] %></span>
+      <% if stats[:pushed_at] %>
+        <span class="ugp-stat ugp-pushed">
+          pushed <%= time_ago_in_words(stats[:pushed_at]) %> ago
+        </span>
+      <% end %>
+    </div>
+    <% if total_bytes.positive? %>
+      <div class="ugp-lang-bar">
+        <% stats[:languages].each do |name, bytes| %>
+          <span
+            class="ugp-lang-segment"
+            data-lang="<%= name %>"
+            style="width: <%= (bytes.to_f / total_bytes * 100).round(2) %>%"
+          ></span>
+        <% end %>
+      </div>
+      <div class="ugp-lang-legend">
+        <% stats[:languages].each do |name, bytes| %>
+          <span class="ugp-lang-label" data-lang="<%= name %>">
+            <%= name %> <%= (bytes.to_f / total_bytes * 100).round(1) %>%
+          </span>
+        <% end %>
+      </div>
+    <% end %>
+    <ul class="ugp-commits">
+      <% stats[:recent_commits].each do |commit| %>
+        <li class="ugp-commit">
+          <span class="ugp-commit-message"><%= commit[:message] %></span>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="ugp-unavailable">GitHub stats unavailable</p>
+  <% end %>
+</div>

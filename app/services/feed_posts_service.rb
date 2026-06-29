@@ -5,7 +5,9 @@ require "nokogiri"
 require "feedjira"
 
 class FeedPostsService
-  FEED_URL = "https://libreverse.geor.me/feed/"
+  # libreverse.geor.me/feed/ 301s to libreverse.io/feed/; Net::HTTP.get_response does not
+  # follow redirects, so point at the canonical host directly.
+  FEED_URL = "https://libreverse.io/feed/"
   CACHE_KEY = "feed_posts"
   CACHE_TTL = 1.hour
 

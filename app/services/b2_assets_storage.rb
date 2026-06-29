@@ -34,7 +34,7 @@ class B2AssetsStorage
     end
 
     def public_base_url
-      ENV.fetch("B2_ASSETS_PUBLIC_URL", "https://geor-me-static.libreverse.io/file/#{BUCKET}")
+      ENV.fetch("B2_ASSETS_PUBLIC_URL", "https://cdn.geor.me/file/#{BUCKET}")
     end
 
     def public_object_url(path)

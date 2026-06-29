@@ -50,6 +50,6 @@ class ViteAssetsControllerTest < ActionController::TestCase
 
     get :show, params: { path: "assets/missing-abc123.js" }
 
-    assert_redirected_to "https://geor-me-static.libreverse.io/file/geor-me-assets/vite/assets/missing-abc123.js"
+    assert_redirected_to "https://cdn.geor.me/file/geor-me-assets/vite/assets/missing-abc123.js"
   end
 end

@@ -55,12 +55,6 @@ class VideosController < ApplicationController
     end
   end
 
-  def uwuifier
-    respond_to do |format|
-      format.m3u8 { render content_type: "application/x-mpegURL" }
-    end
-  end
-
   def home_control_panel
     respond_to do |format|
       format.m3u8 { render content_type: "application/x-mpegURL" }

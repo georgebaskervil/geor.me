@@ -100,7 +100,7 @@ RUN --mount=type=secret,id=b2_key_id \
     SECRET_KEY_BASE_DUMMY=1 bundle exec rake vite:upload_to_b2
 
 ENV VITE_ASSETS_B2_ENABLED="1"
-ENV B2_ASSETS_PUBLIC_URL="https://geor-me-static.libreverse.io/file/geor-me-assets"
+ENV B2_ASSETS_PUBLIC_URL="https://cdn.geor.me/file/geor-me-assets"
 
 # Final stage for app image
 FROM base

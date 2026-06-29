@@ -58,7 +58,7 @@ Rails.application.configure do
   if ENV["VITE_ASSETS_B2_ENABLED"].to_s.match?(/\A(1|true|yes|on)\z/i)
     config.asset_host = ENV.fetch(
       "B2_ASSETS_PUBLIC_URL",
-      "https://geor-me-static.libreverse.io/file/geor-me-assets"
+      "https://cdn.geor.me/file/geor-me-assets"
     )
   end
 

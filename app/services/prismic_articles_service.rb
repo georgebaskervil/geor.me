@@ -5,6 +5,10 @@ require "json"
 
 class PrismicArticlesService
   API_URL = ENV.fetch("PRISMIC_API_URL", "https://geor-me.cdn.prismic.io/api/v1")
+  # Media/asset files (PDFs, images) are served via our CDN host; the API itself is NOT
+  # proxied (that would cache API responses across users), so only non-/api paths are rewritten.
+  PRISMIC_ASSET_HOST = "geor-me.cdn.prismic.io"
+  ASSET_CDN_HOST = ENV.fetch("PRISMIC_ASSET_HOST", "cms.geor.me")
   DOCUMENT_TYPES = %w[blog_post pdf-post].freeze
   TEST_FIXTURE = Rails.root.join("test/fixtures/files/prismic_search.json")
 
@@ -107,7 +111,7 @@ class PrismicArticlesService
         format: :markdown
       )
     when "pdf-post"
-      file_url = data.dig("link_to_media", "value", "file", "url")
+      file_url = rewrite_asset_url(data.dig("link_to_media", "value", "file", "url"))
       return nil if file_url.blank?
 
       base.merge(
@@ -146,5 +150,19 @@ class PrismicArticlesService
     Time.parse(value)
   rescue ArgumentError, TypeError
     nil
+  end
+
+  # Rewrite Prismic media/asset links to our CDN host, leaving API links untouched.
+  def rewrite_asset_url(url)
+    return url if url.blank?
+
+    uri = URI.parse(url)
+    return url unless uri.host == PRISMIC_ASSET_HOST
+    return url if uri.path.start_with?("/api")
+
+    uri.host = ASSET_CDN_HOST
+    uri.to_s
+  rescue URI::InvalidURIError
+    url
   end
 end
