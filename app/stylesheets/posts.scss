@@ -121,3 +121,14 @@
     visibility: hidden;
   }
 }
+
+// Explicitly apply the handwriting font on blog post content (paper area).
+.paper-container,
+.paper-container .posts-article,
+.paper-container .posts-header,
+.paper-container .posts-description,
+.paper-container .posts-text,
+.paper-container .posts-content {
+  font-family: variables.$font-family;
+  letter-spacing: 0.5px;
+}

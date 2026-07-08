@@ -5,8 +5,7 @@
         👋 Hi, I'm George
       </h1>
       <h2 class="hp-h2">
-        Mad (computer) scientist. That's it. That's the bio. (I did make my
-        first site
+        Software, synthesisers, and the occasional photograph. Made my first website
         <span data-live-time-since>
           <% duration = Time.now - Time.new(2019, 5, 7)
           years = (duration / (86_400 * 365)).to_i
@@ -20,8 +19,8 @@
           <%= days %>
           days
         </span>
-        ago though!)
-      </h2>
+        ago.
+      </h2> 
       <% social_links = [
         { name: "X", url: "https://x.com/georgebaskervil" },
         {
@@ -46,11 +45,11 @@
     </div>
     <div class="hp-image-container hp-picture">
       <%= image_tag(
-        vite_asset_path("~/images/me.avif"),
+        vite_asset_path("~/images/pfp.png"),
         alt: "A picture of me",
         loading: "eager",
-        width: "654",
-        height: "654",
+        width: "498",
+        height: "498",
         decoding: "async",
         fetchpriority: "high",
       ) %>

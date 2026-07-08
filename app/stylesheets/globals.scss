@@ -9,6 +9,7 @@ $text-glow: 1px 1px 2px rgb(0 0 0 / 50%);
 
 body {
   font-family: variables.$font-family;
+  font-optical-sizing: auto;
   text-shadow: $text-glow;
 }
 
@@ -25,8 +26,15 @@ body {
   height: 100%;
 }
 
+/* Significant base font-size increase (browser default is 16px). */
+html {
+  font-size: 22px;
+  letter-spacing: 0.5px;
+}
+
 html {
   font-family: variables.$font-family;
+  font-optical-sizing: auto;
   background-color: #2c2a2f;
   background-image:
     url("~/images/starfield.svg"),
@@ -60,22 +68,6 @@ img {
 }
 
 @font-face {
-  font-family: "Xanh Mono";
-  src: url("~/fonts/XanhMono-Regular-latin.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Xanh Mono";
-  src: url("~/fonts/XanhMono-Italic-latin.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
   font-family: "Pixelify Sans";
   src: url("~/fonts/PixelifySans-latin.woff2") format("woff2");
   font-weight: 400 700;
@@ -95,6 +87,9 @@ body {
   height: 100%;
   // Safari: foreignObject does not inherit web fonts from html — set explicitly.
   font-family: variables.$font-family;
+  font-size: 22px;
+  letter-spacing: 0.5px;
+  font-optical-sizing: auto;
   // Safari: promote foreignObject layer inside filtered SVG (no visual change).
   transform: translateZ(0);
 }
@@ -113,7 +108,10 @@ body {
   height: 100%;
   overflow: hidden;
   font-family: variables.$font-family;
-}
+  font-size: 22px;
+  letter-spacing: 0.5px;
+  font-optical-sizing: auto;
+}  
 
 .crt-scroll-content {
   position: relative;

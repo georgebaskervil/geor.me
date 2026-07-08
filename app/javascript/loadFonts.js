@@ -1,10 +1,7 @@
-import xanhRegularUrl from "../fonts/XanhMono-Regular-latin.woff2?url";
-import xanhItalicUrl from "../fonts/XanhMono-Italic-latin.woff2?url";
 import pixelifyUrl from "../fonts/PixelifySans-latin.woff2?url";
 
-const SITE_FONT = '"Xanh Mono", monospace';
+const SITE_FONT = '"Waiting for the Sunrise", cursive';
 const DISTRACTION_FONT = '"Pixelify Sans", sans-serif';
-
 function siteFontTargets() {
   return [
     document.documentElement,
@@ -21,8 +18,27 @@ function setFontFamily(elements, stack) {
   }
 }
 
+function setFontSize(elements, size) {
+  for (const el of elements) {
+    if (!el) continue;
+    el.style.setProperty("font-size", size, "important");
+  }
+}
+
+function setLetterSpacing(elements, spacing) {
+  for (const el of elements) {
+    if (!el) continue;
+    el.style.setProperty("letter-spacing", spacing, "important");
+  }
+}
+
 export function applySiteFont() {
-  setFontFamily(siteFontTargets(), SITE_FONT);
+  const targets = siteFontTargets();
+  setFontFamily(targets, SITE_FONT);
+  // Force the increased base size onto CRT layers (Safari foreignObject does not inherit rem from html).
+  setFontSize(targets, "22px");
+  // Add a smidge of extra letter-spacing site-wide (especially for the handwriting font).
+  setLetterSpacing(targets, "0.5px");
 }
 
 export function applyDistractionFont() {
@@ -43,19 +59,12 @@ async function loadFontFaces(faces) {
 let siteFontPromise;
 
 export function loadSiteFont() {
+  // Waiting for the Sunrise is loaded via the Google Fonts <link> in the layout <head>.
+  // We still force-apply via JS to .crt-shell / #crt-content (Safari does not inherit
+  // web fonts from <html> inside SVG <foreignObject>). Wait for document.fonts.ready
+  // so the variable font is swapped in before we set the family.
   if (!siteFontPromise) {
-    siteFontPromise = loadFontFaces([
-      new FontFace("Xanh Mono", `url(${xanhRegularUrl})`, {
-        weight: "400",
-        style: "normal",
-        display: "swap",
-      }),
-      new FontFace("Xanh Mono", `url(${xanhItalicUrl})`, {
-        weight: "400",
-        style: "italic",
-        display: "swap",
-      }),
-    ])
+    siteFontPromise = document.fonts.ready
       .then(() => {
         document.documentElement.dataset.siteFontLoaded = "1";
         applySiteFont();
@@ -66,9 +75,8 @@ export function loadSiteFont() {
         return false;
       });
   }
-
   return siteFontPromise;
-}
+} 
 
 let distractionFontPromise;
 

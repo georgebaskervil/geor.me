@@ -11,6 +11,9 @@
     <%- favicon_path = vite_asset_path("~/images/favicon.jpg") -%>
     <link rel="dns-prefetch" href="r2.<%= domain %>">
     <link rel="preconnect" href="r2.<%= domain %>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Waiting+for+the+Sunrise&display=swap" rel="stylesheet">
     <%= vite_stylesheet_tag "~/stylesheets/entries/core.scss" %>
     <% Array(@route_stylesheet_entries).each do |entry| %>
       <%= vite_stylesheet_tag "~/stylesheets/#{entry}", data: { turbo_track: "reload" } %>
@@ -170,26 +173,26 @@
           style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 16px;"
         >
           <span
-            style="font-family:'Xanh Mono',monospace;font-size:12px;color:#999;"
+            style="font-family:'Waiting for the Sunrise',cursive;font-size:12px;color:#999;" 
           >A
             <strong style="color:#ccc;font-weight:600;">geor.me</strong>
             project</span>
           <span
-            style="display:flex;align-items:center;gap:12px;font-family:'Xanh Mono',monospace;font-size:12px;"
+            style="display:flex;align-items:center;gap:12px;font-family:'Waiting for the Sunrise',cursive;font-size:12px;" 
           >
             <a
               href="https://geor.me/licensing"
-              style="color:#aaa;text-decoration:none;cursor:pointer;font-family:'Xanh Mono',monospace;font-size:12px;"
+              style="color:#aaa;text-decoration:none;cursor:pointer;font-family:'Waiting for the Sunrise',cursive;font-size:12px;" 
             >Licensing</a>
             <span style="color:#444;">·</span>
             <a
               href="https://geor.me/privacy"
-              style="color:#aaa;text-decoration:none;cursor:pointer;font-family:'Xanh Mono',monospace;font-size:12px;"
+              style="color:#aaa;text-decoration:none;cursor:pointer;font-family:'Waiting for the Sunrise',cursive;font-size:12px;" 
             >Privacy</a>
             <span style="color:#444;">·</span>
             <a
               href="https://geor.me/dmca"
-              style="color:#aaa;text-decoration:none;cursor:pointer;font-family:'Xanh Mono',monospace;font-size:12px;"
+              style="color:#aaa;text-decoration:none;cursor:pointer;font-family:'Waiting for the Sunrise',cursive;font-size:12px;" 
             >DMCA</a>
           </span>
         </div>
