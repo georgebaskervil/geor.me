@@ -58,6 +58,7 @@ Rails.application.routes.draw do
   # Serve original files for posts (e.g., PDFs)
   get "/posts/:id/file", to: "posts#file", as: :post_file
   get "/images", to: "images#index"
+  get "/projects", to: "projects#index"
   get "/legal", to: "legal#index"
   get "/miscellaneous", to: "miscellaneous#index"
   get "/waveform", to: "waveform#index"

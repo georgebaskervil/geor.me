@@ -15,6 +15,7 @@ module RouteStylesheets
   PAGE_ENTRIES = {
     "posts" => "page-posts",
     "images" => "page-images",
+    "projects" => "page-projects",
     "legal" => "page-legal",
     "privacy" => "page-privacy",
     "data" => "page-data",

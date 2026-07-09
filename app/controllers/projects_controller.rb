@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class HomepageController < ApplicationController
+class ProjectsController < ApplicationController
   def index
   end
 end
