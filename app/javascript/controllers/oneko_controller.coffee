@@ -42,8 +42,6 @@ export default class extends Controller
 
   startNeko: =>
     return if @running
-    isReducedMotion = globalThis.matchMedia("(prefers-reduced-motion: reduce)")?.matches
-    return if isReducedMotion
     @running = true
     @nekoEl.classList.remove "oneko-hidden"
     @initNeko()

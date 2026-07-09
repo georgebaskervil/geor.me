@@ -242,7 +242,9 @@ export default defineConfig(({ mode }) => {
         "stimulus-use",
         "@million/lint/runtime-dev",
         "lenis",
-        "stimulus-use/hotkeys"
+        "stimulus-use/hotkeys",
+        // Prebundle with esbuild only (Babel is excluded from .vite/deps + node_modules/gsap).
+        "gsap",
       ],
       exclude: [
         "@hotwired/turbo",

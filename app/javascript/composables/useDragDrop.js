@@ -196,16 +196,13 @@ export function useDragDrop({ onReorder }) {
     indicator.setAttribute("role", "presentation"); // For a11y
 
     // Animate the indicator for better visibility
-    indicator.style.cssText = `
-            height: 4px;
-            background: #c39399;
-            border-radius: 2px;
-            margin: 8px 0;
-            animation: pulse 1.5s infinite;
-            box-shadow: 0 0 8px rgba(195, 147, 153, 0.6);
-            opacity: 0.8;
-            will-change: opacity, transform;
-        `;
+    indicator.style.height = '4px';
+    indicator.style.background = '#c39399';
+    indicator.style.margin = '8px 0';
+    indicator.style.animation = 'pulse 1.5s infinite';
+    indicator.style.boxShadow = '0 0 8px rgba(195, 147, 153, 0.6)';
+    indicator.style.opacity = '0.8';
+    indicator.style.willChange = 'opacity, transform';
 
     // Add data attributes for drop operation
     indicator.dataset.targetIndex = targetIndex;

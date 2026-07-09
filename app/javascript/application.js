@@ -66,9 +66,15 @@ if (!import.meta.env.DEV) {
 
 import { createSuperHover } from "./vendor/superhover.js";
 
-if (globalThis.matchMedia("(hover: hover)").matches) {
-  createSuperHover({ selector: "*", moveEventType: false });
-}
+// Always run super-hover so the check loop never sleeps on pointer idle.
+// This ensures :hover styles (rewritten by postcss-super-hover to also match
+// [data-super-hover-active]) stay live even after the pointer stops moving.
+// We use selector "*" so every element can be a hover target (existing behavior).
+createSuperHover({
+  selector: "*",
+  moveEventType: false,
+  suspendWhenPointerIdle: false,
+});
 
 import "@hotwired/turbo-rails";
 import "./turbo_view_transitions";

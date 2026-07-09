@@ -1,15 +1,10 @@
 import * as Turbo from "@hotwired/turbo";
-import {
-  performTransition,
-  shouldPerformTransition as libraryShouldPerformTransition,
-} from "turbo-view-transitions";
+import { performTransition } from "turbo-view-transitions";
 
 export function shouldPerformTransition() {
-  if (globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    return false;
-  }
-  return libraryShouldPerformTransition();
-}
+  // Support view transitions even when the user prefers reduced motion.
+  return typeof document !== "undefined" && "startViewTransition" in document;
+} 
 
 document.addEventListener("turbo:before-render", (event) => {
   if (!shouldPerformTransition()) return;

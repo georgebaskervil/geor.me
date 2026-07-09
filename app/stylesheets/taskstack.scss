@@ -45,7 +45,7 @@
   padding: 12px;
   border: 1px solid #292d3e;
   background-color: #1e212b;
-  border-radius: 4px;
+  border-radius: 0;
   font-size: 16px;
   color: variables.$text;
 
@@ -60,7 +60,7 @@
   background-color: variables.$accent;
   color: variables.$background-colour;
   border: none;
-  border-radius: 4px;
+  border-radius: 0;
   cursor: pointer;
   font-size: 16px;
   transition: all 0.3s;
@@ -78,7 +78,7 @@
 // Task Creator
 .task-creator {
   background: #1e212b;
-  border-radius: 8px;
+  border-radius: 0;
   padding: 20px;
   box-shadow: 0 10px 20px variables.$box-shadow;
   margin-bottom: 15px;
@@ -99,12 +99,12 @@
 
       &-track {
         background: #272b38;
-        border-radius: 4px;
+        border-radius: 0;
       }
 
       &-thumb {
         background-color: variables.$accent;
-        border-radius: 4px;
+        border-radius: 0;
       }
     }
   }
@@ -155,7 +155,7 @@
     color: variables.$text;
     font-size: 20px;
     border: 3px dashed #292d3e;
-    border-radius: 8px;
+    border-radius: 0;
     background-color: rgb(30 33 43 / 70%);
     display: flex;
     flex-grow: 1;
@@ -179,7 +179,7 @@
     background-color: rgb(195 147 153 / 15%);
     color: variables.$text;
     border: 2px dashed variables.$accent;
-    border-radius: 8px;
+    border-radius: 0;
     cursor: pointer;
 
     @include variables.squish-pressable {
@@ -189,7 +189,7 @@
 
   &-form {
     background-color: #272b38;
-    border-radius: 8px;
+    border-radius: 0;
     padding: 15px;
     box-shadow: variables.$box-shadow;
   }
@@ -269,7 +269,7 @@
       right: 10%;
       height: 4px;
       background: variables.$accent;
-      border-radius: 2px;
+      border-radius: 0;
       opacity: 0.9;
       z-index: 5;
       box-shadow: 0 0 10px rgb(195 147 153 / 80%);
@@ -289,7 +289,7 @@
       right: 10%;
       height: 4px;
       background: variables.$accent;
-      border-radius: 2px;
+      border-radius: 0;
       opacity: 0.9;
       z-index: 5;
       box-shadow: 0 0 10px rgb(195 147 153 / 80%);
@@ -306,7 +306,7 @@
 // Task Block
 .task-block {
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 0;
   background-color: #292d3e;
   box-shadow: 0 2px 5px variables.$box-shadow;
   position: relative;
@@ -371,7 +371,7 @@
 .pop-task-btn {
   background-color: rgb(140 55 58 / 40%);
   padding: 6px 12px;
-  border-radius: 4px;
+  border-radius: 0;
   font-size: 20px;
   font-weight: bold;
   line-height: 1;
@@ -385,7 +385,7 @@
 // Drop Areas
 .drop-area {
   height: 12px;
-  border-radius: 6px;
+  border-radius: 0;
   background-color: rgb(195 147 153 / 10%);
   transition: all 0.2s ease;
   margin: 4px 0;
@@ -395,7 +395,7 @@
   &-final {
     height: 20px;
     margin-top: 10px;
-    border-radius: 4px;
+    border-radius: 0;
     background-color: transparent;
     transition: all 0.2s ease;
   }
@@ -447,7 +447,7 @@
 .drag-placeholder {
   box-sizing: border-box;
   border: 2px dashed rgb(195 147 153 / 30%);
-  border-radius: 8px;
+  border-radius: 0;
   background: rgb(195 147 153 / 5%);
   transition: all 0.2s;
 }
@@ -517,7 +517,7 @@
   background-color: variables.$accent;
   color: variables.$background-colour;
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: 0;
   font-size: 12px;
   font-weight: bold;
   z-index: 5;

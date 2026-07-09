@@ -27,7 +27,7 @@
     color: variables.$text;
     padding: 0.5rem;
     border: 1px solid variables.$neutral;
-    border-radius: 4px;
+    border-radius: 0;
     font-size: 1rem;
 
     &:focus {
@@ -60,7 +60,7 @@
   [data-binomilator-target="results"] {
     padding: 1.5rem;
     background-color: variables.$neutral;
-    border-radius: 4px;
+    border-radius: 0;
     color: variables.$text;
 
     h3 {
@@ -78,7 +78,7 @@
       display: flex;
       justify-content: space-between;
       padding: 0.5rem;
-      border-radius: 4px;
+      border-radius: 0;
       background-color: rgb(0 0 0 / 20%);
 
       &:active {
@@ -92,7 +92,7 @@
     margin: 0 auto;
     aspect-ratio: 2;
     border: 1px solid variables.$neutral;
-    border-radius: 4px;
+    border-radius: 0;
     width: 100%;
     background-color: rgb(0 0 0 / 20%);
     display: flex;

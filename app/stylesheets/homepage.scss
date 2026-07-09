@@ -88,9 +88,84 @@
   @include variables.squish-pressable;
 }
 
-.hp-picture img {
-  border-radius: 50%;
+/* Tilt card effect (profile picture only for now).
+   Matches the provided 3D tilt + moving glow demo, adapted to circular pfp. */
+.profile-tilt {
+  perspective: 1500px;
+}
+
+/* Generic tilt controller base styles.
+   Use on a tilt surface (the element with data-controller="tilt").
+   - When controller is on an <img>, it auto-wraps in .tilt-card and injects .tilt-glow.
+   - When controller is on your own element (e.g. .profile-card), it uses that as the card
+     and ensures a direct child .glow (or .tilt-glow).
+   The ancestor must provide perspective (e.g. via a wrapper or data-tilt-perspective-value). */
+.tilt-card {
+  position: relative;
+  overflow: hidden;
+  transition-duration: 300ms;
+  transition-property: transform, box-shadow;
+  transition-timing-function: ease-out;
+  transform-style: preserve-3d;
+  will-change: transform;
+  /* Provide explicit width/height (or let content size it). */
+}
+
+.tilt-card:hover,
+.tilt-card[data-super-hover-active] {
+  /* Subtle lift on hover (native or via always-running super-hover).
+     Override per usage as needed. */
+  box-shadow: 0 5px 20px 5px #00000044;
+}
+
+.tilt-card .glow,
+.tilt-card .tilt-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 50% -20%, #ffffff22, #0000000f);
+}
+
+/* Profile picture specific tilt card (square, no corner rounding). */
+.profile-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  overflow: hidden;
+  transition-duration: 300ms;
+  transition-property: transform, box-shadow;
+  transition-timing-function: ease-out;
+  transform: none;
+  box-shadow: 0 1px 5px #00000099;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.profile-card:hover,
+.profile-card[data-super-hover-active] {
+  transition-duration: 150ms;
+  box-shadow: 0 5px 20px 5px #00000044;
+}
+
+.profile-card img {
+  border-radius: 0;
   display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.profile-card .glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-image: radial-gradient(circle at 50% -20%, #ffffff22, #0000000f);
+  /* Glow is a visual overlay only; never intercept pointer events. */
+  pointer-events: none;
 }
 
 .moon-overlay {
@@ -137,9 +212,8 @@
 }
 
 .hp-proj-div {
-  @apply p-4 rounded-lg border border-neutral;
+  @apply p-4 border border-neutral;
   @apply w-full;
-
   box-shadow: variables.$shadow-sm;
   transition: transform 0.3s ease-in-out;
   background-color: variables.$background-colour;
@@ -168,9 +242,28 @@
 .hp-image-grid-container {
   @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4;
 
-  content-visibility: auto;
-  contain-intrinsic-size: auto 500px;
+  /* Avoid content-visibility paint containment so tilted photos can overflow. */
+  overflow: visible;
 }
+
+/* Homepage "best photos" grid tilt wrappers (photo-tilt).
+   Match profile picture pattern: perspective + overflow visible on the wrapper,
+   squish neutralization, and ensure tilt surfaces can pop out. */
+.hp-image-grid-container .image-container.photo-tilt {
+  overflow: visible;
+  /* perspective is also set in images.scss for .photo-tilt; keep in sync */
+  perspective: 1500px;
+}
+
+/* Neutralize squish-pressable on photo-tilt containers (exact mirror of profile setup).
+   Include super-hover active state on wrapper and when a child tilt surface is active. */
+.hp-image-grid-container .image-container.photo-tilt:hover,
+.hp-image-grid-container .image-container.photo-tilt:active,
+.hp-image-grid-container .image-container.photo-tilt[data-super-hover-active],
+.hp-image-grid-container .image-container.photo-tilt:has([data-super-hover-active]) {
+  transform: none !important;
+  z-index: 20;
+} 
 
 /* Project Carousel Styles */
 .hp-project-carousel {
@@ -181,7 +274,7 @@
 }
 
 .carousel-container {
-  @apply border border-neutral rounded-lg overflow-hidden bg-background;
+  @apply border border-neutral overflow-hidden bg-background;
 
   box-shadow: variables.$shadow-panel;
 
@@ -206,7 +299,7 @@
 }
 
 .carousel-btn {
-  @apply w-12 h-12 rounded-full bg-accent/80 text-text border-none cursor-pointer;
+  @apply w-12 h-12 bg-accent/80 text-text border-none cursor-pointer;
   @apply flex items-center justify-center text-2xl font-bold;
 
   transition: transform 0.2s ease-in-out;
@@ -237,7 +330,7 @@
 }
 
 .indicator {
-  @apply w-3 h-3 rounded-full bg-neutral border-none cursor-pointer;
+  @apply w-3 h-3 bg-neutral border-none cursor-pointer;
 
   transition: transform 0.2s ease-in-out;
 
@@ -313,7 +406,8 @@
   transition: transform 0.2s ease-in-out;
 
   @apply flex items-center justify-center;
-  @apply w-12 h-12 rounded-full;
+
+  @apply w-12 h-12;
   @apply bg-white/30;
   @apply border border-white/30;
 
@@ -321,7 +415,6 @@
 
   @include variables.squish-pressable {
     @apply bg-white/30;
-
     text-decoration: none;
   }
 }
@@ -477,7 +570,7 @@
     display: flex;
     width: 100%;
     height: 6px;
-    border-radius: 3px;
+    border-radius: 0;
     overflow: hidden;
     background: #2d2a2a;
   }

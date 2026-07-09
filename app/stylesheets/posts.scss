@@ -26,12 +26,12 @@
 .posts-section {
   @apply grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4;
 
-  content-visibility: auto;
-  contain-intrinsic-size: auto 500px;
+  /* No content-visibility here: it paint-contains children and clips 3D tilt scale/lift. */
+  overflow: visible;
 }
 
 .posts-card {
-  @apply p-4 rounded-lg border border-neutral;
+  @apply p-4 border border-neutral;
 
   box-shadow: variables.$shadow-sm;
   transition: transform 0.3s ease-in-out;
@@ -40,6 +40,68 @@
   z-index: 1;
 
   @include variables.squish-pressable;
+}
+
+/* Blog post cards: same 3D tilt + glow structure as profile / photo grid.
+   .posts-card-tilt > a.posts-card[data-controller="tilt"][data-super-hover] > (content + .glow) */
+.posts-card-tilt {
+  position: relative;
+  overflow: visible;
+  perspective: 1500px;
+  z-index: 1;
+}
+
+/* Kill squish on the wrapper so tilt owns transform (mirror of photo-tilt / profile-tilt).
+   Lift stacking so the scaled card paints above grid siblings. */
+.posts-card-tilt:hover,
+.posts-card-tilt:active,
+.posts-card-tilt[data-super-hover-active],
+.posts-card-tilt:has([data-super-hover-active]) {
+  transform: none !important;
+  z-index: 20;
+}
+
+.posts-card-tilt .posts-card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 0;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition-duration: 300ms;
+  transition-property: transform, box-shadow;
+  transition-timing-function: ease-out;
+  /* tilt owns hover motion; drop squish-pressable transform on the card itself */
+  transform: none;
+}
+
+.posts-card-tilt .posts-card:hover,
+.posts-card-tilt .posts-card[data-super-hover-active] {
+  transition-duration: 150ms;
+  box-shadow: 0 5px 20px 5px #00000044;
+}
+
+/* Text lives under the tilt surface; pointer-events none so hit lands on the card */
+.posts-card-tilt .posts-card > .posts-title,
+.posts-card-tilt .posts-card > .posts-content,
+.posts-card-tilt .posts-card > .posts-published-date-card-ver {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.posts-card-tilt .posts-card .glow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-image: radial-gradient(circle at 50% -20%, #ffffff22, #0000000f);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .posts-title {
@@ -72,7 +134,7 @@
   background-image: image-set(url("~/images/paper.avif") type("image/avif"));
   background-repeat: repeat-y;
   background-size: 100% auto;
-  border-radius: 10px;
+  border-radius: 0;
   box-shadow:
     0 4px 8px rgb(0 0 0 / 20%),
     0 6px 20px rgb(0 0 0 / 10%);
@@ -94,7 +156,7 @@
   height: 100%;
   background-repeat: repeat-y;
   background-size: 100% auto;
-  border-radius: 10px;
+  border-radius: 0;
   z-index: -1;
 }
 

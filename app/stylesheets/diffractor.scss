@@ -32,7 +32,7 @@
   }
 
   input[type="number"] {
-    @apply px-3 py-2 rounded-md;
+@apply px-3 py-2;
 
     background-color: variables.$background-colour;
     border: 1px solid variables.$neutral;
@@ -46,7 +46,7 @@
 }
 
 .diffractor-button {
-  @apply px-4 py-2 rounded-md transition-colors duration-200;
+@apply px-4 py-2 transition-colors duration-200;
 
   background-color: variables.$accent;
   color: variables.$text;

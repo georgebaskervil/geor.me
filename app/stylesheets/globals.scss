@@ -171,18 +171,16 @@ html.geor-me-extension-footer .crt-scroll-content {
   display: none !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  ::view-transition-old(page),
-  ::view-transition-new(page) {
-    animation-duration: 0.22s;
-    animation-timing-function: ease-out;
-  }
-
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 0.18s;
-  }
+::view-transition-old(page),
+::view-transition-new(page) {
+  animation-duration: 0.22s;
+  animation-timing-function: ease-out;
 }
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.18s;
+} 
 
 .dl-link-box {
   @apply bottom-0 text-left text-mamba text-sm mt-0 mb-3;
@@ -234,7 +232,7 @@ html.geor-me-extension-footer .crt-scroll-content {
   border-top: 1px solid variables.$neutral;
   border-left: 1px solid variables.$neutral;
   border-right: 1px solid variables.$neutral;
-  border-radius: 0.5rem 0.5rem 0 0;
+  border-radius: 0;
   overflow: hidden;
   z-index: 3;
   transition: height 0.3s ease;
@@ -369,11 +367,12 @@ html.geor-me-extension-footer .crt-scroll-content {
   font-optical-sizing: auto;
   user-select: none;
   pointer-events: auto;
+  opacity: 0;
 
   &.window-width-override {
     width: 572px;
   }
-}
+} 
 
 .window98 .title-bar {
   background: variables.$dialog-blue;
@@ -458,7 +457,7 @@ html.geor-me-extension-footer .crt-scroll-content {
   z-index: 3;
   background: variables.$background-colour;
   padding: 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: 0;
   border: 1px solid rgb(255 255 255 / 10%);
   box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
   transform: rotate(5deg);
@@ -472,8 +471,8 @@ html.geor-me-extension-footer .crt-scroll-content {
 .meme-video {
   pointer-events: none;
 
-  @apply rounded-lg;
-}
+  /* no corner rounding */
+} 
 
 .distraction-button {
   @apply hover:underline;

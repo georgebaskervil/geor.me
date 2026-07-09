@@ -2,36 +2,49 @@
 
 <section class="posts-section">
   <% @all_posts.each do |article| %>
-    <% if article[:format] == :feed %>
-      <%= link_to article[:external_url], class: "posts-card", target: "_blank", rel: "noopener" do %>
-        <h2 class="posts-title"><%= article[:title] %></h2>
-        <p class="posts-content"><%= article[:description] %></p>
-        <p class="posts-published-date-card-ver">Published on the
-          <%= article[:published_at].day.ordinalize %>
-          of
-          <%= article[:published_at].strftime("%B") %>
-          <%= article[:published_at].strftime("%Y") %></p>
+    <div class="posts-card-tilt">
+      <% if article[:format] == :feed %>
+        <%= link_to article[:external_url],
+              class: "posts-card",
+              target: "_blank",
+              rel: "noopener",
+              data: { controller: "tilt", super_hover: true } do %>
+          <h2 class="posts-title"><%= article[:title] %></h2>
+          <p class="posts-content"><%= article[:description] %></p>
+          <p class="posts-published-date-card-ver">Published on the
+            <%= article[:published_at].day.ordinalize %>
+            of
+            <%= article[:published_at].strftime("%B") %>
+            <%= article[:published_at].strftime("%Y") %></p>
+          <div class="glow"></div>
+        <% end %>
+      <% elsif article[:format] == :pdf %>
+        <%= link_to post_path(article[:slug]),
+              class: "posts-card",
+              data: { turbo: false, controller: "tilt", super_hover: true } do %>
+          <h2 class="posts-title"><%= article[:title] %></h2>
+          <p class="posts-content"><%= article[:description] %></p>
+          <p class="posts-published-date-card-ver">Published on the
+            <%= article[:published_at].day.ordinalize %>
+            of
+            <%= article[:published_at].strftime("%B") %>
+            <%= article[:published_at].strftime("%Y") %></p>
+          <div class="glow"></div>
+        <% end %>
+      <% else %>
+        <%= link_to post_path(article[:slug]),
+              class: "posts-card",
+              data: { controller: "tilt", super_hover: true } do %>
+          <h2 class="posts-title"><%= article[:title] %></h2>
+          <p class="posts-content"><%= article[:description] %></p>
+          <p class="posts-published-date-card-ver">Published on the
+            <%= article[:published_at].day.ordinalize %>
+            of
+            <%= article[:published_at].strftime("%B") %>
+            <%= article[:published_at].strftime("%Y") %></p>
+          <div class="glow"></div>
+        <% end %>
       <% end %>
-    <% elsif article[:format] == :pdf %>
-      <%= link_to post_path(article[:slug]), class: "posts-card", data: { turbo: false } do %>
-        <h2 class="posts-title"><%= article[:title] %></h2>
-        <p class="posts-content"><%= article[:description] %></p>
-        <p class="posts-published-date-card-ver">Published on the
-          <%= article[:published_at].day.ordinalize %>
-          of
-          <%= article[:published_at].strftime("%B") %>
-          <%= article[:published_at].strftime("%Y") %></p>
-      <% end %>
-    <% else %>
-      <%= link_to post_path(article[:slug]), class: "posts-card" do %>
-        <h2 class="posts-title"><%= article[:title] %></h2>
-        <p class="posts-content"><%= article[:description] %></p>
-        <p class="posts-published-date-card-ver">Published on the
-          <%= article[:published_at].day.ordinalize %>
-          of
-          <%= article[:published_at].strftime("%B") %>
-          <%= article[:published_at].strftime("%Y") %></p>
-      <% end %>
-    <% end %>
+    </div>
   <% end %>
 </section>

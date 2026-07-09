@@ -15,7 +15,7 @@
   border: 1px solid variables.$neutral;
   transition: all 0.3s ease;
 
-  @apply rounded-lg;
+/* no corner rounding */
 }
 
 .cipher-output {
@@ -28,7 +28,7 @@
   border: 1px solid variables.$neutral;
   transition: all 0.3s ease;
 
-  @apply rounded-lg;
+/* no corner rounding */
 
   white-space: pre-wrap;
   overflow-wrap: break-word;
@@ -55,7 +55,7 @@
   cursor: pointer;
   background-color: #1a1b26;
 
-  @apply rounded-lg;
+/* no corner rounding */
 
   &.mapped {
     color: variables.$accent;
@@ -93,7 +93,7 @@
   transition: all 0.3s ease;
   cursor: pointer;
 
-  @apply rounded-lg;
+/* no corner rounding */
 
   @include variables.squish-pressable {
     color: variables.$accent;

@@ -201,6 +201,9 @@ export function createRollupOutputConfig() {
       if (id.includes("node_modules/emulators")) {
         return "emulators";
       }
+      if (id.includes("node_modules/gsap")) {
+        return "gsap";
+      }
       if (
         id.includes("node_modules/react/") ||
         id.includes("node_modules/react-dom/") ||
@@ -419,7 +422,13 @@ export function createBabelOptions(pathModule) {
     // Use include/exclude instead of deprecated filter pattern
     include: /\.(js|coffee)$/,
     exclude: [
-      /node_modules\/(?:@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|@vue\/|vue\/|three|react|react-dom|scheduler)/,
+      // Never Babel-transform Vite's prebundled deps (.vite/deps/*). Those paths do not
+      // match package-name excludes under node_modules/<pkg>, so closure-elimination /
+      // faster.js would still rewrite them and break fragile runtimes (e.g. GSAP harness:
+      // _harnessPlugins[i].targetTest is not a function).
+      /node_modules\/\.vite\//,
+      // Source packages that must stay untransformed (same carve-out as three/vue/react).
+      /node_modules\/(?:@hotwired\/stimulus|@hotwired\/turbo|@huggingface\/jinja|onnxruntime-web|lenis|emulators|@vue\/|vue\/|three|gsap|react|react-dom|scheduler)/,
       /textcomplete\.min\.js$/,
       /ort-web\.min\.js$/,
     ],

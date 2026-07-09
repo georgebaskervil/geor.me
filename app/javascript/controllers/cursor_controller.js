@@ -4,10 +4,6 @@ import CursorFxWrapper from "../components/CursorFxWrapper.vue";
 
 export default class extends Controller {
   connect() {
-    if (globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
     this.app = createApp(CursorFxWrapper);
     this.app.mount(this.element);
   }

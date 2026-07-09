@@ -8,22 +8,41 @@
   >GitHub repo</a>
 </p>
 
-<article class="images-container">
+<article class="images-container" data-controller="images-lightbox">
+  <%# Lightbox image manifest for the Stimulus controller (preview AVIF + high-res lossless JPG) %>
+  <script id="lightbox-images-data" type="application/json">
+    <%-
+      images_json = @images.map do |img|
+        base = img
+        avif = "#{base}.avif"
+        jpg  = "#{base.sub(/^resized_/, "")}.JPG"
+        preview = vite_asset_path("~/photos/AVIFs/#{avif}")
+        highres = vite_asset_path("~/losslessphotos/#{jpg}")
+        { preview: preview, highres: highres }
+      end
+    -%>
+    <%= raw images_json.to_json %>
+  </script>
+
   <section class="images-grid">
     <% @images.each_with_index do |img, index| %>
-      <div class="image-container">
+      <div class="image-container photo-tilt">
         <%# `img` is already the basename without extension %>
         <% base_name = img %>
         <% avif_name = "#{base_name}.avif" %>
         <% jpg_name = "#{base_name.sub(/^resized_/, "")}.JPG" %>
-        <a href="<%= vite_asset_path("~/losslessphotos/#{jpg_name}") %>" target="_self">
+        <%= link_to vite_asset_path("~/losslessphotos/#{jpg_name}"),
+              class: "tilt-card",
+              target: "_self",
+              data: { controller: "tilt", super_hover: true, index: index } do %>
           <%= image_tag(
             vite_asset_path("~/photos/AVIFs/#{avif_name}"),
             loading: "lazy",
             decoding: "async",
-            fetchpriority: "low",
+            fetchpriority: "low"
           ) %>
-        </a>
+          <div class="glow"></div>
+        <% end %>
       </div>
     <% end %>
   </section>

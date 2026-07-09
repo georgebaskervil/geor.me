@@ -2,10 +2,39 @@
 
 .hp-image-container {
   overflow: hidden;
-  border-radius: 50%;
+  border-radius: 0;
   transition: transform 0.3s ease-in-out;
   opacity: 1;
   z-index: 1;
 
   @include variables.squish-pressable;
-} 
+}
+
+/* Tilt wrapper (homepage pfp only for now).
+   Reserve the layout box and allow the inner 3D card to pop without clipping.
+   Disable squish so the tilt JS fully owns hover/active transforms. */
+.hp-image-container.profile-tilt {
+  overflow: visible;
+  border-radius: 0;
+  width: 498px;
+  height: 498px;
+  flex-shrink: 0;
+}
+
+/* Disable any squish/scale transforms from the mixin or other rules while
+   super-hover (or native hover) is active on the tilt profile picture.
+   The 3D tilt JS fully owns the transform while the pointer is over it. */
+.hp-image-container.profile-tilt:hover,
+.hp-image-container.profile-tilt:active,
+.hp-image-container.profile-tilt[data-super-hover-active],
+.hp-image-container.profile-tilt:has([data-super-hover-active]) {
+  transform: none !important;
+  z-index: 20;
+}
+
+.hp-picture.profile-tilt:hover,
+.hp-picture.profile-tilt:active,
+.hp-picture.profile-tilt[data-super-hover-active],
+.hp-picture.profile-tilt:has([data-super-hover-active]) {
+  transform: none !important;
+}
