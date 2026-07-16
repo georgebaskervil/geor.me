@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  compliance_doc = "https://compliance.geor.me/books/georme-compliance-documentation"
+
   get "/robustext", to: "robustext#index"
   get "/spaceshooter", to: "spaceshooter#index"
   get "/taskstack", to: "taskstack#index"
@@ -52,21 +54,21 @@ Rails.application.routes.draw do
   get "/streaming/taskstack_video", to: "videos#taskstack", defaults: { format: :m3u8 }
   get "/streaming/home_control_panel_video", to: "videos#home_control_panel", defaults: { format: :m3u8 }
   get "/neudec", to: "neudec#index"
-  get "/doomdisclaimer", to: "doomdisclaimer#index"
+  get "/doomdisclaimer", to: redirect("#{compliance_doc}/page/doom-shareware-useage-disclaimer", status: 301)
   get "/posts", to: "posts#index"
   get "/posts/:id", to: "posts#show", as: :post
   # Serve original files for posts (e.g., PDFs)
   get "/posts/:id/file", to: "posts#file", as: :post_file
   get "/images", to: "images#index"
   get "/projects", to: "projects#index"
-  get "/legal", to: "legal#index"
+  get "/legal", to: redirect(compliance_doc, status: 301)
   get "/miscellaneous", to: "miscellaneous#index"
   get "/waveform", to: "waveform#index"
-  get "/privacy", to: "privacy#index"
-  get "/licensing", to: "licensing#index"
-  get "/credits", to: "credits#index"
+  get "/privacy", to: redirect("#{compliance_doc}/page/privacy-policy", status: 301)
+  get "/licensing", to: redirect("#{compliance_doc}/page/licensing", status: 301)
+  get "/credits", to: redirect("#{compliance_doc}/page/site-credits-page", status: 301)
   get "/data", to: "data#index"
-  get "/dmca", to: "dmca#index"
+  get "/dmca", to: redirect("#{compliance_doc}/page/dmca-policy", status: 301)
 
   get "/proxy/georlist", to: "proxy#georlist"
   get "/vite/*path", to: "vite_assets#show", format: false, constraints: { path: /.+/ }

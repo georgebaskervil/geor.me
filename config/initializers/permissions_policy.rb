@@ -6,10 +6,12 @@
 # information see: https://developers.google.com/web/updates/2018/06/feature-policy
 
 Rails.application.config.permissions_policy do |policy|
-  policy.camera      :none
-  policy.gyroscope   :none
-  policy.microphone  :none
-  policy.usb         :none
-  policy.fullscreen  :none
-  policy.payment     :none
+  # Block only APIs this site and its embeds are unlikely to need.
+  policy.payment         :none
+  policy.usb             :none
+  policy.hid             :none
+  policy.serial          :none
+  policy.midi            :none
+  policy.display_capture :none
+  policy.sync_xhr        :none
 end

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>geor.me project footer embed</title>
+    <!-- Cloudflare Fonts rewrites Google Fonts to same-origin on geor.me -->
+    <link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/geor-me-project-footer.css">
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: #161820;
+        color: #ccc;
+        font-family: system-ui, sans-serif;
+        padding: 2rem;
+      }
+
+      pre {
+        background: #0e0e0e;
+        border: 1px solid #333;
+        padding: 1rem;
+        overflow-x: auto;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      h1 {
+        font-size: 1.25rem;
+        margin-top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>geor.me project footer</h1>
+    <p>
+      Fixed glass bar for sub-projects and embeds. Paste the snippet below before
+      <code>&lt;/body&gt;</code> on any page.
+    </p>
+
+    <pre id="embed-snippet"></pre>
+
+    <!-- Live preview (fixed bar) -->
+    <div
+      class="geor-me-project-footer geor-me-project-footer--fixed"
+      role="contentinfo"
+    >
+      <div class="geor-me-project-footer__panel">
+        <div class="geor-me-project-footer__bar">
+          <span class="geor-me-project-footer__label">
+            A <strong>geor.me</strong> project
+          </span>
+          <span class="geor-me-project-footer__links">
+            <a href="https://compliance.geor.me/books/georme-compliance-documentation" class="geor-me-project-footer__link" rel="noopener">Legal</a>
+            <span class="geor-me-project-footer__sep" aria-hidden="true">·</span>
+            <a href="https://compliance.geor.me/books/georme-compliance-documentation/page/privacy-policy" class="geor-me-project-footer__link" rel="noopener">Privacy</a>
+            <span class="geor-me-project-footer__sep" aria-hidden="true">·</span>
+            <a href="https://compliance.geor.me/books/georme-compliance-documentation/page/licensing" class="geor-me-project-footer__link" rel="noopener">Licensing</a>
+            <span class="geor-me-project-footer__sep" aria-hidden="true">·</span>
+            <a href="https://compliance.geor.me/books/georme-compliance-documentation/page/dmca-policy" class="geor-me-project-footer__link" rel="noopener">DMCA</a>
+            <span class="geor-me-project-footer__sep" aria-hidden="true">·</span>
+            <a href="https://compliance.geor.me/books/georme-compliance-documentation/page/site-credits-page" class="geor-me-project-footer__link" rel="noopener">Credits</a>
+            <span class="geor-me-project-footer__sep" aria-hidden="true">·</span>
+            <a href="https://compliance.geor.me/books/georme-compliance-documentation/page/doom-shareware-useage-disclaimer" class="geor-me-project-footer__link" rel="noopener">Doom</a>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const snippet = `<!-- geor.me project footer -->
+<link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://geor.me/geor-me-project-footer.css">
+<div class="geor-me-project-footer geor-me-project-footer--fixed" role="contentinfo">
+  <div class="geor-me-project-footer__panel">
+    <div class="geor-me-project-footer__bar">
+      <span class="geor-me-project-footer__label">A <strong>geor.me</strong> project</span>
+      <span class="geor-me-project-footer__links">
+        <a href="https://compliance.geor.me/books/georme-compliance-documentation" class="geor-me-project-footer__link" rel="noopener">Legal</a>
+        <span class="geor-me-project-footer__sep" aria-hidden="true">·</span>
+        <a href="https://compliance.geor.me/books/georme-compliance-documentation/page/privacy-policy" class="geor-me-project-footer__link" rel="noopener">Privacy</a>
+        <span class="geor-me-project-footer__sep" aria-hidden="true">·</span>
+        <a href="https://compliance.geor.me/books/georme-compliance-documentation/page/licensing" class="geor-me-project-footer__link" rel="noopener">Licensing</a>
+        <span class="geor-me-project-footer__sep" aria-hidden="true">·</span>
+        <a href="https://compliance.geor.me/books/georme-compliance-documentation/page/dmca-policy" class="geor-me-project-footer__link" rel="noopener">DMCA</a>
+        <span class="geor-me-project-footer__sep" aria-hidden="true">·</span>
+        <a href="https://compliance.geor.me/books/georme-compliance-documentation/page/site-credits-page" class="geor-me-project-footer__link" rel="noopener">Credits</a>
+        <span class="geor-me-project-footer__sep" aria-hidden="true">·</span>
+        <a href="https://compliance.geor.me/books/georme-compliance-documentation/page/doom-shareware-useage-disclaimer" class="geor-me-project-footer__link" rel="noopener">Doom</a>
+      </span>
+    </div>
+  </div>
+</div>`;
+
+      document.getElementById("embed-snippet").textContent = snippet;
+    </script>
+  </body>
+</html>

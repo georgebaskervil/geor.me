@@ -121,31 +121,23 @@ body {
   will-change: transform;
 }
 
-.geor-me-extension-footer-slot {
+// Zaraz injects #geor-me-project-footer onto body; CRT SVG is position:fixed
+// full-viewport so in-flow body siblings sit mid-page. Pin to viewport bottom.
+// (Handoff JS also sets these with !important after inject for order races.)
+#geor-me-project-footer {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
+  top: auto;
   z-index: 10000;
-  pointer-events: none;
-  opacity: 0;
-  transform: translateY(100%);
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin-top: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-html.lenis-at-end .geor-me-extension-footer-slot {
-  pointer-events: auto;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-html.geor-me-extension-footer .crt-scroll-content {
-  padding-bottom: 3.5rem;
+html.geor-me-project-footer-pinned .crt-scroll-content {
+  padding-bottom: 4.5rem;
 }
 
 .turbo-loading {

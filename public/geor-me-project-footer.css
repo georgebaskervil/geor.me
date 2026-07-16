@@ -1,0 +1,76 @@
+/* geor.me project footer — self-contained styles
+ *
+ * Pair with Nabla via Google Fonts (Cloudflare Fonts rewrites this on geor.me):
+ *   <link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
+ *
+ * Or on geor.me properties, link this file:
+ *   <link rel="stylesheet" href="https://geor.me/geor-me-project-footer.css">
+ */
+
+.geor-me-project-footer {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: Nabla, system-ui, sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "EDPT" 100, "EHLT" 12;
+}
+
+.geor-me-project-footer--fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+}
+
+.geor-me-project-footer__panel {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: none;
+}
+
+.geor-me-project-footer__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: #999;
+}
+
+.geor-me-project-footer__label strong {
+  color: #ccc;
+  font-weight: 600;
+}
+
+.geor-me-project-footer__links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.geor-me-project-footer__link {
+  color: #aaa;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.geor-me-project-footer__link:hover {
+  color: #ccc;
+  text-decoration: underline;
+}
+
+.geor-me-project-footer__sep {
+  color: #444;
+}

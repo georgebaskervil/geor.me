@@ -1,4 +1,4 @@
-import "./geor_me_extension_handoff";
+import "./geor_me_project_footer_handoff";
 import * as Sentry from "@sentry/browser";
 import { shouldPerformTransition } from "./turbo_view_transitions";
 

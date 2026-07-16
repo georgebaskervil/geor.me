@@ -38,6 +38,13 @@
     <%= action_cable_meta_tag %>
     <%= csp_meta_tag %>
     <%= vite_client_tag %>
+    <% unless Rails.env.development? %>
+      <script
+        defer
+        src="https://cloud.umami.is/script.js"
+        data-website-id="77d51e44-cbc3-43da-8dd8-f4e21d38c495"
+      ></script>
+    <% end %>
   </head>
   <body>
     <div class="scanlines"></div>
@@ -162,42 +169,5 @@
         </foreignobject>
       </g>
     </svg>
-    <div
-      id="geor-me-extension-footer-slot"
-      class="geor-me-extension-footer-slot"
-      aria-hidden="true"
-    >
-      <div
-        style="width:98%;background:#1a1a1a;box-sizing:border-box;border-top-right-radius: 10px;border-top-left-radius: 10px;"
-      >
-        <div
-          style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 16px;"
-        >
-          <span
-            style="font-family:'Waiting for the Sunrise',cursive;font-size:12px;color:#999;" 
-          >A
-            <strong style="color:#ccc;font-weight:600;">geor.me</strong>
-            project</span>
-          <span
-            style="display:flex;align-items:center;gap:12px;font-family:'Waiting for the Sunrise',cursive;font-size:12px;" 
-          >
-            <a
-              href="https://geor.me/licensing"
-              style="color:#aaa;text-decoration:none;cursor:pointer;font-family:'Waiting for the Sunrise',cursive;font-size:12px;" 
-            >Licensing</a>
-            <span style="color:#444;">·</span>
-            <a
-              href="https://geor.me/privacy"
-              style="color:#aaa;text-decoration:none;cursor:pointer;font-family:'Waiting for the Sunrise',cursive;font-size:12px;" 
-            >Privacy</a>
-            <span style="color:#444;">·</span>
-            <a
-              href="https://geor.me/dmca"
-              style="color:#aaa;text-decoration:none;cursor:pointer;font-family:'Waiting for the Sunrise',cursive;font-size:12px;" 
-            >DMCA</a>
-          </span>
-        </div>
-      </div>
-    </div>
   </body>
 </html>

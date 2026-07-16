@@ -2,6 +2,7 @@ import pixelifyUrl from "../fonts/PixelifySans-latin.woff2?url";
 
 const SITE_FONT = '"Waiting for the Sunrise", cursive';
 const DISTRACTION_FONT = '"Pixelify Sans", sans-serif';
+
 function siteFontTargets() {
   return [
     document.documentElement,
