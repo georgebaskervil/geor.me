@@ -4,6 +4,12 @@ import CursorFxWrapper from "../components/CursorFxWrapper.vue";
 
 export default class extends Controller {
   connect() {
+    if (globalThis.__georCapabilities?.customCursor === false) {
+      this.element.hidden = true;
+      this.element.setAttribute("aria-hidden", "true");
+      return;
+    }
+
     this.app = createApp(CursorFxWrapper);
     this.app.mount(this.element);
   }

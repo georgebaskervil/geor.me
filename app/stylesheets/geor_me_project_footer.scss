@@ -1,10 +1,4 @@
-/* geor.me project footer — self-contained styles for external embeds.
- * On geor.me itself the footer is first-party (layout partial + SCSS).
- *
- * Pair with Nabla (self-hosted on geor.me, or Google Fonts elsewhere):
- *   <link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
- */
-
+// First-party geor.me project footer (also mirrored by Zaraz on other hosts).
 .geor-me-project-footer {
   width: 100%;
   box-sizing: border-box;
@@ -16,16 +10,6 @@
   margin-top: 3rem;
   color: #e5e5e5;
   background-color: #111111;
-}
-
-/* Optional fixed bar on non-CRT hosts only */
-.geor-me-project-footer--fixed {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10000;
-  margin-top: 0;
 }
 
 .geor-me-project-footer__panel {
@@ -44,8 +28,8 @@
 }
 
 .geor-me-project-footer__label strong {
-  color: #ffffff;
   font-weight: 600;
+  color: #ffffff;
 }
 
 .geor-me-project-footer__links {
@@ -56,14 +40,14 @@
 }
 
 .geor-me-project-footer__link {
-  color: #e5e5e5;
   text-decoration: none;
   cursor: pointer;
-}
+  color: #e5e5e5;
 
-.geor-me-project-footer__link:hover {
-  color: #ffffff;
-  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+    color: #ffffff;
+  }
 }
 
 .geor-me-project-footer__sep {

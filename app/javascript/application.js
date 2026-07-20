@@ -1,9 +1,12 @@
+// Capability gate first — sets flags/classes before Stimulus controllers boot.
+import "./capabilities";
 import "./geor_me_project_footer_handoff";
 import * as Sentry from "@sentry/browser";
 import { shouldPerformTransition } from "./turbo_view_transitions";
 
 // Core CSS is loaded via vite_stylesheet_tag in the layout (not bundled here).
 import "./loadFonts";
+import "./swetrix_client";
 
 // Blur overlay during navigation when View Transitions API is unavailable.
 document.addEventListener("turbo:visit", () => {

@@ -12,6 +12,28 @@ export default class extends Controller {
     this.displacement = document.querySelector("#crt-displacement");
     this.displacementImage = document.querySelector("#crt-displacement-image");
     this.foreignObject = document.querySelector("#crt-foreign-object");
+
+    // Capability gate: skip barrel warp when filters / reduced-motion demand it.
+    this.barrelEnabled = globalThis.__georCapabilities?.crtBarrel !== false;
+    if (!this.barrelEnabled) {
+      document.querySelectorAll("svg > g").forEach((g) => {
+        const f = g.getAttribute("filter") || "";
+        if (f.includes("barrel") || f.includes("#barrel")) {
+          g.removeAttribute("filter");
+        }
+      });
+      this.syncForeignObjectDimensions();
+      this.onResize = () => {
+        if (this.resizeFrame) return;
+        this.resizeFrame = requestAnimationFrame(() => {
+          this.resizeFrame = undefined;
+          this.syncForeignObjectDimensions();
+        });
+      };
+      window.addEventListener("resize", this.onResize);
+      return;
+    }
+
     this.syncForeignObjectDimensions();
     this.preloadDisplacementMap();
     this.updateScale();

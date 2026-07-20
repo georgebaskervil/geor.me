@@ -1,7 +1,15 @@
 import pixelifyUrl from "../fonts/PixelifySans-latin.woff2?url";
+import nablaUrl from "../fonts/Nabla-latin.woff2?url";
 
-const SITE_FONT = '"Waiting for the Sunrise", cursive';
-const DISTRACTION_FONT = '"Pixelify Sans", sans-serif';
+// Twemoji Color is loaded with emoji unicode-range only; keep it at end of stacks.
+const SITE_FONT =
+  '"Waiting for the Sunrise", cursive, "Twemoji Color", system-ui, sans-serif';
+const DISTRACTION_FONT =
+  '"Pixelify Sans", sans-serif, "Twemoji Color", system-ui';
+const FOOTER_FONT =
+  'Nabla, system-ui, -apple-system, sans-serif, "Twemoji Color"';
+const TWEMOJI_SRC =
+  "https://twemoji.libreverse.io/TwitterColorEmoji-SVGinOT.ttf";
 
 function siteFontTargets() {
   return [
@@ -46,6 +54,13 @@ export function applyDistractionFont() {
   setFontFamily(
     document.querySelectorAll("#distractionmode-scope .floating-window.window98"),
     DISTRACTION_FONT,
+  );
+}
+
+export function applyFooterFont() {
+  setFontFamily(
+    document.querySelectorAll("#geor-me-project-footer, .geor-me-project-footer"),
+    FOOTER_FONT,
   );
 }
 
@@ -104,11 +119,56 @@ export function loadDistractionFont() {
   return distractionFontPromise;
 }
 
+let nablaFontPromise;
+
+export function loadNablaFont() {
+  if (!nablaFontPromise) {
+    nablaFontPromise = loadFontFaces([
+      new FontFace("Nabla", `url(${nablaUrl})`, {
+        weight: "400",
+        style: "normal",
+        display: "swap",
+      }),
+    ])
+      .then(() => {
+        document.documentElement.dataset.nablaFontLoaded = "1";
+        applyFooterFont();
+        return true;
+      })
+      .catch(() => {
+        applyFooterFont();
+        return false;
+      });
+  }
+  return nablaFontPromise;
+}
+
+function injectTwemojiFont() {
+  if (document.getElementById("twemoji-color-font")) return;
+
+  // Only register the face — do not override body { font-family }.
+  // Site/footer stacks already append "Twemoji Color" for emoji codepoints.
+  const style = document.createElement("style");
+  style.id = "twemoji-color-font";
+  style.textContent =
+    "@font-face{" +
+    "font-family:'Twemoji Color';" +
+    `src:url('${TWEMOJI_SRC}') format('truetype');` +
+    "font-display:swap;" +
+    "unicode-range:U+1F000-1FAFF,U+2600-27BF,U+2190-21FF,U+2B00-2BFF,U+FE00-FE0F,U+1F1E6-1F1FF,U+200D,U+20E3,U+E0020-E007F;" +
+    "}";
+  (document.head || document.documentElement).appendChild(style);
+}
+
 loadSiteFont();
+loadNablaFont();
+injectTwemojiFont();
 
 document.addEventListener("turbo:load", () => {
   if (document.documentElement.dataset.siteFontLoaded) applySiteFont();
   if (document.documentElement.dataset.distractionFontLoaded) {
     applyDistractionFont();
   }
+  if (document.documentElement.dataset.nablaFontLoaded) applyFooterFont();
+  injectTwemojiFont();
 });

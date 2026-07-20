@@ -1,0 +1,28 @@
+<%# First-party project footer: always present even when Zaraz/adblock strips injects.
+    Sits inside Lenis content (.crt-scroll-content) after #site-main. %>
+<div
+  id="geor-me-project-footer"
+  class="geor-me-project-footer"
+  role="contentinfo"
+  data-geor-me-footer-mount="lenis-content"
+>
+  <div class="geor-me-project-footer__panel">
+    <div class="geor-me-project-footer__bar">
+      <span class="geor-me-project-footer__label">
+        A <strong>geor.me</strong> project
+      </span>
+      <span class="geor-me-project-footer__links">
+        <% geor_me_project_footer_links.each_with_index do |link, i| %>
+          <% if i.positive? %>
+            <span class="geor-me-project-footer__sep" aria-hidden="true">·</span>
+          <% end %>
+          <a
+            href="<%= link[:href] %>"
+            class="geor-me-project-footer__link"
+            rel="noopener"
+          ><%= link[:label] %></a>
+        <% end %>
+      </span>
+    </div>
+  </div>
+</div>

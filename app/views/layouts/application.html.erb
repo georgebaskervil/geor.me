@@ -21,6 +21,21 @@
     <script>
       // Site bundle owns Lenis on #crt-content; extension userscript skips when this is set.
       window._lenisInitialised = true;
+      // Early capability classes (refined by app/javascript/capabilities.js).
+      (function () {
+        try {
+          var h = document.documentElement;
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            h.classList.add("geor-no-crt-barrel", "geor-no-lenis");
+          }
+          if (
+            window.matchMedia("(pointer: coarse)").matches ||
+            !window.matchMedia("(hover: hover)").matches
+          ) {
+            h.classList.add("geor-no-cursor", "geor-no-oneko");
+          }
+        } catch (e) {}
+      })();
     </script>
     <%= vite_javascript_tag "~/javascript/application.js" %>
     <% crt_displacement_map = same_origin_vite_asset_path("~/images/crt-displacement-map.png") %>
@@ -105,7 +120,6 @@
                           { title: "Images", path: "/images", external: false },
                           { title: "Projects", path: "/projects", external: false },
                           { title: "Miscellaneous", path: "/miscellaneous", external: false },
-                          { title: "Legal", path: "/legal", external: false },
                         ] %>
 
                         <nav class="layout-nav" data-controller="heading-highlight">
@@ -152,11 +166,11 @@
                         <main>
                           <div class="main">
                             <%= yield %>
-                            <%= render "layouts/footer" %>
                           </div>
                         </main>
                       </div>
                     </div>
+                    <%= render "shared/geor_me_project_footer" %>
                   <% end %>
               <% end %>
             </div>

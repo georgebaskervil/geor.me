@@ -1,12 +1,23 @@
-// Zaraz (and similar tools) append the project footer to document.body.
-// The CRT frame is position:fixed full-viewport, so an in-flow body child
-// lands mid-page (or under the SVG). Pin injects to the viewport bottom.
+// First-party footer lives in Lenis content. This only dedupes/reparents
+// legacy Zaraz (or similar) injects that land on document.body outside the CRT.
 (function installGeorMeProjectFooterHandoff() {
   if (globalThis.__georMeProjectFooterHandoffInstalled) return;
   globalThis.__georMeProjectFooterHandoffInstalled = true;
 
   const TAG = "[geor.me/footer]";
   const FOOTER_ID = "geor-me-project-footer";
+
+  function getLenis() {
+    return globalThis.lenis || null;
+  }
+
+  function getLenisContent(lenis) {
+    if (lenis?.content instanceof Element) return lenis.content;
+    return (
+      document.querySelector('.crt-scroll-content[data-controller~="lenis"]') ||
+      document.querySelector(".crt-scroll-content")
+    );
+  }
 
   function isProjectFooter(node) {
     if (node?.nodeType !== Node.ELEMENT_NODE || node.tagName !== "DIV") {
@@ -21,53 +32,104 @@
     );
   }
 
-  function pinFooter(el) {
-    if (!el || el.dataset.georMeFooterPinned === "1") return;
-
-    // Force viewport-bottom placement above CRT (z-index 1) and scanlines (9999).
-    el.style.setProperty("position", "fixed", "important");
-    el.style.setProperty("bottom", "0", "important");
-    el.style.setProperty("left", "0", "important");
-    el.style.setProperty("right", "0", "important");
-    el.style.setProperty("top", "auto", "important");
-    el.style.setProperty("z-index", "10000", "important");
-    el.style.setProperty("margin-top", "0", "important");
-    el.style.setProperty("width", "100%", "important");
-    el.style.setProperty("box-sizing", "border-box", "important");
-
-    if (el.parentElement !== document.body) {
-      document.body.append(el);
-    } else if (el !== document.body.lastElementChild) {
-      document.body.append(el);
+  function clearFixedPinStyles(el) {
+    for (const prop of [
+      "position",
+      "bottom",
+      "left",
+      "right",
+      "top",
+      "z-index",
+      "margin-top",
+      "width",
+    ]) {
+      if (el.style.getPropertyValue(prop)) el.style.removeProperty(prop);
     }
+  }
+
+  function adoptFooter(el) {
+    if (!el) return;
+
+    const lenis = getLenis();
+    const content = getLenisContent(lenis);
 
     if (!el.id) el.id = FOOTER_ID;
-    el.dataset.georMeFooterPinned = "1";
-    document.documentElement.classList.add("geor-me-project-footer-pinned");
-    console.debug(TAG, "pinned Zaraz/project footer to viewport bottom");
+    el.classList?.add("geor-me-project-footer");
+
+    if (!content) {
+      el.dataset.georMeFooterMount = el.dataset.georMeFooterMount || "pending";
+      return;
+    }
+
+    clearFixedPinStyles(el);
+
+    if (el.parentElement !== content) {
+      content.appendChild(el);
+    } else if (el !== content.lastElementChild) {
+      content.appendChild(el);
+    }
+
+    el.dataset.georMeFooterMount = "lenis-content";
+    el.dataset.georMeFooterPinned = "0";
+    document.documentElement.classList.remove("geor-me-project-footer-pinned");
+
+    try {
+      lenis?.resize?.();
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function allFooterCandidates() {
+    const found = [];
+    const seen = new Set();
+    const push = (node) => {
+      if (!node || seen.has(node) || !isProjectFooter(node)) return;
+      seen.add(node);
+      found.push(node);
+    };
+
+    push(document.getElementById(FOOTER_ID));
+    document.querySelectorAll(".geor-me-project-footer").forEach(push);
+    // Body-level injects without the class (older Zaraz HTML)
+    for (const node of document.body?.children || []) push(node);
+
+    return found;
   }
 
   function adoptInjectedFooters() {
     if (!document.body) return;
 
-    const byId = document.getElementById(FOOTER_ID);
-    if (byId) {
-      pinFooter(byId);
-      return;
+    const candidates = allFooterCandidates();
+    if (candidates.length === 0) return;
+
+    const content = getLenisContent(getLenis());
+    // Prefer first-party (already in Lenis content / server-rendered).
+    const keep =
+      candidates.find((el) => content?.contains(el)) ||
+      candidates.find((el) => el.id === FOOTER_ID) ||
+      candidates[0];
+
+    for (const el of candidates) {
+      if (el === keep) continue;
+      el.remove();
+      console.debug(TAG, "removed duplicate project footer");
     }
 
-    for (const node of document.body.children) {
-      if (isProjectFooter(node)) {
-        pinFooter(node);
-        return;
-      }
-    }
+    adoptFooter(keep);
   }
 
   function watch() {
     adoptInjectedFooters();
     const observer = new MutationObserver(adoptInjectedFooters);
-    observer.observe(document.body, { childList: true });
+    observer.observe(document.body, { childList: true, subtree: true });
+    document.addEventListener("turbo:load", adoptInjectedFooters);
+
+    const started = Date.now();
+    const poll = setInterval(() => {
+      adoptInjectedFooters();
+      if (getLenis() || Date.now() - started > 5000) clearInterval(poll);
+    }, 100);
   }
 
   if (document.body) {

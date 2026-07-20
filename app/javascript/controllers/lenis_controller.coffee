@@ -52,6 +52,14 @@ export default class extends Controller
     return unless wrapper? and content?
     return if @lenis
 
+    # Capability gate: native overflow scroll when Lenis is unsupported / disabled.
+    if globalThis.__georCapabilities?.lenis is false
+      window._lenisInitialised = true
+      wrapper.style.overflow = "auto"
+      wrapper.style.overflowX = "hidden"
+      document.documentElement.classList.add("geor-no-lenis")
+      return
+
     savedScroll = wrapper.scrollTop or 0
 
     @lenis = new Lenis

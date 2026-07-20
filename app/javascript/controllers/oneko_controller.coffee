@@ -4,6 +4,11 @@ ONEKO_STORAGE_KEY = "oneko-state"
 
 export default class extends Controller
   connect: =>
+    if globalThis.__georCapabilities?.oneko is false
+      @element.hidden = true
+      @element.classList.add("oneko-hidden")
+      return
+
     @running = false
     @requestId = undefined
     @staticIdleTimer = undefined

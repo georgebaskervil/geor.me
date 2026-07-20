@@ -121,23 +121,23 @@ body {
   will-change: transform;
 }
 
-// Zaraz injects #geor-me-project-footer onto body; CRT SVG is position:fixed
-// full-viewport so in-flow body siblings sit mid-page. Pin to viewport bottom.
-// (Handoff JS also sets these with !important after inject for order races.)
-#geor-me-project-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: auto;
-  z-index: 10000;
-  margin-top: 0;
-  width: 100%;
-  box-sizing: border-box;
+// Project footer is first-party in .crt-scroll-content (see shared partial).
+// Handoff only dedupes/reparents legacy Zaraz body injects — never position:fixed.
+
+// --- Capability fallbacks (see app/javascript/capabilities.js) ---
+// CRT barrel filter is stripped in JS; these cover scroll/cursor/oneko chrome.
+html.geor-no-lenis #crt-content {
+  overflow: auto;
+  overflow-x: hidden;
 }
 
-html.geor-me-project-footer-pinned .crt-scroll-content {
-  padding-bottom: 4.5rem;
+html.geor-no-cursor [data-controller="cursor"],
+html.geor-no-cursor #site-cursor {
+  display: none !important;
+}
+
+html.geor-no-oneko #oneko {
+  display: none !important;
 }
 
 .turbo-loading {

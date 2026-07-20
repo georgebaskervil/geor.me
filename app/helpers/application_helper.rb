@@ -2,6 +2,7 @@
 
 module ApplicationHelper
   include BetterHtml::Helpers
+  include GeorMeProjectFooterHelper
 
   def domain
     "geor.me"
