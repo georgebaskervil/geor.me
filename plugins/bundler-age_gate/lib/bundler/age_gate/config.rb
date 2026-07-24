@@ -126,9 +126,9 @@ module Bundler
         return nil unless token_config
 
         # Support environment variable substitution: ${VAR_NAME}
-        if token_config.match?(/\$\{(.+)\}/)
-          var_name = token_config.match(/\$\{(.+)\}/)[1]
-          ENV[var_name]
+        # Use [^}]+ (not .+) to avoid polynomial ReDoS on crafted strings.
+        if (m = token_config.match(/\$\{([^}]+)\}/))
+          ENV[m[1]]
         else
           token_config
         end

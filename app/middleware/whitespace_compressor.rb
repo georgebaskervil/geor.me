@@ -4,7 +4,8 @@ class WhitespaceCompressor
   def initialize(app)
     @app = app
     # Compile Ruby regex patterns once during initialization
-    @preserve_pattern = %r{(<textarea>[\s\S]*?</textarea>|<pre>[\s\S]*?</pre>|<script>[\s\S]*?</script>|<iframe>[\s\S]*?</iframe>)}
+    # Case-insensitive so e.g. <SCRIPT> is preserved (CodeQL rb/bad-tag-filter).
+    @preserve_pattern = %r{(<textarea>[\s\S]*?</textarea>|<pre>[\s\S]*?</pre>|<script>[\s\S]*?</script>|<iframe>[\s\S]*?</iframe>)}i
     @pattern_comments = /<!--[\s\S]*?-->/
     @pattern_between_tags = />\s+</
     @pattern_spaces = /\s{2,}/
