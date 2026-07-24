@@ -126,9 +126,10 @@ module Bundler
         return nil unless token_config
 
         # Support environment variable substitution: ${VAR_NAME}
-        # Use [^}]+ (not .+) to avoid polynomial ReDoS on crafted strings.
-        if (m = token_config.match(/\$\{([^}]+)\}/))
-          ENV[m[1]]
+        # String slice only — no regex (avoids CodeQL polynomial-ReDoS on crafted input).
+        str = token_config.to_s
+        if str.start_with?("${") && str.end_with?("}") && str.length > 3
+          ENV[str[2..-2]]
         else
           token_config
         end
