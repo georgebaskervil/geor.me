@@ -5,8 +5,11 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
-      # 0.7.59 C extension raises TypeError on Linux at runtime (see .snyk, AGENTS.md)
+      # 0.7.59 C extension raises TypeError on Linux at runtime (see .snyk, AGENTS.md).
+      # Ignore all version updates and the broken release explicitly (grouped security
+      # PRs have re-introduced 0.7.59 before).
       - dependency-name: "iodine"
+        versions: [">= 0.7.59"]
         update-types: ["version-update:semver-major", "version-update:semver-minor", "version-update:semver-patch"]
     cooldown:
       default-days: 10

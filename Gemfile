@@ -10,12 +10,16 @@ ruby "3.3.7"
 
 gem "aws-sdk-s3", "1.225.1"
 gem "aws-sdk-core", "3.252.0"
-gem "aws-partitions", "1.1272.0"
+# Keep on age-gate-safe release (1.1271+ still too new for the 7-day rule).
+gem "aws-partitions", "1.1270.0"
 gem "better_html"
 gem "bootsnap", "1.24.4", require: false
 gem "feedjira"
 # Pin 0.7.58: 0.7.59 C extension fails on Linux during Docker vite:build (see .snyk).
-gem "iodine", "0.7.59", require: false
+# Dependabot must not re-bump this (ignore in .github/dependabot.yml + .snyk).
+gem "iodine", "0.7.58", require: false
+# 1.3.7 is the security-patched floor; 1.3.8 is under the 7-day age gate until ~2026-07-26.
+gem "concurrent-ruby", "1.3.7"
 gem "nokogiri", "1.19.4"
 gem "rails", "8.1.3"
 gem "reactionview", "~> 0.3.0"
@@ -35,8 +39,11 @@ gem "memo_wise"
 gem "json", "2.19.9"
 gem "oj", "3.17.4"                     
 gem "psych", "5.4.0"
+# Transitive of rdoc/etc; 6.0.6 under age gate until ~2026-07-27.
+gem "erb", "6.0.5"
 gem "permessage_deflate", "~> 0.1.4"
-gem "net-imap", "0.6.6"
+# 0.6.6 is under the 7-day age gate until ~2026-07-30.
+gem "net-imap", "0.6.4.1"
 
 group :development, :test do
   gem "debug"
