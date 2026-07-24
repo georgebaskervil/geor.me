@@ -132,7 +132,7 @@ GEM
       rails (>= 3.0.0)
     drb (2.2.3)
     dry-cli (1.4.1)
-    erb (6.0.4)
+    erb (6.0.6)
     erb-formatter (0.7.3)
       syntax_tree (~> 6.0)
     erb_lint (0.9.0)
@@ -159,7 +159,7 @@ GEM
       activesupport (>= 6.1)
     herb (0.10.1-arm64-darwin)
     herb (0.10.1-x86_64-linux-gnu)
-    i18n (1.14.8)
+    i18n (1.15.2)
       concurrent-ruby (~> 1.0)
     io-console (0.8.2)
     iodine (0.7.59)
@@ -214,7 +214,7 @@ GEM
       ast (~> 2.4.1)
       racc
     permessage_deflate (0.1.4)
-    pp (0.6.3)
+    pp (0.6.4)
       prettyprint
     prettier_print (1.2.1)
     prettyprint (0.2.0)
@@ -225,7 +225,7 @@ GEM
     public_suffix (7.0.5)
     racc (1.8.1)
     rack (3.2.6)
-    rack-proxy (0.8.2)
+    rack-proxy (0.8.3)
       rack
     rack-session (2.1.2)
       base64 (>= 0.1.0)
@@ -266,9 +266,14 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.4.2)
-    rdoc (7.2.0)
+    rbs (4.0.3)
+      logger
+      prism (>= 1.6.0)
+      tsort
+    rdoc (8.0.0)
       erb
-      psych (>= 4.0.0)
+      prism (>= 1.6.0)
+      rbs (>= 4.0.0)
       tsort
     reactionview (0.3.0)
       actionview (>= 7.0)
@@ -347,7 +352,7 @@ GEM
     unicode-emoji (4.2.0)
     uri (1.1.1)
     useragent (0.16.11)
-    vite_rails (3.11.0)
+    vite_rails (3.11.1)
       railties (>= 5.1, < 9)
       vite_ruby (~> 3.0, >= 3.2.2)
     vite_ruby (3.10.2)
