@@ -19,21 +19,22 @@
       <%= vite_stylesheet_tag "~/stylesheets/#{entry}", data: { turbo_track: "reload" } %>
     <% end %>
     <script>
-      // Site bundle owns Lenis on #crt-content; extension userscript skips when this is set.
-      window._lenisInitialised = true;
       // Early capability classes (refined by app/javascript/capabilities.js).
+      // CRT is not gated on reduced-motion (static filter). Lenis is. Touch → native.
       (function () {
         try {
           var h = document.documentElement;
-          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            h.classList.add("geor-no-crt-barrel", "geor-no-lenis");
+          var mq = function (q) {
+            return window.matchMedia(q).matches;
+          };
+          var touchOnly =
+            !mq("(hover: hover)") &&
+            !mq("(any-pointer: fine)") &&
+            (mq("(pointer: coarse)") || mq("(any-pointer: coarse)"));
+          if (mq("(prefers-reduced-motion: reduce)") || touchOnly) {
+            h.classList.add("geor-no-lenis");
           }
-          if (
-            window.matchMedia("(pointer: coarse)").matches ||
-            !window.matchMedia("(hover: hover)").matches
-          ) {
-            h.classList.add("geor-no-cursor", "geor-no-oneko");
-          }
+          if (touchOnly) h.classList.add("geor-no-cursor", "geor-no-oneko");
         } catch (e) {}
       })();
     </script>
@@ -53,13 +54,6 @@
     <%= action_cable_meta_tag %>
     <%= csp_meta_tag %>
     <%= vite_client_tag %>
-    <% unless Rails.env.development? %>
-      <script
-        defer
-        src="https://cloud.umami.is/script.js"
-        data-website-id="77d51e44-cbc3-43da-8dd8-f4e21d38c495"
-      ></script>
-    <% end %>
   </head>
   <body>
     <div class="scanlines"></div>

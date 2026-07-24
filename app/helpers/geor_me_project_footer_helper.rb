@@ -3,7 +3,7 @@
 module GeorMeProjectFooterHelper
   COMPLIANCE_BASE = "https://compliance.geor.me/books/georme-compliance-documentation"
 
-  # Shared with the Zaraz multi-site inject; keep paths in one place.
+  # Compliance links for the first-party project footer (and public embed assets).
   def geor_me_project_footer_links
     [
       { label: "Legal", href: COMPLIANCE_BASE },

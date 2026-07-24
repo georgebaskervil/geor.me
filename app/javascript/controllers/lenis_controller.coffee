@@ -6,7 +6,6 @@ SCROLL_EPSILON = 0.5
 
 export default class extends Controller
   connect: ->
-    window._lenisInitialised = true
     @_init()
     @_wrapperEl = @_wrapper()
 
@@ -54,7 +53,6 @@ export default class extends Controller
 
     # Capability gate: native overflow scroll when Lenis is unsupported / disabled.
     if globalThis.__georCapabilities?.lenis is false
-      window._lenisInitialised = true
       wrapper.style.overflow = "auto"
       wrapper.style.overflowX = "hidden"
       document.documentElement.classList.add("geor-no-lenis")
@@ -62,6 +60,9 @@ export default class extends Controller
 
     savedScroll = wrapper.scrollTop or 0
 
+    # syncTouch:false = don't smooth touch gestures (Lenis default for wheel-only).
+    # Phone/tablet never reach here — capabilities disables Lenis entirely on touch
+    # UIs, because the transform scroll container still fights native momentum.
     @lenis = new Lenis
       wrapper: wrapper
       content: content

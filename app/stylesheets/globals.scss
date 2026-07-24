@@ -122,7 +122,6 @@ body {
 }
 
 // Project footer is first-party in .crt-scroll-content (see shared partial).
-// Handoff only dedupes/reparents legacy Zaraz body injects — never position:fixed.
 
 // --- Capability fallbacks (see app/javascript/capabilities.js) ---
 // CRT barrel filter is stripped in JS; these cover scroll/cursor/oneko chrome.

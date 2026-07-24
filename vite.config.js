@@ -238,7 +238,6 @@ export default defineConfig(({ mode }) => {
         "@hotwired/turbo",
         "@hotwired/stimulus",
         "@rails/request.js",
-        "@sentry/browser",
         "stimulus-use",
         "@million/lint/runtime-dev",
         "lenis",
