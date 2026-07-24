@@ -10,7 +10,7 @@ ruby "3.3.7"
 
 gem "aws-sdk-s3", "1.225.1"
 gem "aws-sdk-core", "3.252.0"
-gem "aws-partitions", "1.1255.0"
+gem "aws-partitions", "1.1272.0"
 gem "better_html"
 gem "bootsnap", "1.24.4", require: false
 gem "feedjira"
