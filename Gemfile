@@ -17,7 +17,7 @@ gem "bootsnap", "1.24.4", require: false
 gem "feedjira"
 # Pin 0.7.58: 0.7.59 C extension fails on Linux during Docker vite:build (see .snyk).
 # Dependabot must not re-bump this (ignore in .github/dependabot.yml + .snyk).
-gem "iodine", "0.7.58", require: false
+gem "iodine", "0.7.59", require: false
 # 1.3.7 is the security-patched floor; 1.3.8 is under the 7-day age gate until ~2026-07-26.
 gem "concurrent-ruby", "1.3.7"
 gem "nokogiri", "1.19.4"
