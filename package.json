@@ -76,7 +76,7 @@
     "vite-plugin-babel": "^1.7.3",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-full-reload": "^1.2.0",
-    "vite-plugin-legacy-swc": "2.0.2",
+    "vite-plugin-legacy-swc": "2.1.1",
     "vite-plugin-ruby": "^5.2.2",
     "vite-plugin-static-copy": "^4.1.0",
     "vite-plugin-stimulus-hmr": "^3.0.0",
