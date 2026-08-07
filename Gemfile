@@ -43,7 +43,7 @@ gem "psych", "5.4.0"
 gem "erb", "6.0.6"
 gem "permessage_deflate", "~> 0.1.4"
 # 0.6.6 is under the 7-day age gate until ~2026-07-30.
-gem "net-imap", "0.6.4.1"
+gem "net-imap", "0.6.6"
 
 group :development, :test do
   gem "debug"
