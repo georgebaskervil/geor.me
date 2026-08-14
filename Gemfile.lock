@@ -373,7 +373,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.8.3)
-    zstd-ruby (2.0.6)
+    zstd-ruby (2.0.8)
 
 PLATFORMS
   arm64-darwin-24
