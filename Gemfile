@@ -8,7 +8,7 @@ plugin "bundler-age_gate", path: "plugins/bundler-age_gate"
 
 ruby "3.3.7"
 
-gem "aws-sdk-s3", "1.228.2"
+gem "aws-sdk-s3", "1.229.0"
 gem "aws-sdk-core", "3.254.1"
 # Keep on age-gate-safe release (1.1271+ still too new for the 7-day rule).
 gem "aws-partitions", "1.1281.0"
