@@ -38,7 +38,7 @@ gem "freezolite"
 gem "memo_wise"                          
 gem "json", "2.21.2"
 gem "oj", "3.17.6"                     
-gem "psych", "5.4.0"
+gem "psych", "5.5.0"
 # Transitive of rdoc/etc; 6.0.6 under age gate until ~2026-07-27.
 gem "erb", "6.0.7"
 gem "permessage_deflate", "~> 0.1.4"
