@@ -22,7 +22,7 @@ gem "iodine", "0.7.59", require: false
 gem "concurrent-ruby", "1.3.8"
 gem "nokogiri", "1.19.4"
 gem "rails", "8.1.3.1"
-gem "reactionview", "~> 0.3.0"
+gem "reactionview", "~> 0.4.0"
 gem "sentry-rails", "6.7.0"
 gem "sentry-ruby", "6.7.0"
 gem "stimulus-rails"
