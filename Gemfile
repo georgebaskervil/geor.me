@@ -13,7 +13,7 @@ gem "aws-sdk-core", "3.254.1"
 # Keep on age-gate-safe release (1.1271+ still too new for the 7-day rule).
 gem "aws-partitions", "1.1283.0"
 gem "better_html"
-gem "bootsnap", "1.25.0", require: false
+gem "bootsnap", "1.26.0", require: false
 gem "feedjira"
 # Pin 0.7.58: 0.7.59 C extension fails on Linux during Docker vite:build (see .snyk).
 # Dependabot must not re-bump this (ignore in .github/dependabot.yml + .snyk).
