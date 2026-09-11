@@ -18,7 +18,7 @@
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.23",
     "@million/lint": "^1.0.14",
-    "@mlc-ai/web-llm": "0.2.84",
+    "@mlc-ai/web-llm": "0.2.85",
     "@rails/actioncable": "^8.1.300",
     "@rails/request.js": "^0.0.13",
     "@vitejs/plugin-vue": "^6.0.8",
