@@ -171,7 +171,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.21.2)
+    json (3.0.1)
     language_server-protocol (3.17.0.6)
     lint_roller (1.1.0)
     logger (1.7.0)
@@ -403,7 +403,7 @@ DEPENDENCIES
   foreman
   freezolite
   iodine (= 0.7.59)
-  json (= 2.21.2)
+  json (= 3.0.1)
   memo_wise
   net-imap (= 0.6.6)
   nokogiri (= 1.19.4)
