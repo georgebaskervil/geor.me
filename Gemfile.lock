@@ -91,7 +91,7 @@ GEM
     aws-sdk-kms (1.130.0)
       aws-sdk-core (~> 3, >= 3.254.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.229.0)
+    aws-sdk-s3 (1.230.0)
       aws-sdk-core (~> 3, >= 3.254.1)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
@@ -385,7 +385,7 @@ PLATFORMS
 DEPENDENCIES
   aws-partitions (= 1.1287.0)
   aws-sdk-core (= 3.254.1)
-  aws-sdk-s3 (= 1.229.0)
+  aws-sdk-s3 (= 1.230.0)
   better_html
   bootsnap (= 1.26.0)
   brakeman
