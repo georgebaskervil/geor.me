@@ -21,7 +21,7 @@ gem "iodine", "0.7.59", require: false
 # 1.3.7 is the security-patched floor; 1.3.8 is under the 7-day age gate until ~2026-07-26.
 gem "concurrent-ruby", "1.3.8"
 gem "nokogiri", "1.19.4"
-gem "rails", "8.1.3.1"
+gem "rails", "8.1.4"
 gem "reactionview", "~> 0.6.0"
 gem "sentry-rails", "7.0.0"
 gem "sentry-ruby", "7.0.0"
