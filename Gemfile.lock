@@ -208,7 +208,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.19.4-x86_64-linux-gnu)
       racc (~> 1.4)
-    oj (3.17.6)
+    oj (3.17.7)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
     ostruct (0.6.3)
@@ -409,7 +409,7 @@ DEPENDENCIES
   memo_wise
   net-imap (= 0.6.7)
   nokogiri (= 1.19.4)
-  oj (= 3.17.6)
+  oj (= 3.17.7)
   permessage_deflate (~> 0.1.4)
   psych (= 5.5.0)
   rails (= 8.1.4)
