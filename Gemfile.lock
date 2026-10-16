@@ -127,7 +127,7 @@ GEM
     crass (1.0.7)
     cruise (0.3.0-arm64-darwin)
     cruise (0.3.0-x86_64-linux-gnu)
-    date (3.5.1)
+    date (3.6.0)
     debug (1.11.1)
       irb (~> 1.10)
       reline (>= 0.3.8)
@@ -194,7 +194,7 @@ GEM
       prism (~> 1.5)
     msgpack (1.8.5)
     mutex_m (0.3.0)
-    net-imap (0.6.7)
+    net-imap (0.6.8)
       date
       net-protocol
     net-pop (0.1.2)
@@ -406,7 +406,7 @@ DEPENDENCIES
   iodine (= 0.7.59)
   json (= 3.0.2)
   memo_wise
-  net-imap (= 0.6.7)
+  net-imap (= 0.6.8)
   nokogiri (= 1.19.4)
   oj (= 3.17.7)
   permessage_deflate (~> 0.1.4)
