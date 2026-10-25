@@ -26,6 +26,18 @@
 User-agent: archive.org_bot
 Disallow:
 
+User-agent: Googlebot
+Content-Signal: search=yes,ai-input=no,ai-train=no
+Disallow:
+
+User-agent: Bingbot
+Content-Signal: search=yes,ai-input=no,ai-train=no
+Disallow:
+
+User-agent: DuckDuckBot
+Content-Signal: search=yes,ai-input=no,ai-train=no
+Disallow:
+
 User-agent: *
 Content-Signal: search=no,ai-input=no,ai-train=no
 Disallow: /
