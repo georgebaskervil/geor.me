@@ -20,7 +20,7 @@
     <% end %>
     <script>
       // Early capability classes (refined by app/javascript/capabilities.js).
-      // CRT is not gated on reduced-motion (static filter). Lenis is. Touch → native.
+      // Neither CRT nor Lenis is gated on reduced-motion (intentional). Touch → native.
       (function () {
         try {
           var h = document.documentElement;
@@ -31,7 +31,7 @@
             !mq("(hover: hover)") &&
             !mq("(any-pointer: fine)") &&
             (mq("(pointer: coarse)") || mq("(any-pointer: coarse)"));
-          if (mq("(prefers-reduced-motion: reduce)") || touchOnly) {
+          if (touchOnly) {
             h.classList.add("geor-no-lenis");
           }
           if (touchOnly) h.classList.add("geor-no-cursor", "geor-no-oneko");

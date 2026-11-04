@@ -5,7 +5,7 @@
  * HTML classes: geor-no-crt-barrel | geor-no-lenis | geor-no-cursor | geor-no-oneko
  *
  * - CRT barrel: static SVG feDisplacementMap — gated only on SVG support, not reduced-motion.
- * - Lenis: needs rAF; off for prefers-reduced-motion; off on phone/tablet UIs
+ * - Lenis: needs rAF; ignores prefers-reduced-motion (intentional); off on phone/tablet UIs
  *   (syncTouch:false only skips touch smoothing; Lenis still owns the scroll container
  *   and fights native momentum on touch). Hybrid laptops keep Lenis.
  */
@@ -66,7 +66,6 @@ export function detectCapabilities() {
   /** @type {GeorCapabilities} */
   const flags = { ...defaults };
 
-  const reducedMotion = mq("(prefers-reduced-motion: reduce)");
   const touchPrimary = isTouchPrimaryUi();
 
   if (!supportsRequestAnimationFrame()) {
@@ -77,10 +76,8 @@ export function detectCapabilities() {
     flags.crtBarrel = false;
   }
 
-  // Smooth wheel is motion; honour OS preference. CRT warp is not animated.
-  if (reducedMotion) {
-    flags.lenis = false;
-  }
+  // Intentionally NOT gated on prefers-reduced-motion: the site owner keeps the
+  // OS setting on for system animations but wants this site's motion.
 
   // Phones/tablets: native scroll + system cursor (no Lenis transform container).
   if (touchPrimary) {
