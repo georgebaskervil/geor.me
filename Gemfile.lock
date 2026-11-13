@@ -80,7 +80,7 @@ GEM
     ast (2.4.3)
     aws-eventstream (1.4.1)
     aws-partitions (1.1299.0)
-    aws-sdk-core (3.263.0)
+    aws-sdk-core (3.266.0)
       aws-eventstream (~> 1, >= 1.4.1)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -385,7 +385,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-partitions (= 1.1299.0)
-  aws-sdk-core (= 3.263.0)
+  aws-sdk-core (= 3.266.0)
   aws-sdk-s3 (= 1.235.0)
   better_html
   bootsnap (= 1.26.1)
