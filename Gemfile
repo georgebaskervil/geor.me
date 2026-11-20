@@ -41,7 +41,7 @@ gem "oj", "3.17.8"
 gem "psych", "5.5.0"
 # Transitive of rdoc/etc; 6.0.6 under age gate until ~2026-07-27.
 gem "erb", "6.0.7"
-gem "permessage_deflate", "~> 0.1.4"
+gem "permessage_deflate", "~> 0.2.0"
 # 0.6.6 is under the 7-day age gate until ~2026-07-30.
 gem "net-imap", "0.6.8"
 
