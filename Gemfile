@@ -36,7 +36,7 @@ gem "fast_blank"
 gem "fast_underscore"                    
 gem "freezolite"                         
 gem "memo_wise"                          
-gem "json", "3.1.0"
+gem "json", "3.2.0"
 gem "oj", "3.17.8"                     
 gem "psych", "5.5.0"
 # Transitive of rdoc/etc; 6.0.6 under age gate until ~2026-07-27.
